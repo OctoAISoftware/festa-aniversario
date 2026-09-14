@@ -60,5 +60,6 @@ bolo, velinhas, docinhos, brigadeiro, sorvete, refrigerante, suco, salgadinhos, 
 
 ## Créditos
 
-Ícones dos 40 itens cortesia do [OpenMoji](https://openmoji.org/), licença [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
-Mascotes e cena final: arte original feita para a Maia.
+- Ícones da maioria dos itens cortesia do [OpenMoji](https://openmoji.org/), licença [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+- **Algodão-doce** e **chapéu de festa**: ilustrações originais feitas para a Maia (não há glifo Unicode adequado para algodão-doce; chapéu de festa foi trocado do top hat genérico para o cone com pompom que é o que criança brasileira espera).
+- Mascotes (coelha com laço rosa + ursinho amarelo), cena do bolo, decoração, banner, chamas das velas: arte original feita para a Maia.

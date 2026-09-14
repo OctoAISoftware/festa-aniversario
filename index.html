@@ -4,6 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
 <meta name="theme-color" content="#ffd6e8" />
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='%23fff' stroke='%23ff9ec6' stroke-width='2'/><path d='M16 7 L18.5 12 L24 12.5 L20 16 L21 21.5 L16 18.5 L11 21.5 L12 16 L8 12.5 L13.5 12 Z' fill='%23ff6fa8'/><circle cx='16' cy='16' r='3' fill='%23fff'/></svg>" />
 <title>Festa da Maia — Organizador de Festa</title>
 <style>
   :root{
@@ -83,6 +84,11 @@
     max-width:980px;margin:0 auto;
     width:100%;
   }
+  /* Tighter bottom padding for the final screen — the action buttons sit right above the footer
+     and we don't want a 110px dead-zone between them. */
+  #screen-final{
+    padding-bottom:calc(14px + var(--safe-bot));
+  }
   .panel{
     background:#fff;border-radius:var(--r-lg);
     padding:14px;box-shadow:var(--shadow);
@@ -153,7 +159,11 @@
     position:relative;border-radius:var(--r-lg);overflow:hidden;
     box-shadow:var(--shadow);border:3px solid var(--pink-100);
     background:linear-gradient(180deg,#bfe4ff 0%,#d8ecff 60%,#c8e6c2 100%);
+    /* Stage matches the SVG's 4:3 viewBox so 'meet' produces zero letterbox. */
     aspect-ratio: 4/3;
+    /* On short phones (e.g. landscape) let users scroll the scene vertically. */
+    min-height: 340px;
+    touch-action:pan-y;
   }
   #scene-svg{position:absolute;inset:0;width:100%;height:100%;display:block}
   .findable{
@@ -162,24 +172,34 @@
     transform-origin:center;
     transition:filter .15s ease;
   }
+  .findable .hit{pointer-events:auto}
+  .findable .sprite{pointer-events:none;user-select:none;-webkit-user-drag:none}
+  .findable:hover .findable-anim{filter:brightness(1.08) drop-shadow(0 0 8px rgba(255,255,255,.85))}
+  .findable:hover{filter:none}
   .findable:hover{filter:brightness(1.08) drop-shadow(0 0 6px rgba(255,255,255,.7))}
   .findable.found{
     pointer-events:none;
-    animation:found-pop .65s ease forwards;
   }
-  .findable.hint{
+  .findable.found .findable-anim{
+    animation:found-pop .65s ease forwards;
+    transform-origin:center;
+  }
+  .findable.hint .findable-anim{
     animation:wiggle 1.2s ease-in-out infinite;
     transform-origin:center;
   }
+  /* The animation transform is applied to an INNER <g class="findable-anim"> so the
+     outer <g>'s translate(x,y) stays put — SVG transforms replace, not compose. */
+  .findable-anim{transform-box:fill-box;transform-origin:center;transition:transform .2s ease}
   @keyframes wiggle{
     0%,100%{transform:rotate(0) scale(1)}
-    25%{transform:rotate(-6deg) scale(1.06)}
-    75%{transform:rotate(6deg) scale(1.06)}
+    25%{transform:rotate(-8deg) scale(1.10)}
+    75%{transform:rotate(8deg) scale(1.10)}
   }
   @keyframes found-pop{
     0%{transform:scale(1)}
-    40%{transform:scale(1.4);filter:drop-shadow(0 0 12px gold)}
-    100%{transform:scale(.85);opacity:.55;filter:drop-shadow(0 0 0 transparent)}
+    40%{transform:scale(1.45);filter:drop-shadow(0 0 14px gold)}
+    100%{transform:scale(.8);opacity:.55;filter:drop-shadow(0 0 0 transparent)}
   }
   .puff{
     position:absolute;width:18px;height:18px;border-radius:50%;
@@ -250,7 +270,7 @@
     position:relative;border-radius:var(--r-lg);overflow:hidden;
     box-shadow:var(--shadow);border:3px solid var(--pink-200);
     background:linear-gradient(180deg,#bfe4ff 0%,#ffe7d6 100%);
-    aspect-ratio: 4/3;
+    aspect-ratio: 16/9;
   }
   #scene-final-svg{position:absolute;inset:0;width:100%;height:100%}
   .float{animation:float 4s ease-in-out infinite}
@@ -295,7 +315,7 @@
 
   /* ── footer credits ─────────────────────────────────────────────── */
   footer.site-credit{
-    text-align:center;padding:18px 14px calc(20px + var(--safe-bot));
+    text-align:center;padding:12px 14px calc(14px + var(--safe-bot));
     font-size:11px;color:var(--ink-soft);line-height:1.45;
     max-width:680px;margin:0 auto;
   }
@@ -431,7 +451,7 @@
   </div>
   <div class="find-layout">
     <section class="stage" id="stage" aria-label="Cena da festa">
-      <svg id="scene-svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+      <svg id="scene-svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
     </section>
     <aside class="sidebar">
       <h3>Checklist</h3>
@@ -446,11 +466,10 @@
 <main id="screen-final">
   <div class="screen-title">
     <h2>A festa está pronta! 🎉</h2>
-    <p>Parabéns pra você! ✨</p>
   </div>
   <section class="panel">
     <div class="finale">
-      <svg id="scene-final-svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+      <svg id="scene-final-svg" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
     </div>
     <div class="finale-actions">
       <button class="big-btn primary" id="restart">
@@ -470,8 +489,8 @@
 </main>
 
 <footer class="site-credit">
-  Ícones dos itens cortesia do <a href="https://openmoji.org/" target="_blank" rel="noopener">OpenMoji</a> · licença <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>.<br/>
-  As ilustrações dos mascotes e da cena são originais, feitas para a Maia. 💗
+  Ícones dos itens: <a href="https://openmoji.org/" target="_blank" rel="noopener">OpenMoji</a> (CC BY-SA 4.0) + ilustrações originais (algodão-doce, chapéu de festa, mascotes e cena).<br/>
+  Feito com 💗 para a Maia.
 </footer>
 
 <script>
@@ -481,17 +500,20 @@
  * ────────────────────────────────────────────────────────────────── */
 
 const ICON_BASE = "assets/icons/";
+// Cache-buster suffix: invalidates the Cloudflare edge cache for the changed icons.
+// (CF token can't purge, max-age=14400s. Without this, the live site keeps serving the old files.)
+const ICON_V = "v=2026-09-14-2";
 const ICONS = {
-  bolo:"bolo.svg", velinhas:"velinhas.svg", docinhos:"docinhos.svg", brigadeiro:"brigadeiro.svg",
-  sorvete:"sorvete.svg", refrigerante:"refrigerante.svg", suco:"suco.svg", salgadinhos:"salgadinhos.svg",
-  pizza:"pizza.svg", pipoca:"pipoca.svg", algodao:"algodao.svg", cachorroquente:"cachorroquente.svg",
-  baloes:"baloes.svg", chapeu:"chapeu.svg", serpentina:"serpentina.svg", confete:"confete.svg",
-  pratinhos:"pratinhos.svg", copos:"copos.svg", guardanapos:"guardanapos.svg", toalha:"toalha.svg",
-  bandeirolas:"bandeirolas.svg", luzinhas:"luzinhas.svg", decor:"decor.svg", musica:"musica.svg",
-  presente:"presente.svg", sacola:"sacola.svg", mascara:"mascara.svg", fantasia:"fantasia.svg",
-  guardachuva:"guardachuva.svg", pinhata:"pinhata.svg", cadeiras:"cadeiras.svg", pescaria:"pescaria.svg",
-  saco:"saco.svg", boca:"boca.svg", amarelinha:"amarelinha.svg", tatuagem:"tatuagem.svg",
-  bexiga:"bexiga.svg", palhaco:"palhaco.svg", coroa:"coroa.svg", colar:"colar.svg",
+  bolo:"bolo.svg?"+ICON_V, velinhas:"velinhas.svg?"+ICON_V, docinhos:"docinhos.svg?"+ICON_V, brigadeiro:"brigadeiro.svg?"+ICON_V,
+  sorvete:"sorvete.svg?"+ICON_V, refrigerante:"refrigerante.svg?"+ICON_V, suco:"suco.svg?"+ICON_V, salgadinhos:"salgadinhos.svg?"+ICON_V,
+  pizza:"pizza.svg?"+ICON_V, pipoca:"pipoca.svg?"+ICON_V, algodao:"algodao.svg?"+ICON_V, cachorroquente:"cachorroquente.svg?"+ICON_V,
+  baloes:"baloes.svg?"+ICON_V, chapeu:"chapeu.svg?"+ICON_V, serpentina:"serpentina.svg?"+ICON_V, confete:"confete.svg?"+ICON_V,
+  pratinhos:"pratinhos.svg?"+ICON_V, copos:"copos.svg?"+ICON_V, guardanapos:"guardanapos.svg?"+ICON_V, toalha:"toalha.svg?"+ICON_V,
+  bandeirolas:"bandeirolas.svg?"+ICON_V, luzinhas:"luzinhas.svg?"+ICON_V, decor:"decor.svg?"+ICON_V, musica:"musica.svg?"+ICON_V,
+  presente:"presente.svg?"+ICON_V, sacola:"sacola.svg?"+ICON_V, mascara:"mascara.svg?"+ICON_V, fantasia:"fantasia.svg?"+ICON_V,
+  guardachuva:"guardachuva.svg?"+ICON_V, pinhata:"pinhata.svg?"+ICON_V, cadeiras:"cadeiras.svg?"+ICON_V, pescaria:"pescaria.svg?"+ICON_V,
+  saco:"saco.svg?"+ICON_V, boca:"boca.svg?"+ICON_V, amarelinha:"amarelinha.svg?"+ICON_V, tatuagem:"tatuagem.svg?"+ICON_V,
+  bexiga:"bexiga.svg?"+ICON_V, palhaco:"palhaco.svg?"+ICON_V, coroa:"coroa.svg?"+ICON_V, colar:"colar.svg?"+ICON_V,
 };
 
 // ── 40-item catalog ───────────────────────────────────────────────
@@ -597,18 +619,65 @@ document.getElementById('go-find').addEventListener('click', ()=>{
 });
 
 // ── Screen 2: build find scene ─────────────────────────────────────
+// Safe zone for spawn: viewBox is 800×600. Items render ON TOP of the scenery so
+// every selected item is always visible, regardless of what scenery sits behind
+// it. We just avoid the very edges so nothing is clipped by the rounded mask,
+// and we avoid the deepest part of the table where the cake/tablecloth dominate.
+const SPAWN = {
+  xMin: 90, xMax: 710,      // small margin so 96-wide sprites stay inside the rounded mask
+  yMin: 70, yMax: 540,      // almost the entire viewBox; sprites render on top of scenery
+  // sprite user-unit footprint (matches foreignObject in renderScene)
+  spriteSize: 96,            // visual sprite size in viewBox units
+  hitSize:    112,           // tappable hit area (sprite + 8px padding all around)
+  minGap:     90,            // min center-to-center spacing — sprites may touch but not overlap hits
+};
+// Scatter items on a deterministic shuffled grid, picking the cell that maximizes
+// distance-to-nearest-already-placed. We don't reject close cells outright — at
+// 40 items in a 620×470 band the density is ~87%, so we MUST allow some proximity
+// (just prefer the farthest). Z-order: later items draw on top, so a later item
+// can fully cover an earlier one if the customer has to find it.
+function pickSpawn(used, hash){
+  const stepX = 26, stepY = 26;
+  const xs = [], ys = [];
+  for (let x=SPAWN.xMin; x<=SPAWN.xMax; x+=stepX) xs.push(x);
+  for (let y=SPAWN.yMin; y<=SPAWN.yMax; y+=stepY) ys.push(y);
+  let best = null, bestScore = -1;
+  const r = (n)=> ( (hash * 9301 + n * 49297 + 233280) >>> 0 );
+  for (let i=0;i<xs.length;i++){
+    for (let j=0;j<ys.length;j++){
+      const x = xs[i], y = ys[j];
+      let minD = Infinity;
+      for (const u of used){
+        const d = Math.hypot(x-u.x, y-u.y);
+        if (d < minD) minD = d;
+      }
+      // Strongly prefer cells with minD ≥ minGap, but allow fallback placement
+      // if the band is crowded (40 items).
+      const score = minD + ((r(i*97+j*31) % 1000) / 1000) * 4;
+      if (score > bestScore){ bestScore = score; best = {x,y}; }
+    }
+  }
+  if (!best){
+    // Last-resort: deterministic jitter inside the safe band
+    let h2 = hash >>> 0;
+    best = {
+      x: SPAWN.xMin + (h2 % (SPAWN.xMax - SPAWN.xMin)),
+      y: SPAWN.yMin + ((h2 >> 11) % (SPAWN.yMax - SPAWN.yMin)),
+    };
+  }
+  return best;
+}
+
 function startFindScreen(){
   const ids = [...state.selected];
   state.found = new Set();
+  const placed = [];
   state.placements = ids.map((id, i)=>{
     const item = ITEMS.find(x=>x.id===id);
-    let h = 0; for (const c of id) h = (h*31 + c.charCodeAt(0)) >>> 0;
-    const x = 8 + (h % 84);
-    const hy = ((h >> 7) % 70);
-    const y = 12 + hy;
-    const w = 7 + ((h >> 3) % 6);
-    const z = ((h >> 11) % 30) + 10;
-    return {id, item, x, y, w, z};
+    let h = 2166136261 >>> 0; for (const c of id) h = ((h ^ c.charCodeAt(0)) * 16777619) >>> 0;
+    const pos = pickSpawn(placed, h + i*131);
+    placed.push(pos);
+    return {id, item, x: pos.x, y: pos.y};
   });
   renderScene();
   renderChecklist();
@@ -695,28 +764,36 @@ function renderScene(){
 
   const scene = svg;
   state.placements.forEach(p=>{
-    const g = document.createElementNS('http://www.w3.org/2000/svg','g');
-    g.setAttribute('class','findable');
-    g.setAttribute('transform', `translate(${p.x*8}, ${p.y*6}) scale(${p.w/72})`);
-    g.dataset.id = p.id;
-    // Use foreignObject so we can embed an <img> directly inside SVG (modern browsers support this)
+    const wrap = document.createElementNS('http://www.w3.org/2000/svg','g');
+    wrap.setAttribute('class','findable');
+    wrap.setAttribute('transform', `translate(${p.x}, ${p.y})`);
+    wrap.dataset.id = p.id;
+    // inner <g> takes the CSS animation so the outer translate isn't replaced
+    const anim = document.createElementNS('http://www.w3.org/2000/svg','g');
+    anim.setAttribute('class','findable-anim');
+    // Use foreignObject so we can embed an <img> directly inside SVG (modern browsers support this).
+    // Hit area = 112×112 user units (sprite is 96×96 centered inside → 8px padding all around).
+    // viewBox 800×600 with preserveAspectRatio meet → on a 390-wide stage the sprite
+    // renders at 96 × (390/800) ≈ 47 px (visual) and hit-area ≈ 55 px (finger-sized).
     const fo = document.createElementNS('http://www.w3.org/2000/svg','foreignObject');
-    fo.setAttribute('x','-36');fo.setAttribute('y','-36');
-    fo.setAttribute('width','72');fo.setAttribute('height','72');
+    fo.setAttribute('x','-56');fo.setAttribute('y','-56');
+    fo.setAttribute('width','112');fo.setAttribute('height','112');
+    fo.classList.add('hit');
     const xhtmlNS = 'http://www.w3.org/1999/xhtml';
     const img = document.createElementNS(xhtmlNS,'img');
     img.setAttribute('src', ICON_BASE + ICONS[p.id]);
-    img.setAttribute('width','72');
-    img.setAttribute('height','72');
-    img.style.pointerEvents = 'none';
-    img.style.userSelect = 'none';
+    img.setAttribute('width','96');
+    img.setAttribute('height','96');
+    img.style.cssText = 'display:block;margin:8px auto 0;width:96px;height:96px;object-fit:contain;';
+    img.classList.add('sprite');
     fo.appendChild(img);
-    g.appendChild(fo);
-    g.addEventListener('click', e=>{
+    anim.appendChild(fo);
+    wrap.appendChild(anim);
+    wrap.addEventListener('click', e=>{
       e.stopPropagation();
       findItem(p.id, e);
     });
-    scene.appendChild(g);
+    scene.appendChild(wrap);
   });
 
   updateProgress();
@@ -794,13 +871,15 @@ function updateProgress(){
   document.getElementById('progress-label').textContent = `${done} de ${total}`;
 }
 
-// hint timer: every ~10s of no finds, spotlight one unfound
+// hint timer: every ~9s of no finds, spotlight one unfound item.
+// Also gently scrolls the hinted item into view (it lives inside a scrollable stage).
 let lastFoundAt = Date.now();
 function startHintTimer(){
+  if (state.hintTimer) clearInterval(state.hintTimer);
   state.hintTimer = setInterval(()=>{
     if (document.getElementById('screen-find').style.display !== 'block') return;
     const now = Date.now();
-    if (now - lastFoundAt < 9500) return;
+    if (now - lastFoundAt < 8500) return;
     const remaining = state.placements.filter(p=>!state.found.has(p.id));
     if (!remaining.length) return;
     document.querySelectorAll('.findable.hint').forEach(g=>g.classList.remove('hint'));
@@ -808,10 +887,19 @@ function startHintTimer(){
     const g = document.querySelector(`#scene-svg .findable[data-id="${pick.id}"]`);
     if (g){
       g.classList.add('hint');
-      setTimeout(()=>{ if (!state.found.has(pick.id)) g.classList.remove('hint'); }, 4000);
+      // Pan the hinted item into view inside the scrollable stage container.
+      const stage = document.getElementById('stage');
+      const r = g.getBoundingClientRect();
+      const sr = stage.getBoundingClientRect();
+      const margin = 40;
+      if (r.top < sr.top + margin || r.bottom > sr.bottom - margin){
+        const delta = (r.top + r.height/2) - (sr.top + sr.height/2);
+        stage.scrollBy({ top: delta, behavior: 'smooth' });
+      }
+      setTimeout(()=>{ if (!state.found.has(pick.id)) g.classList.remove('hint'); }, 4500);
     }
     lastFoundAt = Date.now();
-  }, 3000);
+  }, 2500);
 }
 const origFind = findItem;
 findItem = function(id, evt){
@@ -848,32 +936,32 @@ function renderFinalScene(){
       </radialGradient>
     </defs>
 
-    <rect x="0" y="0" width="800" height="600" fill="url(#skyF)"/>
+    <rect x="0" y="0" width="800" height="450" fill="url(#skyF)"/>
 
     <g opacity=".6">
-      <circle cx="640" cy="120" r="180" fill="url(#lightG)"/>
+      <circle cx="640" cy="90" r="140" fill="url(#lightG)"/>
     </g>
 
-    <!-- string lights -->
-    <path d="M0 100 Q200 180 400 130 Q600 80 800 150" stroke="#5a3550" stroke-width="1.4" fill="none"/>
-    ${bulbRow(40,180,'#ffe28a')}
-    ${bulbRow(120,162,'#ff6fa8')}
-    ${bulbRow(200,148,'#9ed6ff')}
-    ${bulbRow(280,138,'#7ddcb1')}
-    ${bulbRow(360,130,'#e9d8ff')}
-    ${bulbRow(440,128,'#ffe28a')}
-    ${bulbRow(520,120,'#ff6fa8')}
-    ${bulbRow(600,130,'#9ed6ff')}
-    ${bulbRow(680,140,'#7ddcb1')}
-    ${bulbRow(760,148,'#ffe28a')}
+    <!-- string lights (compressed to fit 800x450) -->
+    <path d="M0 75 Q200 135 400 98 Q600 60 800 113" stroke="#5a3550" stroke-width="1.4" fill="none"/>
+    ${bulbRow(40,135,'#ffe28a')}
+    ${bulbRow(120,122,'#ff6fa8')}
+    ${bulbRow(200,111,'#9ed6ff')}
+    ${bulbRow(280,104,'#7ddcb1')}
+    ${bulbRow(360,98,'#e9d8ff')}
+    ${bulbRow(440,96,'#ffe28a')}
+    ${bulbRow(520,90,'#ff6fa8')}
+    ${bulbRow(600,98,'#9ed6ff')}
+    ${bulbRow(680,105,'#7ddcb1')}
+    ${bulbRow(760,111,'#ffe28a')}
 
     <!-- ground -->
-    <rect x="0" y="380" width="800" height="220" fill="#cbe8c2"/>
-    <rect x="0" y="380" width="800" height="40" fill="#a8d99b"/>
+    <rect x="0" y="285" width="800" height="165" fill="#cbe8c2"/>
+    <rect x="0" y="285" width="800" height="30" fill="#a8d99b"/>
 
-    <!-- tablecloth -->
-    <path d="M200 360 L600 360 L620 480 L180 480 Z" fill="${tint}" stroke="#fff" stroke-width="3"/>
-    <path d="M200 360 L600 360 L600 372 L200 372 Z" fill="#fff" opacity=".4"/>
+    <!-- tablecloth (rebalanced to fit 800x450) -->
+    <path d="M200 270 L600 270 L620 360 L180 360 Z" fill="${tint}" stroke="#fff" stroke-width="3"/>
+    <path d="M200 270 L600 270 L600 279 L200 279 Z" fill="#fff" opacity=".4"/>
 
     <g id="table-contents"></g>
 
@@ -891,30 +979,30 @@ function renderFinalScene(){
     ${has('pinhata') ? pinhataSVG() : ''}
 
     <!-- mascot dancing (improved original bunny with pink bow) -->
-    <g transform="translate(660,420)" class="float">
+    <g transform="translate(660,320)" class="float">
       ${mascotSVG()}
     </g>
 
     <!-- friend mascot (improved original yellow bear) -->
-    <g transform="translate(140,440)" class="float" style="animation-delay:.6s">
+    <g transform="translate(140,335)" class="float" style="animation-delay:.6s">
       ${friendMascotSVG()}
     </g>
 
-    <!-- bunting -->
-    <path d="M40 80 Q400 0 760 80" stroke="#ff6fa8" stroke-width="2" fill="none"/>
+    <!-- bunting (rebalanced) -->
+    <path d="M40 60 Q400 0 760 60" stroke="#ff6fa8" stroke-width="2" fill="none"/>
     ${buntingSVG()}
 
     <!-- "Parabéns pra você" banner -->
-    <g transform="translate(400,90)">
+    <g transform="translate(400,68)">
       <rect x="-180" y="-22" width="360" height="44" rx="22" fill="#fff" stroke="#ff6fa8" stroke-width="3"/>
       <text x="0" y="8" font-size="22" font-weight="900" text-anchor="middle" fill="#ff4d8d">✨ Parabéns pra você! ✨</text>
     </g>
 
-    <!-- sparkles -->
-    <g class="sparkle" transform="translate(120,200)">${sparkleSVG()}</g>
-    <g class="sparkle" transform="translate(680,260)" style="animation-delay:.3s">${sparkleSVG()}</g>
-    <g class="sparkle" transform="translate(540,200)" style="animation-delay:.6s">${sparkleSVG()}</g>
-    <g class="sparkle" transform="translate(260,260)" style="animation-delay:.9s">${sparkleSVG()}</g>
+    <!-- sparkles (rebalanced) -->
+    <g class="sparkle" transform="translate(110,160)">${sparkleSVG()}</g>
+    <g class="sparkle" transform="translate(700,200)" style="animation-delay:.3s">${sparkleSVG()}</g>
+    <g class="sparkle" transform="translate(560,160)" style="animation-delay:.6s">${sparkleSVG()}</g>
+    <g class="sparkle" transform="translate(260,200)" style="animation-delay:.9s">${sparkleSVG()}</g>
   `;
 
   // place additional selected items on the table
@@ -925,7 +1013,7 @@ function renderFinalScene(){
     if (!has(id)) return;
     const item = ITEMS.find(it=>it.id===id);
     const g = document.createElementNS('http://www.w3.org/2000/svg','g');
-    g.setAttribute('transform', `translate(${x},400) scale(.42)`);
+    g.setAttribute('transform', `translate(${x},315) scale(.42)`);
     const fo = document.createElementNS('http://www.w3.org/2000/svg','foreignObject');
     fo.setAttribute('x','-36');fo.setAttribute('y','-36');
     fo.setAttribute('width','72');fo.setAttribute('height','72');
@@ -941,35 +1029,73 @@ function renderFinalScene(){
   });
 }
 
+
 function bulbRow(cx,cy,color){
   return `<line x1="${cx-12}" y1="${cy-6}" x2="${cx+12}" y2="${cy+6}" stroke="#5a3550" stroke-width="1"/>
           <circle cx="${cx}" cy="${cy+10}" r="6" fill="${color}" stroke="#fff" stroke-width="1.2"/>`;
 }
 function bigCakeSVG(){
   return `
-    <g transform="translate(400,330)">
-      <ellipse cx="0" cy="50" rx="120" ry="14" fill="#f4c7d9"/>
-      <rect x="-110" y="-40" width="220" height="100" rx="10" fill="#ffc7df"/>
-      <path d="M-110 -40 Q-105 -50 -100 -40 M-80 -40 Q-75 -52 -70 -40 M-50 -40 Q-45 -50 -40 -40 M-20 -40 Q-15 -52 -10 -40 M10 -40 Q15 -50 20 -40 M40 -40 Q45 -52 50 -40 M70 -40 Q75 -50 80 -40 M100 -40 Q105 -52 110 -40" stroke="#fff" stroke-width="2.5" fill="none"/>
-      <rect x="-110" y="-10" width="220" height="6" fill="#ff9ec6"/>
-      <rect x="-110" y="20" width="220" height="6" fill="#ff9ec6"/>
-      <circle cx="-70" cy="10" r="3" fill="#fff"/>
-      <circle cx="-40" cy="20" r="3" fill="#fff"/>
-      <circle cx="0" cy="10" r="3" fill="#fff"/>
-      <circle cx="40" cy="20" r="3" fill="#fff"/>
-      <circle cx="70" cy="10" r="3" fill="#fff"/>
+    <g transform="translate(400,250)">
+      <ellipse cx="0" cy="38" rx="100" ry="11" fill="#f4c7d9"/>
+      <rect x="-95" y="-32" width="190" height="84" rx="9" fill="#ffc7df"/>
+      <!-- attached frosting drips: scalloped band sitting flush with the top of the cake body, drawn as a continuous filled scallop so it can't separate -->
+      <path d="M-95 -32
+               Q -85 -42 -75 -32
+               Q -65 -42 -55 -32
+               Q -45 -42 -35 -32
+               Q -25 -42 -15 -32
+               Q  -5 -42   5 -32
+               Q  15 -42  25 -32
+               Q  35 -42  45 -32
+               Q  55 -42  65 -32
+               Q  75 -42  85 -32
+               Q  95 -42  95 -32
+               L  95 -24
+               Q  85 -34  75 -24
+               Q  65 -34  55 -24
+               Q  45 -34  35 -24
+               Q  25 -34  15 -24
+               Q   5 -34  -5 -24
+               Q -15 -34 -25 -24
+               Q -35 -34 -45 -24
+               Q -55 -34 -65 -24
+               Q -75 -34 -85 -24
+               Q -95 -34 -95 -24 Z"
+            fill="#fff" stroke="#ff9ec6" stroke-width="1.4" stroke-linejoin="round"/>
+      <rect x="-95" y="-8" width="190" height="5" fill="#ff9ec6"/>
+      <rect x="-95" y="16" width="190" height="5" fill="#ff9ec6"/>
+      <circle cx="-60" cy="8" r="2.5" fill="#fff"/>
+      <circle cx="-35" cy="16" r="2.5" fill="#fff"/>
+      <circle cx="0" cy="8" r="2.5" fill="#fff"/>
+      <circle cx="35" cy="16" r="2.5" fill="#fff"/>
+      <circle cx="60" cy="8" r="2.5" fill="#fff"/>
     </g>
   `;
 }
 function candleFlameSVG(){
   return `
-    <g transform="translate(400,250)">
+    <g transform="translate(400,180)">
+      <!-- wicks -->
+      <line x1="-23" y1="-10" x2="-23" y2="-14" stroke="#5a3550" stroke-width="1.4"/>
+      <line x1="0" y1="-16" x2="0" y2="-20" stroke="#5a3550" stroke-width="1.4"/>
+      <line x1="23" y1="-12" x2="23" y2="-16" stroke="#5a3550" stroke-width="1.4"/>
+      <!-- candle bodies -->
       <rect x="-26" y="-10" width="6" height="20" rx="2" fill="#fff" stroke="#5a3550" stroke-width="1.4"/>
-      <rect x="-3" y="-16" width="6" height="26" rx="2" fill="#9ed6ff" stroke="#5a3550" stroke-width="1.4"/>
-      <rect x="20" y="-12" width="6" height="22" rx="2" fill="#ffc7df" stroke="#5a3550" stroke-width="1.4"/>
-      <path d="M-23 -10 Q-26 -16 -22 -22 Q-19 -16 -23 -10Z" fill="#ffe28a"/>
-      <path d="M0 -16 Q-3 -22 1 -28 Q4 -22 0 -16Z" fill="#ff6fa8"/>
-      <path d="M23 -12 Q20 -18 24 -24 Q27 -18 23 -12Z" fill="#ffe28a"/>
+      <rect x="-3"  y="-16" width="6" height="26" rx="2" fill="#9ed6ff" stroke="#5a3550" stroke-width="1.4"/>
+      <rect x="20"  y="-12" width="6" height="22" rx="2" fill="#ffc7df" stroke="#5a3550" stroke-width="1.4"/>
+      <!-- warm flame halos (outer glow) -->
+      <ellipse cx="-23" cy="-18" rx="7" ry="11" fill="#fff3b8" opacity=".55"/>
+      <ellipse cx="0" cy="-24" rx="8" ry="14" fill="#fff3b8" opacity=".55"/>
+      <ellipse cx="23" cy="-20" rx="7" ry="12" fill="#fff3b8" opacity=".55"/>
+      <!-- flame bodies (warm yellow) -->
+      <path d="M-23 -14 Q-29 -22 -23 -28 Q-17 -22 -23 -14 Z" fill="#ffd24d" stroke="#ff8a3d" stroke-width="1.2" stroke-linejoin="round"/>
+      <path d="M0 -20 Q-7 -30 0 -38 Q7 -30 0 -20 Z" fill="#ffd24d" stroke="#ff8a3d" stroke-width="1.2" stroke-linejoin="round"/>
+      <path d="M23 -16 Q17 -26 23 -32 Q29 -26 23 -16 Z" fill="#ffd24d" stroke="#ff8a3d" stroke-width="1.2" stroke-linejoin="round"/>
+      <!-- inner flame cores (white-hot) -->
+      <path d="M-23 -18 Q-26 -22 -23 -25 Q-20 -22 -23 -18 Z" fill="#fff8d6"/>
+      <path d="M0 -24 Q-3 -30 0 -34 Q3 -30 0 -24 Z" fill="#fff8d6"/>
+      <path d="M23 -20 Q20 -24 23 -27 Q26 -24 23 -20 Z" fill="#fff8d6"/>
     </g>
   `;
 }
@@ -977,52 +1103,52 @@ function presentsSVG(tier){
   const colors = ['#ff6fa8','#9ed6ff','#7ddcb1','#ffe28a','#e9d8ff'];
   const c1=colors[tier], c2=colors[(tier+2)%5], c3=colors[(tier+4)%5];
   return `
-    <g transform="translate(120,440)">
-      <rect x="-30" y="-10" width="60" height="44" rx="4" fill="${c1}"/>
-      <rect x="-30" y="-10" width="60" height="6" fill="#fff" opacity=".4"/>
-      <rect x="-4" y="-10" width="8" height="44" fill="${c3}"/>
-      <path d="M0 -10 Q-14 -28 -10 -38 Q-2 -28 0 -10Z" fill="${c3}"/>
-      <path d="M0 -10 Q14 -28 10 -38 Q2 -28 0 -10Z" fill="${c3}"/>
-      <circle cx="0" cy="-30" r="3" fill="${c1}"/>
+    <g transform="translate(120,335)">
+      <rect x="-26" y="-8" width="52" height="36" rx="3" fill="${c1}"/>
+      <rect x="-26" y="-8" width="52" height="5" fill="#fff" opacity=".4"/>
+      <rect x="-4" y="-8" width="8" height="36" fill="${c3}"/>
+      <path d="M0 -8 Q-12 -22 -8 -30 Q-2 -22 0 -8Z" fill="${c3}"/>
+      <path d="M0 -8 Q12 -22 8 -30 Q2 -22 0 -8Z" fill="${c3}"/>
+      <circle cx="0" cy="-24" r="2.5" fill="${c1}"/>
     </g>
-    <g transform="translate(680,460)">
-      <rect x="-26" y="-10" width="52" height="40" rx="4" fill="${c2}"/>
-      <rect x="-26" y="-10" width="52" height="6" fill="#fff" opacity=".4"/>
-      <rect x="-3" y="-10" width="6" height="40" fill="${c3}"/>
-      <path d="M0 -10 Q-12 -26 -8 -34 Q-2 -26 0 -10Z" fill="${c3}"/>
-      <path d="M0 -10 Q12 -26 8 -34 Q2 -26 0 -10Z" fill="${c3}"/>
+    <g transform="translate(680,348)">
+      <rect x="-22" y="-8" width="44" height="32" rx="3" fill="${c2}"/>
+      <rect x="-22" y="-8" width="44" height="5" fill="#fff" opacity=".4"/>
+      <rect x="-3" y="-8" width="6" height="32" fill="${c3}"/>
+      <path d="M0 -8 Q-10 -20 -7 -28 Q-2 -20 0 -8Z" fill="${c3}"/>
+      <path d="M0 -8 Q10 -20 7 -28 Q2 -20 0 -8Z" fill="${c3}"/>
     </g>
   `;
 }
 function balloonsSVG(tier){
   const cols = ['#ff9ec6','#9ed6ff','#ffe28a','#7ddcb1','#e9d8ff'];
   return `
-    <g transform="translate(560,300)">
-      <ellipse cx="-40" cy="-20" rx="20" ry="26" fill="${cols[tier]}"/>
-      <ellipse cx="0" cy="-30" rx="22" ry="28" fill="${cols[(tier+1)%5]}"/>
-      <ellipse cx="40" cy="-20" rx="20" ry="26" fill="${cols[(tier+2)%5]}"/>
-      <ellipse cx="-46" cy="-26" rx="3" ry="5" fill="#fff" opacity=".6"/>
-      <ellipse cx="-6" cy="-36" rx="3" ry="5" fill="#fff" opacity=".6"/>
-      <ellipse cx="34" cy="-26" rx="3" ry="5" fill="#fff" opacity=".6"/>
-      <path d="M-40 6 Q-42 20 -40 50" stroke="#5a3550" stroke-width="1.4" fill="none"/>
-      <path d="M0 0 Q-2 20 0 50" stroke="#5a3550" stroke-width="1.4" fill="none"/>
-      <path d="M40 6 Q42 20 40 50" stroke="#5a3550" stroke-width="1.4" fill="none"/>
-      <polygon points="-40,6 -44,4 -40,2" fill="${cols[tier]}"/>
-      <polygon points="0,0 -4,-2 0,-4" fill="${cols[(tier+1)%5]}"/>
-      <polygon points="40,6 36,4 40,2" fill="${cols[(tier+2)%5]}"/>
+    <g transform="translate(560,220)">
+      <ellipse cx="-40" cy="-20" rx="18" ry="22" fill="${cols[tier]}"/>
+      <ellipse cx="0" cy="-30" rx="20" ry="24" fill="${cols[(tier+1)%5]}"/>
+      <ellipse cx="40" cy="-20" rx="18" ry="22" fill="${cols[(tier+2)%5]}"/>
+      <ellipse cx="-46" cy="-26" rx="2.5" ry="4" fill="#fff" opacity=".6"/>
+      <ellipse cx="-6" cy="-36" rx="2.5" ry="4" fill="#fff" opacity=".6"/>
+      <ellipse cx="34" cy="-26" rx="2.5" ry="4" fill="#fff" opacity=".6"/>
+      <path d="M-40 2 Q-42 18 -40 50" stroke="#5a3550" stroke-width="1.4" fill="none"/>
+      <path d="M0 -4 Q-2 18 0 50" stroke="#5a3550" stroke-width="1.4" fill="none"/>
+      <path d="M40 2 Q42 18 40 50" stroke="#5a3550" stroke-width="1.4" fill="none"/>
+      <polygon points="-40,2 -44,0 -40,-2" fill="${cols[tier]}"/>
+      <polygon points="0,-4 -4,-6 0,-8" fill="${cols[(tier+1)%5]}"/>
+      <polygon points="40,2 36,0 40,-2" fill="${cols[(tier+2)%5]}"/>
     </g>
   `;
 }
 function pinhataSVG(){
   return `
-    <g transform="translate(280,180)">
-      <line x1="0" y1="-50" x2="0" y2="-30" stroke="#5a3550" stroke-width="2"/>
-      <ellipse cx="0" cy="0" rx="34" ry="46" fill="#ffe28a"/>
-      <path d="M-34 0 L34 0 L0 -50 Z" fill="#ff6fa8"/>
-      <path d="M-34 0 L-20 20 L-30 10 Z" fill="#9ed6ff"/>
-      <path d="M34 0 L20 20 L30 10 Z" fill="#9ed6ff"/>
-      <rect x="-6" y="30" width="12" height="20" fill="#ff6fa8"/>
-      <rect x="-10" y="50" width="20" height="6" fill="#ffe28a"/>
+    <g transform="translate(280,140)">
+      <line x1="0" y1="-40" x2="0" y2="-24" stroke="#5a3550" stroke-width="2"/>
+      <ellipse cx="0" cy="0" rx="28" ry="38" fill="#ffe28a"/>
+      <path d="M-28 0 L28 0 L0 -40 Z" fill="#ff6fa8"/>
+      <path d="M-28 0 L-16 16 L-24 8 Z" fill="#9ed6ff"/>
+      <path d="M28 0 L16 16 L24 8 Z" fill="#9ed6ff"/>
+      <rect x="-5" y="24" width="10" height="16" fill="#ff6fa8"/>
+      <rect x="-8" y="40" width="16" height="5" fill="#ffe28a"/>
     </g>
   `;
 }
@@ -1031,7 +1157,7 @@ function buntingSVG(){
   for (let i=0;i<10;i++){
     const cx = 80 + i*70;
     const colors = ['#ff6fa8','#9ed6ff','#ffe28a','#7ddcb1','#e9d8ff'];
-    s += `<polygon points="${cx-10},${90 + (i%2)*6} ${cx+10},${90 + (i%2)*6} ${cx},${110 + (i%2)*6}" fill="${colors[i%5]}"/>`;
+    s += `<polygon points="${cx-10},${68 + (i%2)*5} ${cx+10},${68 + (i%2)*5} ${cx},${84 + (i%2)*5}" fill="${colors[i%5]}"/>`;
   }
   return s;
 }
@@ -1172,6 +1298,7 @@ function startFinaleConfetti(){
 document.getElementById('restart').addEventListener('click', ()=>{
   state.selected.clear();
   state.found.clear();
+  if (state.hintTimer){ clearInterval(state.hintTimer); state.hintTimer = null; }
   document.querySelectorAll('.tile.selected').forEach(t=>t.classList.remove('selected'));
   document.getElementById('screen-final').style.display = 'none';
   document.getElementById('screen-pick').style.display = 'block';
