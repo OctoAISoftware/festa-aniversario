@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
 <meta name="theme-color" content="#ffd6e8" />
 <title>Festa da Maia — Organizador de Festa</title>
 <style>
@@ -25,72 +25,93 @@
     --ink-soft:#8a6a82;
     --shadow:0 10px 24px rgba(255,105,160,.18);
     --shadow-soft:0 6px 14px rgba(255,105,160,.12);
+    --shadow-tile:0 4px 10px rgba(255,105,160,.14);
     --r-lg:24px;
     --r-md:16px;
     --r-sm:12px;
+    --tap:48px;
+    --safe-top:env(safe-area-inset-top,0px);
+    --safe-bot:env(safe-area-inset-bottom,0px);
   }
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:linear-gradient(180deg,#fff0f7 0%,#fff7e6 100%);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Comic Sans MS","Comic Sans",cursive,system-ui,sans-serif;color:var(--ink);min-height:100vh;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
-  button{font-family:inherit;border:none;background:none;color:inherit;cursor:pointer}
+  html{ -webkit-text-size-adjust:100%; }
+  html,body{
+    margin:0;padding:0;
+    background:linear-gradient(180deg,#fff0f7 0%,#fff7e6 100%);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Comic Sans MS","Comic Sans",cursive,system-ui,sans-serif;
+    color:var(--ink);min-height:100vh;overflow-x:hidden;
+    -webkit-tap-highlight-color:transparent;
+    -webkit-touch-callout:none;
+  }
+  button{font-family:inherit;border:none;background:none;color:inherit;cursor:pointer;min-height:var(--tap);min-width:var(--tap)}
   h1,h2,h3,p{margin:0}
+  img{display:block;max-width:100%;height:auto;user-select:none;-webkit-user-drag:none;-webkit-touch-callout:none}
   .no-select{user-select:none;-webkit-user-select:none}
 
   /* ── HEADER ──────────────────────────────────────────────────────── */
   header.app-bar{
     position:sticky;top:0;z-index:50;
-    display:flex;align-items:center;gap:12px;
-    padding:14px 18px;
-    background:rgba(255,255,255,.85);
+    display:flex;align-items:center;gap:10px;
+    padding:calc(var(--safe-top) + 10px) 14px 10px;
+    background:rgba(255,255,255,.88);
     backdrop-filter:blur(14px) saturate(1.4);
     -webkit-backdrop-filter:blur(14px) saturate(1.4);
     border-bottom:2px solid var(--pink-100);
   }
   header.app-bar .logo{
-    width:46px;height:46px;border-radius:14px;background:#fff;
+    width:42px;height:42px;border-radius:12px;background:#fff;
     display:grid;place-items:center;box-shadow:var(--shadow-soft);
-    border:2px solid var(--pink-100);
+    border:2px solid var(--pink-100);flex:0 0 auto;
   }
-  header.app-bar h1{font-size:20px;line-height:1.1;font-weight:800;color:var(--pink-600);letter-spacing:-.01em}
-  header.app-bar .sub{font-size:11px;color:var(--ink-soft);font-weight:600}
+  header.app-bar h1{font-size:18px;line-height:1.1;font-weight:800;color:var(--pink-600);letter-spacing:-.01em}
+  header.app-bar .sub{font-size:10px;color:var(--ink-soft);font-weight:600}
   header.app-bar .spacer{flex:1}
   header.app-bar .counter{
     display:flex;align-items:center;gap:6px;background:var(--pink-100);
     padding:8px 14px;border-radius:999px;font-weight:800;color:var(--pink-600);
-    box-shadow:var(--shadow-soft);
+    box-shadow:var(--shadow-soft);font-size:13px;
   }
-  header.app-bar .counter .dot{width:10px;height:10px;border-radius:50%;background:var(--pink-400);box-shadow:0 0 0 4px #fff inset}
-  .screen-title{
-    text-align:center;padding:18px 16px 6px;
-  }
-  .screen-title h2{font-size:26px;color:var(--pink-600);font-weight:900;letter-spacing:-.01em}
-  .screen-title p{font-size:14px;color:var(--ink-soft);margin-top:4px}
+  header.app-bar .counter .dot{width:8px;height:8px;border-radius:50%;background:var(--pink-400);box-shadow:0 0 0 3px #fff inset}
+
+  .screen-title{ text-align:center;padding:14px 16px 4px; }
+  .screen-title h2{font-size:22px;color:var(--pink-600);font-weight:900;letter-spacing:-.01em;line-height:1.15}
+  .screen-title p{font-size:13px;color:var(--ink-soft);margin-top:3px}
 
   /* ── MAIN WRAPPER ────────────────────────────────────────────────── */
-  main{padding:0 16px 100px;max-width:980px;margin:0 auto}
+  main{
+    padding:0 14px calc(110px + var(--safe-bot));
+    max-width:980px;margin:0 auto;
+    width:100%;
+  }
   .panel{
     background:#fff;border-radius:var(--r-lg);
-    padding:18px;box-shadow:var(--shadow);
+    padding:14px;box-shadow:var(--shadow);
     border:2px solid var(--pink-100);
   }
 
   /* ── SCREEN 1 — item selection grid ──────────────────────────────── */
   #screen-pick{display:block}
   #screen-find,#screen-final{display:none}
+
   .grid{
-    display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));
-    gap:14px;margin-top:14px;
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(96px,1fr));
+    gap:10px;margin-top:10px;
   }
   .tile{
     position:relative;background:#fff;border-radius:var(--r-md);
-    padding:10px 8px 12px;border:3px solid var(--pink-100);
-    box-shadow:var(--shadow-soft);transition:transform .15s ease, border-color .2s ease, background .2s ease;
+    padding:8px 6px 10px;border:3px solid var(--pink-100);
+    box-shadow:var(--shadow-tile);
+    transition:transform .15s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease;
     cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;
-    min-height:120px;
+    min-height:108px;
+    -webkit-tap-highlight-color:transparent;
   }
   .tile:hover{transform:translateY(-3px) scale(1.02)}
   .tile:active{transform:translateY(-1px) scale(.98)}
-  .tile .icon{width:72px;height:72px;display:grid;place-items:center}
-  .tile .name{font-size:12px;font-weight:700;color:var(--ink);text-align:center;line-height:1.15}
+  .tile .icon{width:64px;height:64px;display:grid;place-items:center;overflow:hidden}
+  .tile .icon img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(255,105,160,.15))}
+  .tile .name{font-size:11px;font-weight:700;color:var(--ink);text-align:center;line-height:1.15;min-height:24px}
   .tile.selected{
     background:linear-gradient(160deg,#fff7fb,#ffeaf3);
     border-color:var(--pink-400);
@@ -98,8 +119,8 @@
     animation:pop .4s ease;
   }
   .tile.selected::after{
-    content:"";position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;
-    background:var(--pink-400) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='none' stroke='white' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round' d='M5 12.5 10 17.5 19 7.5'/></svg>") center/18px no-repeat;
+    content:"";position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;
+    background:var(--pink-400) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='none' stroke='white' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round' d='M5 12.5 10 17.5 19 7.5'/></svg>") center/16px no-repeat;
     box-shadow:0 4px 10px rgba(255,77,141,.4);
     animation:bounce-in .45s cubic-bezier(.2,1.6,.4,1) both;
   }
@@ -108,14 +129,15 @@
   @keyframes bounce-in{0%{transform:scale(0) rotate(-30deg)}70%{transform:scale(1.3) rotate(8deg)}100%{transform:scale(1) rotate(0)}}
 
   /* CTA */
-  .cta-row{margin-top:20px;display:flex;flex-direction:column;align-items:center;gap:10px}
+  .cta-row{margin-top:18px;display:flex;flex-direction:column;align-items:center;gap:8px}
   .cta{
     background:linear-gradient(180deg,var(--pink-400),var(--pink-500));
-    color:#fff;font-weight:900;font-size:20px;letter-spacing:.01em;
-    padding:18px 30px;border-radius:999px;box-shadow:0 14px 30px rgba(255,77,141,.45);
+    color:#fff;font-weight:900;font-size:18px;letter-spacing:.01em;
+    padding:16px 26px;border-radius:999px;box-shadow:0 14px 30px rgba(255,77,141,.45);
     transition:transform .15s ease, box-shadow .15s ease, filter .15s ease;
-    display:inline-flex;align-items:center;gap:12px;
+    display:inline-flex;align-items:center;gap:10px;
     border:3px solid #fff;
+    min-height:56px;
   }
   .cta:hover{transform:translateY(-2px) scale(1.03)}
   .cta:active{transform:translateY(0) scale(.98)}
@@ -124,7 +146,7 @@
     color:#fff8;cursor:not-allowed;box-shadow:none;
   }
   .cta[disabled]:hover{transform:none}
-  .cta-hint{font-size:13px;color:var(--ink-soft);font-weight:700;min-height:18px}
+  .cta-hint{font-size:12px;color:var(--ink-soft);font-weight:700;min-height:16px;text-align:center;padding:0 12px}
 
   /* ── SCREEN 2 — seek-and-find ────────────────────────────────────── */
   #screen-find .stage{
@@ -184,39 +206,35 @@
   }
 
   /* sidebar */
-  .find-layout{display:grid;grid-template-columns:1fr 200px;gap:14px;margin-top:14px}
-  @media (max-width:780px){
-    .find-layout{grid-template-columns:1fr}
-  }
+  .find-layout{display:grid;grid-template-columns:1fr;gap:12px;margin-top:10px}
   .sidebar{
     background:#fff;border-radius:var(--r-lg);
-    padding:14px;box-shadow:var(--shadow-soft);border:2px solid var(--pink-100);
+    padding:12px;box-shadow:var(--shadow-soft);border:2px solid var(--pink-100);
   }
-  .sidebar h3{font-size:14px;color:var(--pink-600);font-weight:900;margin-bottom:10px}
+  .sidebar h3{font-size:14px;color:var(--pink-600);font-weight:900;margin-bottom:8px}
   .checklist{
-    display:grid;grid-template-columns:repeat(5,1fr);gap:8px;
+    display:grid;grid-template-columns:repeat(5,1fr);gap:6px;
   }
-  @media (max-width:780px){.checklist{grid-template-columns:repeat(6,1fr)}}
   .checklist .slot{
-    aspect-ratio:1;border-radius:14px;background:var(--pink-50);
+    aspect-ratio:1;border-radius:10px;background:var(--pink-50);
     display:grid;place-items:center;border:2px dashed var(--pink-200);
-    position:relative;
+    position:relative;overflow:hidden;
   }
-  .checklist .slot svg{width:80%;height:80%}
+  .checklist .slot img{width:80%;height:80%;object-fit:contain}
   .checklist .slot.found{
     background:linear-gradient(160deg,#ffeaf3,#ffd5e6);
     border:2px solid var(--pink-300);
     animation:slot-pop .5s cubic-bezier(.2,1.6,.4,1);
   }
   .checklist .slot.found::after{
-    content:"";position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;
-    background:var(--pink-400) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='none' stroke='white' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round' d='M5 12.5 10 17.5 19 7.5'/></svg>") center/16px no-repeat;
+    content:"";position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;
+    background:var(--pink-400) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='none' stroke='white' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round' d='M5 12.5 10 17.5 19 7.5'/></svg>") center/14px no-repeat;
     box-shadow:0 4px 10px rgba(255,77,141,.5);
   }
   @keyframes slot-pop{0%{transform:scale(.4)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
 
   .progress{
-    margin-top:12px;background:var(--pink-50);height:14px;border-radius:999px;overflow:hidden;
+    margin-top:10px;background:var(--pink-50);height:12px;border-radius:999px;overflow:hidden;
     border:2px solid var(--pink-100);
   }
   .progress > span{
@@ -225,7 +243,7 @@
     transition:width .4s cubic-bezier(.2,.8,.2,1);
     border-radius:999px;
   }
-  .progress-label{font-size:12px;color:var(--ink-soft);font-weight:700;margin-top:6px;text-align:center}
+  .progress-label{font-size:11px;color:var(--ink-soft);font-weight:700;margin-top:5px;text-align:center}
 
   /* ── SCREEN 3 — final scene ──────────────────────────────────────── */
   #screen-final .finale{
@@ -243,15 +261,16 @@
     50%{transform:scale(1.3) rotate(40deg);opacity:1}
   }
   .finale-actions{
-    display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:18px;
+    display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px;
   }
   .big-btn{
     background:#fff;color:var(--pink-600);
-    border:3px solid var(--pink-300);border-radius:22px;
-    padding:14px 22px;font-weight:900;font-size:17px;
+    border:3px solid var(--pink-300);border-radius:20px;
+    padding:12px 18px;font-weight:900;font-size:15px;
     box-shadow:var(--shadow-soft);
-    display:inline-flex;align-items:center;gap:10px;
+    display:inline-flex;align-items:center;gap:8px;
     transition:transform .15s ease, box-shadow .15s ease;
+    min-height:50px;
   }
   .big-btn:hover{transform:translateY(-2px) scale(1.04)}
   .big-btn.primary{
@@ -274,8 +293,44 @@
   @keyframes bounce-splash{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
   .splash.gone{opacity:0;pointer-events:none}
 
-  /* ── mascot / character SVGs (original, non-Sanrio) ─────────────── */
-  .mascot{position:absolute;pointer-events:none}
+  /* ── footer credits ─────────────────────────────────────────────── */
+  footer.site-credit{
+    text-align:center;padding:18px 14px calc(20px + var(--safe-bot));
+    font-size:11px;color:var(--ink-soft);line-height:1.45;
+    max-width:680px;margin:0 auto;
+  }
+  footer.site-credit a{color:var(--pink-600);text-decoration:none;border-bottom:1px dotted var(--pink-300)}
+  footer.site-credit a:hover{border-bottom-color:var(--pink-600)}
+
+  /* ── BREAKPOINTS — true mobile-first scaling ────────────────────── */
+  /* phones ~360-414px: keep current */
+  @media (max-width:380px){
+    .grid{grid-template-columns:repeat(3,1fr);gap:8px}
+    .tile{min-height:104px}
+    .tile .icon{width:58px;height:58px}
+    .tile .name{font-size:10px}
+    header.app-bar h1{font-size:17px}
+  }
+  /* slightly larger phones (iPhone Plus / Pro Max) — 2xl uses 5 cols */
+  @media (min-width:430px){
+    .grid{grid-template-columns:repeat(4,1fr)}
+    .checklist{grid-template-columns:repeat(6,1fr)}
+  }
+  /* tablet portrait — sidebar returns */
+  @media (min-width:760px){
+    main{padding-left:18px;padding-right:18px}
+    .grid{grid-template-columns:repeat(5,1fr)}
+    .find-layout{grid-template-columns:1fr 220px;gap:14px}
+    .checklist{grid-template-columns:repeat(5,1fr)}
+    .tile .icon{width:72px;height:72px}
+    .tile .name{font-size:12px}
+  }
+  /* desktop — comfortable */
+  @media (min-width:980px){
+    .grid{grid-template-columns:repeat(6,1fr)}
+    .find-layout{grid-template-columns:1fr 240px;gap:18px}
+    .tile .icon{width:80px;height:80px}
+  }
 
   /* reduced motion */
   @media (prefers-reduced-motion:reduce){
@@ -287,27 +342,43 @@
 <!-- ── Splash ─────────────────────────────────────────────────────── -->
 <div class="splash" id="splash" aria-hidden="true">
   <div class="bouncer">
-    <svg viewBox="0 0 80 80" width="80" height="80" aria-hidden="true">
-      <!-- original bunny mascot -->
+    <svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true">
+      <!-- Original bunny mascot (improved) -->
       <defs>
-        <radialGradient id="bunnyCheek" cx=".5" cy=".5" r=".5">
-          <stop offset="0" stop-color="#ffb3cf"/>
-          <stop offset="1" stop-color="#ffb3cf" stop-opacity="0"/>
+        <radialGradient id="bunnyBody" cx=".5" cy=".4" r=".6">
+          <stop offset="0" stop-color="#ffffff"/>
+          <stop offset="1" stop-color="#fff3f8"/>
+        </radialGradient>
+        <radialGradient id="bunnyEar" cx=".5" cy=".5" r=".5">
+          <stop offset="0" stop-color="#ffd5e6"/>
+          <stop offset="1" stop-color="#ff9ec6"/>
         </radialGradient>
       </defs>
-      <ellipse cx="26" cy="22" rx="6" ry="14" fill="#fff" stroke="#f4c7d9" stroke-width="2"/>
-      <ellipse cx="54" cy="22" rx="6" ry="14" fill="#fff" stroke="#f4c7d9" stroke-width="2"/>
-      <ellipse cx="26" cy="22" rx="2.6" ry="9" fill="#ffc7df"/>
-      <ellipse cx="54" cy="22" rx="2.6" ry="9" fill="#ffc7df"/>
-      <circle cx="40" cy="46" r="26" fill="#fff" stroke="#f4c7d9" stroke-width="2.4"/>
-      <circle cx="31" cy="44" r="4.5" fill="#ffb3cf" opacity=".6"/>
-      <circle cx="49" cy="44" r="4.5" fill="#ffb3cf" opacity=".6"/>
-      <circle cx="33" cy="40" r="3" fill="#3a2a36"/>
-      <circle cx="47" cy="40" r="3" fill="#3a2a36"/>
-      <circle cx="33.6" cy="39.4" r=".9" fill="#fff"/>
-      <circle cx="47.6" cy="39.4" r=".9" fill="#fff"/>
-      <path d="M37 47 Q40 50 43 47" stroke="#3a2a36" stroke-width="2" fill="none" stroke-linecap="round"/>
-      <ellipse cx="40" cy="49" rx="2" ry="1.4" fill="#ff7aa9"/>
+      <!-- ears -->
+      <ellipse cx="42" cy="36" rx="9" ry="22" fill="url(#bunnyEar)" stroke="#f4c7d9" stroke-width="2"/>
+      <ellipse cx="78" cy="36" rx="9" ry="22" fill="url(#bunnyEar)" stroke="#f4c7d9" stroke-width="2"/>
+      <ellipse cx="42" cy="36" rx="3.4" ry="14" fill="#ffb3cf"/>
+      <ellipse cx="78" cy="36" rx="3.4" ry="14" fill="#ffb3cf"/>
+      <!-- head -->
+      <ellipse cx="60" cy="70" rx="38" ry="34" fill="url(#bunnyBody)" stroke="#f4c7d9" stroke-width="2.4"/>
+      <!-- cheeks -->
+      <circle cx="38" cy="72" r="6" fill="#ffb3cf" opacity=".7"/>
+      <circle cx="82" cy="72" r="6" fill="#ffb3cf" opacity=".7"/>
+      <!-- eyes -->
+      <ellipse cx="48" cy="64" rx="4.2" ry="5" fill="#3a2a36"/>
+      <ellipse cx="72" cy="64" rx="4.2" ry="5" fill="#3a2a36"/>
+      <circle cx="49" cy="63" r="1.4" fill="#fff"/>
+      <circle cx="73" cy="63" r="1.4" fill="#fff"/>
+      <!-- nose + smile -->
+      <ellipse cx="60" cy="74" rx="2.4" ry="1.6" fill="#ff7aa9"/>
+      <path d="M54 78 Q60 84 66 78" stroke="#3a2a36" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <!-- bow -->
+      <g transform="translate(60,32)">
+        <path d="M-22 -2 Q-12 -12 0 -2 Q-12 8 -22 -2Z" fill="#ff6fa8" stroke="#ff4d8d" stroke-width="1.5"/>
+        <path d="M22 -2 Q12 -12 0 -2 Q12 8 22 -2Z" fill="#ff6fa8" stroke="#ff4d8d" stroke-width="1.5"/>
+        <circle cx="0" cy="-2" r="4.5" fill="#ff4d8d" stroke="#fff" stroke-width="1.2"/>
+        <circle cx="0" cy="-2" r="1.5" fill="#fff"/>
+      </g>
     </svg>
   </div>
 </div>
@@ -343,7 +414,7 @@
     <div class="cta-row">
       <button class="cta" id="go-find" disabled>
         Vamos procurar!
-        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
           <path fill="currentColor" d="M5 12h12l-4-4 1.4-1.4L21 12l-6.6 5.4L13 16l4-4H5z"/>
         </svg>
       </button>
@@ -383,13 +454,13 @@
     </div>
     <div class="finale-actions">
       <button class="big-btn primary" id="restart">
-        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
           <path fill="currentColor" d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/>
         </svg>
         Montar outra festa
       </button>
       <button class="big-btn" id="variation">
-        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
           <path fill="currentColor" d="M12 2 14.5 8.5 21 9.3 16 14 17.5 21 12 17.3 6.5 21 8 14 3 9.3 9.5 8.5z"/>
         </svg>
         Outra variação
@@ -398,522 +469,79 @@
   </section>
 </main>
 
+<footer class="site-credit">
+  Ícones dos itens cortesia do <a href="https://openmoji.org/" target="_blank" rel="noopener">OpenMoji</a> · licença <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>.<br/>
+  As ilustrações dos mascotes e da cena são originais, feitas para a Maia. 💗
+</footer>
+
 <script>
 /* ──────────────────────────────────────────────────────────────────
  *  Festa da Maia — single-page game
- *  No external resources. Inline SVG, vanilla JS.
+ *  Visuals sourced from OpenMoji (CC BY-SA 4.0) + original art.
  * ────────────────────────────────────────────────────────────────── */
 
-// ── 40-item catalog (each has id, label pt-BR, icon SVG) ────────────
+const ICON_BASE = "assets/icons/";
+const ICONS = {
+  bolo:"bolo.svg", velinhas:"velinhas.svg", docinhos:"docinhos.svg", brigadeiro:"brigadeiro.svg",
+  sorvete:"sorvete.svg", refrigerante:"refrigerante.svg", suco:"suco.svg", salgadinhos:"salgadinhos.svg",
+  pizza:"pizza.svg", pipoca:"pipoca.svg", algodao:"algodao.svg", cachorroquente:"cachorroquente.svg",
+  baloes:"baloes.svg", chapeu:"chapeu.svg", serpentina:"serpentina.svg", confete:"confete.svg",
+  pratinhos:"pratinhos.svg", copos:"copos.svg", guardanapos:"guardanapos.svg", toalha:"toalha.svg",
+  bandeirolas:"bandeirolas.svg", luzinhas:"luzinhas.svg", decor:"decor.svg", musica:"musica.svg",
+  presente:"presente.svg", sacola:"sacola.svg", mascara:"mascara.svg", fantasia:"fantasia.svg",
+  guardachuva:"guardachuva.svg", pinhata:"pinhata.svg", cadeiras:"cadeiras.svg", pescaria:"pescaria.svg",
+  saco:"saco.svg", boca:"boca.svg", amarelinha:"amarelinha.svg", tatuagem:"tatuagem.svg",
+  bexiga:"bexiga.svg", palhaco:"palhaco.svg", coroa:"coroa.svg", colar:"colar.svg",
+};
+
+// ── 40-item catalog ───────────────────────────────────────────────
 const ITEMS = [
-  // doces / comidas
-  {id:"bolo",     label:"bolo",       color:"#ffc7df", icon:iconCake},
-  {id:"velinhas", label:"velinhas",   color:"#ffe28a", icon:iconCandles},
-  {id:"docinhos", label:"docinhos",   color:"#ffd6e8", icon:iconSweets},
-  {id:"brigadeiro",label:"brigadeiro",color:"#5a3550", icon:iconBrigadeiro},
-  {id:"sorvete",  label:"sorvete",    color:"#bff0d8", icon:iconIcecream},
-  {id:"refrigerante",label:"refrigerante",color:"#9ed6ff", icon:iconSoda},
-  {id:"suco",     label:"suco",       color:"#ffe28a", icon:iconJuice},
-  {id:"salgadinhos",label:"salgadinhos",color:"#ffd6c0", icon:iconSnack},
-  {id:"pizza",    label:"pizza",      color:"#ffe6a3", icon:iconPizza},
-  {id:"pipoca",   label:"pipoca",     color:"#fff7ec", icon:iconPopcorn},
-  {id:"algodao",  label:"algodão-doce",color:"#ffd6e8", icon:iconCottonCandy},
-  {id:"cachorroquente",label:"cachorro-quente",color:"#ffc7a8", icon:iconHotdog},
-  // decoração
-  {id:"baloes",   label:"balões",     color:"#ffc7df", icon:iconBalloons},
-  {id:"chapeu",   label:"chapéu de festa", color:"#9ed6ff", icon:iconPartyHat},
-  {id:"serpentina",label:"serpentina",color:"#e9d8ff", icon:iconStreamer},
-  {id:"confete",  label:"confete",    color:"#ffe28a", icon:iconConfetti},
-  {id:"pratinhos",label:"pratinhos",  color:"#dff1ff", icon:iconPlates},
-  {id:"copos",    label:"copos",      color:"#dff1ff", icon:iconCups},
-  {id:"guardanapos",label:"guardanapos",color:"#ffc7df", icon:iconNapkins},
-  {id:"toalha",   label:"toalha da mesa",color:"#ffd6e8", icon:iconTablecloth},
-  {id:"bandeirolas",label:"bandeirolas",color:"#9ed6ff", icon:iconBunting},
-  {id:"luzinhas", label:"luzinhas",   color:"#ffe28a", icon:iconLights},
-  {id:"decor",    label:"decoração de parede", color:"#e9d8ff", icon:iconWallDecor},
-  {id:"musica",   label:"música",     color:"#ffc7df", icon:iconMusic},
-  {id:"presente", label:"presente",   color:"#ff9ec6", icon:iconGift},
-  {id:"sacola",   label:"sacola de lembrancinhas",color:"#bff0d8", icon:iconLembrancinha},
-  {id:"mascara",  label:"máscara de festa", color:"#e9d8ff", icon:iconMask},
-  {id:"fantasia", label:"fantasia",   color:"#9ed6ff", icon:iconCostume},
-  {id:"guardachuva",label:"guarda-chuva de papel",color:"#ffc7df", icon:iconUmbrella},
-  {id:"pinhata",  label:"piñata",     color:"#ffe28a", icon:iconPinata},
-  // brincadeiras
-  {id:"cadeiras", label:"dança das cadeiras",color:"#ffc7df", icon:iconChairs},
-  {id:"pescaria", label:"pescaria",   color:"#bff0d8", icon:iconFishing},
-  {id:"saco",     label:"corrida do saco",color:"#dff1ff", icon:iconSackRace},
-  {id:"boca",     label:"boca do palhaço",color:"#ffe28a", icon:iconClownMouth},
-  {id:"amarelinha",label:"amarelinha",color:"#e9d8ff", icon:iconHopscotch},
-  {id:"tatuagem", label:"tatuagem de festa",color:"#ffc7df", icon:iconTattoo},
-  {id:"bexiga",   label:"bexiga",     color:"#9ed6ff", icon:iconBalloon},
-  {id:"palhaco",  label:"palhaço",    color:"#ff9ec6", icon:iconClown},
-  {id:"coroa",    label:"coroa",      color:"#ffe28a", icon:iconCrown},
-  {id:"colar",    label:"colar de guloseimas",color:"#bff0d8", icon:iconCandyNecklace},
+  {id:"bolo",     label:"bolo",        color:"#ffc7df"},
+  {id:"velinhas", label:"velinhas",    color:"#ffe28a"},
+  {id:"docinhos", label:"docinhos",    color:"#ffd6e8"},
+  {id:"brigadeiro",label:"brigadeiro", color:"#c9a8b6"},
+  {id:"sorvete",  label:"sorvete",     color:"#bff0d8"},
+  {id:"refrigerante",label:"refrigerante",color:"#9ed6ff"},
+  {id:"suco",     label:"suco",        color:"#ffe28a"},
+  {id:"salgadinhos",label:"salgadinhos",color:"#ffd6c0"},
+  {id:"pizza",    label:"pizza",       color:"#ffe6a3"},
+  {id:"pipoca",   label:"pipoca",      color:"#fff7ec"},
+  {id:"algodao",  label:"algodão-doce",color:"#ffd6e8"},
+  {id:"cachorroquente",label:"cachorro-quente",color:"#ffc7a8"},
+  {id:"baloes",   label:"balões",      color:"#ffc7df"},
+  {id:"chapeu",   label:"chapéu de festa",color:"#9ed6ff"},
+  {id:"serpentina",label:"serpentina", color:"#e9d8ff"},
+  {id:"confete",  label:"confete",     color:"#ffe28a"},
+  {id:"pratinhos",label:"pratinhos",   color:"#dff1ff"},
+  {id:"copos",    label:"copos",       color:"#dff1ff"},
+  {id:"guardanapos",label:"guardanapos",color:"#ffc7df"},
+  {id:"toalha",   label:"toalha da mesa",color:"#ffd6e8"},
+  {id:"bandeirolas",label:"bandeirolas",color:"#9ed6ff"},
+  {id:"luzinhas", label:"luzinhas",    color:"#ffe28a"},
+  {id:"decor",    label:"decoração de parede",color:"#e9d8ff"},
+  {id:"musica",   label:"música",      color:"#ffc7df"},
+  {id:"presente", label:"presente",    color:"#ff9ec6"},
+  {id:"sacola",   label:"sacola de lembrancinhas",color:"#bff0d8"},
+  {id:"mascara",  label:"máscara de festa",color:"#e9d8ff"},
+  {id:"fantasia", label:"fantasia",    color:"#9ed6ff"},
+  {id:"guardachuva",label:"guarda-chuva de papel",color:"#ffc7df"},
+  {id:"pinhata",  label:"piñata",      color:"#ffe28a"},
+  {id:"cadeiras", label:"dança das cadeiras",color:"#ffc7df"},
+  {id:"pescaria", label:"pescaria",    color:"#bff0d8"},
+  {id:"saco",     label:"corrida do saco",color:"#dff1ff"},
+  {id:"boca",     label:"boca do palhaço",color:"#ffe28a"},
+  {id:"amarelinha",label:"amarelinha", color:"#e9d8ff"},
+  {id:"tatuagem", label:"tatuagem de festa",color:"#ffc7df"},
+  {id:"bexiga",   label:"bexiga",      color:"#9ed6ff"},
+  {id:"palhaco",  label:"palhaço",     color:"#ff9ec6"},
+  {id:"coroa",    label:"coroa",       color:"#ffe28a"},
+  {id:"colar",    label:"colar de guloseimas",color:"#bff0d8"},
 ];
+if (ITEMS.length !== 40) console.warn("Expected 40 items, got", ITEMS.length);
 
-if (ITEMS.length !== 40) {
-  console.warn("Expected 40 items, got", ITEMS.length);
-}
-
-// ── Icon factories (return SVG inner) ───────────────────────────────
-function wrap(inner, size=72){
-  return `<svg viewBox="0 0 80 80" width="${size}" height="${size}" aria-hidden="true">${inner}</svg>`;
-}
-function iconCake(){
-  return wrap(`
-    <ellipse cx="40" cy="68" rx="32" ry="6" fill="#f4c7d9"/>
-    <rect x="12" y="40" width="56" height="28" rx="6" fill="#ffc7df"/>
-    <path d="M12 40 Q14 30 16 40 M22 40 Q24 28 26 40 M32 40 Q34 30 36 40 M42 40 Q44 28 46 40 M52 40 Q54 30 56 40 M62 40 Q64 30 66 40" stroke="#fff" stroke-width="2" fill="none"/>
-    <rect x="12" y="46" width="56" height="4" fill="#ff9ec6"/>
-    <rect x="38" y="20" width="4" height="14" rx="2" fill="#fff" stroke="#5a3550" stroke-width="1.4"/>
-    <path d="M40 12 Q35 16 40 22 Q45 16 40 12Z" fill="#ff6fa8"/>
-    <circle cx="40" cy="9" r="3" fill="#ffe28a"/>
-    <circle cx="40" cy="9" r="1.2" fill="#fff"/>
-  `);
-}
-function iconCandles(){
-  return wrap(`
-    <rect x="36" y="14" width="3" height="20" rx="1.5" fill="#fff" stroke="#5a3550" stroke-width="1.2"/>
-    <rect x="41" y="10" width="3" height="24" rx="1.5" fill="#9ed6ff" stroke="#5a3550" stroke-width="1.2"/>
-    <rect x="46" y="16" width="3" height="18" rx="1.5" fill="#ffc7df" stroke="#5a3550" stroke-width="1.2"/>
-    <path d="M37.5 14 Q36 11 38 8 Q40 10 38 13" fill="#ffe28a"/>
-    <path d="M42.5 10 Q41 7 43 4 Q45 6 43 9" fill="#ff6fa8"/>
-    <path d="M47.5 16 Q46 13 48 10 Q50 12 48 15" fill="#ffe28a"/>
-    <rect x="14" y="34" width="52" height="34" rx="4" fill="#ffc7df"/>
-    <ellipse cx="40" cy="68" rx="30" ry="4" fill="#f4c7d9"/>
-  `);
-}
-function iconSweets(){
-  return wrap(`
-    <ellipse cx="40" cy="68" rx="28" ry="3" fill="#5a3550" opacity=".2"/>
-    <g>
-      <path d="M14 52 L66 52 L60 70 L20 70 Z" fill="#ff9ec6" stroke="#ff6fa8" stroke-width="1.4"/>
-      <path d="M18 52 L22 70 M26 52 L30 70 M34 52 L38 70 M42 52 L46 70 M50 52 L54 70 M58 52 L62 70" stroke="#ff6fa8" stroke-width=".9" fill="none"/>
-      <ellipse cx="40" cy="52" rx="26" ry="4" fill="#ffc7df" stroke="#ff9ec6" stroke-width="1.2"/>
-      <circle cx="40" cy="46" r="11" fill="#5a3550"/>
-      <circle cx="36" cy="44" r="1.4" fill="#fff"/>
-      <circle cx="44" cy="46" r="1.2" fill="#fff"/>
-      <circle cx="40" cy="49" r="1" fill="#fff"/>
-      <circle cx="38" cy="48" r=".8" fill="#7ddcb1"/>
-      <circle cx="43" cy="50" r=".8" fill="#7ddcb1"/>
-    </g>
-    <g transform="translate(0 -2)">
-      <path d="M30 28 L50 28 L46 38 L34 38 Z" fill="#9ed6ff" stroke="#5fa8d6" stroke-width="1"/>
-      <path d="M32 28 L35 38 M36 28 L38 38 M40 28 L42 38 M44 28 L46 38" stroke="#5fa8d6" stroke-width=".7" fill="none"/>
-      <ellipse cx="40" cy="28" rx="10" ry="2.5" fill="#cfe7fa" stroke="#9ed6ff" stroke-width="1"/>
-      <circle cx="40" cy="24" r="7" fill="#9ed6ff" stroke="#5fa8d6" stroke-width="1"/>
-      <circle cx="38" cy="23" r=".9" fill="#fff"/>
-      <circle cx="42" cy="24" r=".9" fill="#fff"/>
-    </g>
-  `);
-}
-function iconBrigadeiro(){
-  return wrap(`
-    <ellipse cx="40" cy="64" rx="26" ry="5" fill="#3a2a36" opacity=".3"/>
-    <path d="M14 60 Q14 38 40 38 Q66 38 66 60 Q66 70 40 70 Q14 70 14 60Z" fill="#5a3550"/>
-    <ellipse cx="40" cy="38" rx="26" ry="6" fill="#7a4a6c"/>
-    <circle cx="28" cy="36" r="2" fill="#fff"/>
-    <circle cx="42" cy="32" r="2" fill="#fff"/>
-    <circle cx="52" cy="36" r="2" fill="#fff"/>
-    <circle cx="34" cy="44" r="2" fill="#fff"/>
-    <circle cx="48" cy="44" r="2" fill="#fff"/>
-  `);
-}
-function iconIcecream(){
-  return wrap(`
-    <path d="M22 30 L40 70 L58 30 Z" fill="#e9a875" stroke="#a86b3a" stroke-width="1.6"/>
-    <path d="M24 32 L28 36 M30 32 L34 36 M36 32 L40 36 M42 32 L46 36 M48 32 L52 36 M54 32 L56 34" stroke="#a86b3a" stroke-width="1.2"/>
-    <circle cx="32" cy="26" r="12" fill="#ffc7df"/>
-    <circle cx="46" cy="22" r="10" fill="#9ed6ff"/>
-    <circle cx="40" cy="14" r="8" fill="#ffe28a"/>
-    <circle cx="32" cy="26" r="3" fill="#fff"/>
-    <circle cx="46" cy="22" r="2" fill="#fff"/>
-  `);
-}
-function iconSoda(){
-  return wrap(`
-    <ellipse cx="40" cy="68" rx="20" ry="3" fill="#5a3550" opacity=".25"/>
-    <rect x="26" y="20" width="28" height="46" rx="4" fill="#ff6fa8"/>
-    <rect x="28" y="22" width="24" height="42" rx="3" fill="#ff9ec6"/>
-    <rect x="26" y="32" width="28" height="14" fill="#fff"/>
-    <text x="40" y="42" font-size="10" font-weight="900" text-anchor="middle" fill="#ff4d8d">REFR</text>
-    <rect x="36" y="14" width="8" height="6" rx="1" fill="#fff"/>
-    <ellipse cx="40" cy="14" rx="6" ry="3" fill="#5a3550"/>
-  `);
-}
-function iconJuice(){
-  return wrap(`
-    <path d="M22 26 L58 26 L52 64 Q40 70 28 64 Z" fill="#ffe28a"/>
-    <path d="M22 26 L58 26 L57 30 L23 30 Z" fill="#e6b65a"/>
-    <circle cx="40" cy="44" r="3" fill="#ff9ec6"/>
-    <circle cx="34" cy="50" r="2.5" fill="#ff6fa8"/>
-    <circle cx="46" cy="50" r="2.5" fill="#ff6fa8"/>
-    <path d="M58 28 Q66 26 64 18 Q60 22 58 26" fill="#ff9ec6"/>
-    <circle cx="62" cy="20" r="1.5" fill="#fff"/>
-  `);
-}
-function iconSnack(){
-  return wrap(`
-    <path d="M16 30 L64 30 L60 64 Q40 70 20 64 Z" fill="#ffd6c0"/>
-    <rect x="14" y="22" width="52" height="14" rx="6" fill="#ffc7a8"/>
-    <path d="M14 22 Q40 12 66 22" stroke="#5a3550" stroke-width="1.4" fill="none"/>
-    <text x="40" y="50" font-size="10" font-weight="900" text-anchor="middle" fill="#ff4d8d">SALG</text>
-  `);
-}
-function iconPizza(){
-  return wrap(`
-    <path d="M40 14 L72 60 Q40 72 8 60 Z" fill="#ffe28a" stroke="#e6a85a" stroke-width="2"/>
-    <path d="M40 14 L72 60 L40 64 Z" fill="#ff9ec6" opacity=".3"/>
-    <circle cx="32" cy="38" r="4" fill="#ff4d8d"/>
-    <circle cx="50" cy="44" r="4" fill="#ff4d8d"/>
-    <circle cx="40" cy="52" r="3" fill="#ff4d8d"/>
-    <circle cx="28" cy="52" r="2.5" fill="#7ddcb1"/>
-    <circle cx="54" cy="56" r="2.5" fill="#7ddcb1"/>
-  `);
-}
-function iconPopcorn(){
-  return wrap(`
-    <path d="M22 36 L58 36 L52 66 L28 66 Z" fill="#ff6fa8"/>
-    <rect x="22" y="32" width="36" height="6" rx="2" fill="#fff"/>
-    <circle cx="30" cy="26" r="8" fill="#fff7ec" stroke="#e6c89a" stroke-width="1.4"/>
-    <circle cx="42" cy="20" r="9" fill="#fff7ec" stroke="#e6c89a" stroke-width="1.4"/>
-    <circle cx="54" cy="26" r="8" fill="#fff7ec" stroke="#e6c89a" stroke-width="1.4"/>
-    <circle cx="36" cy="14" r="6" fill="#fff7ec" stroke="#e6c89a" stroke-width="1.4"/>
-    <circle cx="48" cy="10" r="6" fill="#fff7ec" stroke="#e6c89a" stroke-width="1.4"/>
-  `);
-}
-function iconCottonCandy(){
-  return wrap(`
-    <ellipse cx="40" cy="70" rx="3" ry="2" fill="#5a3550" opacity=".25"/>
-    <rect x="37" y="42" width="6" height="28" rx="1.5" fill="#c98a5a"/>
-    <rect x="37" y="42" width="6" height="28" rx="1.5" fill="none" stroke="#7a4a2a" stroke-width="1"/>
-    <path d="M34 44 L46 44 L40 42 Z" fill="#e6b07a"/>
-    <path d="M40 44 C12 44 8 18 24 12 C36 8 40 18 40 18 C40 18 44 8 56 12 C72 18 68 44 40 44 Z" fill="#ffc7df"/>
-    <path d="M40 44 C18 44 16 26 28 20 C38 16 40 22 40 22 C40 22 42 16 52 20 C64 26 62 44 40 44 Z" fill="#fff"/>
-    <path d="M22 28 Q26 22 30 28 Q34 34 38 28" stroke="#ff9ec6" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-    <path d="M42 28 Q46 22 50 28 Q54 34 58 28" stroke="#ff9ec6" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-    <path d="M28 36 Q32 32 36 36" stroke="#ff9ec6" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-    <path d="M44 36 Q48 32 52 36" stroke="#ff9ec6" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-    <circle cx="20" cy="14" r="2.5" fill="#fff" opacity=".9"/>
-    <circle cx="60" cy="14" r="2" fill="#fff" opacity=".9"/>
-  `);
-}
-function iconHotdog(){
-  return wrap(`
-    <ellipse cx="40" cy="42" rx="32" ry="14" fill="#ffc7a8" stroke="#a86b3a" stroke-width="2"/>
-    <ellipse cx="40" cy="42" rx="26" ry="9" fill="#ff9ec6"/>
-    <path d="M16 42 Q40 50 64 42" stroke="#ff4d8d" stroke-width="3" fill="none"/>
-    <path d="M14 38 Q40 30 66 38" stroke="#7ddcb1" stroke-width="3" fill="none"/>
-  `);
-}
-function iconBalloons(){
-  return wrap(`
-    <ellipse cx="40" cy="68" rx="14" ry="3" fill="#5a3550" opacity=".25"/>
-    <ellipse cx="22" cy="36" rx="14" ry="18" fill="#ff9ec6"/>
-    <ellipse cx="40" cy="28" rx="14" ry="18" fill="#9ed6ff"/>
-    <ellipse cx="58" cy="36" rx="14" ry="18" fill="#ffe28a"/>
-    <ellipse cx="18" cy="32" rx="3" ry="4" fill="#fff" opacity=".6"/>
-    <ellipse cx="36" cy="24" rx="3" ry="4" fill="#fff" opacity=".6"/>
-    <ellipse cx="54" cy="32" rx="3" ry="4" fill="#fff" opacity=".6"/>
-    <path d="M22 54 Q24 60 22 68" stroke="#5a3550" stroke-width="1.4" fill="none"/>
-    <path d="M40 46 Q38 56 40 68" stroke="#5a3550" stroke-width="1.4" fill="none"/>
-    <path d="M58 54 Q56 60 58 68" stroke="#5a3550" stroke-width="1.4" fill="none"/>
-    <polygon points="22,54 18,52 22,50" fill="#ff9ec6"/>
-    <polygon points="40,46 36,44 40,42" fill="#9ed6ff"/>
-    <polygon points="58,54 54,52 58,50" fill="#ffe28a"/>
-  `);
-}
-function iconPartyHat(){
-  return wrap(`
-    <path d="M20 60 L60 60 L40 14 Z" fill="#ff6fa8"/>
-    <path d="M20 60 L60 60 L40 50 Z" fill="#ff9ec6"/>
-    <circle cx="40" cy="12" r="6" fill="#ffe28a"/>
-    <circle cx="32" cy="38" r="2" fill="#fff"/>
-    <circle cx="46" cy="46" r="2" fill="#fff"/>
-    <circle cx="38" cy="54" r="2" fill="#fff"/>
-  `);
-}
-function iconStreamer(){
-  return wrap(`
-    <path d="M10 18 Q24 28 18 40 Q12 52 26 56 Q40 60 36 44" stroke="#ff6fa8" stroke-width="6" fill="none" stroke-linecap="round"/>
-    <path d="M30 12 Q44 22 38 34 Q32 46 46 50 Q60 54 56 38" stroke="#9ed6ff" stroke-width="6" fill="none" stroke-linecap="round"/>
-    <path d="M50 18 Q64 28 58 40 Q52 52 66 56" stroke="#ffe28a" stroke-width="6" fill="none" stroke-linecap="round"/>
-    <circle cx="10" cy="18" r="3" fill="#ff6fa8"/>
-    <circle cx="30" cy="12" r="3" fill="#9ed6ff"/>
-    <circle cx="50" cy="18" r="3" fill="#ffe28a"/>
-  `);
-}
-function iconConfetti(){
-  return wrap(`
-    <rect x="14" y="14" width="8" height="14" rx="2" fill="#ff6fa8" transform="rotate(20 18 21)"/>
-    <rect x="56" y="18" width="8" height="14" rx="2" fill="#9ed6ff" transform="rotate(-30 60 25)"/>
-    <rect x="36" y="40" width="8" height="14" rx="2" fill="#ffe28a" transform="rotate(45 40 47)"/>
-    <circle cx="22" cy="50" r="4" fill="#7ddcb1"/>
-    <circle cx="58" cy="50" r="4" fill="#e9d8ff"/>
-    <circle cx="40" cy="64" r="4" fill="#ff9ec6"/>
-    <polygon points="28,30 32,32 30,36" fill="#ff6fa8"/>
-    <polygon points="50,38 54,40 52,44" fill="#ffe28a"/>
-  `);
-}
-function iconPlates(){
-  return wrap(`
-    <ellipse cx="40" cy="46" rx="34" ry="8" fill="#9ed6ff"/>
-    <ellipse cx="40" cy="44" rx="32" ry="6" fill="#dff1ff"/>
-    <ellipse cx="40" cy="42" rx="22" ry="3" fill="#fff"/>
-    <ellipse cx="28" cy="60" rx="14" ry="5" fill="#ffc7df"/>
-    <ellipse cx="52" cy="60" rx="14" ry="5" fill="#ffc7df"/>
-    <ellipse cx="28" cy="58" rx="12" ry="3" fill="#fff"/>
-    <ellipse cx="52" cy="58" rx="12" ry="3" fill="#fff"/>
-  `);
-}
-function iconCups(){
-  return wrap(`
-    <path d="M16 26 L26 70 L34 26 Z" fill="#ff9ec6"/>
-    <path d="M30 26 L40 70 L48 26 Z" fill="#9ed6ff"/>
-    <path d="M44 26 L54 70 L62 26 Z" fill="#ffe28a"/>
-    <ellipse cx="21" cy="26" rx="5" ry="2" fill="#fff"/>
-    <ellipse cx="35" cy="26" rx="5" ry="2" fill="#fff"/>
-    <ellipse cx="49" cy="26" rx="5" ry="2" fill="#fff"/>
-  `);
-}
-function iconNapkins(){
-  return wrap(`
-    <rect x="14" y="22" width="42" height="42" rx="4" fill="#ffc7df" stroke="#ff9ec6" stroke-width="2"/>
-    <rect x="14" y="22" width="42" height="42" rx="4" fill="url(#napkinG)" opacity=".5"/>
-    <defs><linearGradient id="napkinG" x1="0" x2="1" y1="0" y2="1">
-      <stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="transparent"/></linearGradient></defs>
-    <circle cx="24" cy="32" r="2" fill="#fff"/>
-    <circle cx="46" cy="32" r="2" fill="#fff"/>
-    <circle cx="24" cy="54" r="2" fill="#fff"/>
-    <circle cx="46" cy="54" r="2" fill="#fff"/>
-  `);
-}
-function iconTablecloth(){
-  return wrap(`
-    <path d="M10 24 L70 24 L74 70 L6 70 Z" fill="#ffc7df" stroke="#ff9ec6" stroke-width="2"/>
-    <path d="M22 24 Q22 36 18 50 M34 24 Q34 36 32 50 M46 24 Q46 36 48 50 M58 24 Q58 36 60 50" stroke="#fff" stroke-width="2" fill="none" opacity=".7"/>
-    <path d="M10 24 L70 24 L70 30 L10 30 Z" fill="#ff9ec6"/>
-  `);
-}
-function iconBunting(){
-  return wrap(`
-    <path d="M8 18 Q40 30 72 18" stroke="#ff6fa8" stroke-width="2" fill="none"/>
-    <polygon points="14,24 22,24 18,38" fill="#ff6fa8"/>
-    <polygon points="26,26 34,26 30,40" fill="#9ed6ff"/>
-    <polygon points="38,28 46,28 42,42" fill="#ffe28a"/>
-    <polygon points="50,26 58,26 54,40" fill="#7ddcb1"/>
-    <polygon points="62,24 70,24 66,38" fill="#e9d8ff"/>
-  `);
-}
-function iconLights(){
-  return wrap(`
-    <path d="M10 18 Q40 28 70 18" stroke="#5a3550" stroke-width="1.6" fill="none"/>
-    <circle cx="18" cy="24" r="5" fill="#ffe28a"/>
-    <circle cx="30" cy="28" r="5" fill="#ff6fa8"/>
-    <circle cx="42" cy="30" r="5" fill="#9ed6ff"/>
-    <circle cx="54" cy="28" r="5" fill="#7ddcb1"/>
-    <circle cx="64" cy="24" r="5" fill="#e9d8ff"/>
-    <path d="M18 24 L18 30 L20 30 L20 24Z" fill="#ff9ec6"/>
-    <path d="M30 28 L30 36 L32 36 L32 28Z" fill="#ff9ec6"/>
-    <path d="M42 30 L42 38 L44 38 L44 30Z" fill="#ff9ec6"/>
-  `);
-}
-function iconWallDecor(){
-  return wrap(`
-    <circle cx="40" cy="36" r="22" fill="#e9d8ff"/>
-    <path d="M40 18 L46 30 L58 32 L48 40 L52 52 L40 46 L28 52 L32 40 L22 32 L34 30 Z" fill="#ff6fa8"/>
-    <circle cx="40" cy="36" r="6" fill="#ffe28a"/>
-  `);
-}
-function iconMusic(){
-  return wrap(`
-    <rect x="22" y="14" width="6" height="36" rx="2" fill="#ff6fa8"/>
-    <rect x="32" y="20" width="6" height="36" rx="2" fill="#9ed6ff"/>
-    <rect x="42" y="14" width="6" height="36" rx="2" fill="#ffe28a"/>
-    <rect x="52" y="22" width="6" height="36" rx="2" fill="#7ddcb1"/>
-    <ellipse cx="25" cy="56" rx="5" ry="3" fill="#fff"/>
-    <ellipse cx="35" cy="60" rx="5" ry="3" fill="#fff"/>
-    <ellipse cx="45" cy="56" rx="5" ry="3" fill="#fff"/>
-    <ellipse cx="55" cy="62" rx="5" ry="3" fill="#fff"/>
-  `);
-}
-function iconGift(){
-  return wrap(`
-    <rect x="14" y="32" width="52" height="36" rx="4" fill="#ff6fa8"/>
-    <rect x="14" y="32" width="52" height="6" fill="#ff9ec6"/>
-    <rect x="36" y="32" width="8" height="36" fill="#ffe28a"/>
-    <path d="M40 32 Q26 18 28 8 Q42 14 40 32Z" fill="#ffe28a"/>
-    <path d="M40 32 Q54 18 52 8 Q38 14 40 32Z" fill="#ffe28a"/>
-    <circle cx="40" cy="20" r="3" fill="#ff6fa8"/>
-  `);
-}
-function iconLembrancinha(){
-  return wrap(`
-    <path d="M22 30 L58 30 L52 64 L28 64 Z" fill="#bff0d8" stroke="#7ddcb1" stroke-width="2"/>
-    <path d="M28 30 Q28 18 32 14 Q36 18 36 30" stroke="#5a3550" stroke-width="2" fill="none"/>
-    <path d="M44 30 Q44 18 48 14 Q52 18 52 30" stroke="#5a3550" stroke-width="2" fill="none"/>
-    <circle cx="40" cy="44" r="3" fill="#ff6fa8"/>
-    <text x="40" y="58" font-size="8" font-weight="900" text-anchor="middle" fill="#5a3550">PRESENTE</text>
-  `);
-}
-function iconMask(){
-  return wrap(`
-    <ellipse cx="40" cy="42" rx="28" ry="18" fill="#e9d8ff"/>
-    <ellipse cx="32" cy="42" rx="5" ry="6" fill="#5a3550"/>
-    <ellipse cx="48" cy="42" rx="5" ry="6" fill="#5a3550"/>
-    <circle cx="32" cy="42" r="2" fill="#fff"/>
-    <circle cx="48" cy="42" r="2" fill="#fff"/>
-    <path d="M30 56 Q40 62 50 56" stroke="#ff6fa8" stroke-width="3" fill="none" stroke-linecap="round"/>
-    <path d="M14 38 L8 34 M66 38 L72 34" stroke="#5a3550" stroke-width="2"/>
-  `);
-}
-function iconCostume(){
-  return wrap(`
-    <path d="M22 22 L40 14 L58 22 L66 50 L52 56 L52 70 L28 70 L28 56 L14 50 Z" fill="#9ed6ff"/>
-    <path d="M40 14 L40 56" stroke="#ff6fa8" stroke-width="3"/>
-    <circle cx="40" cy="30" r="4" fill="#ffe28a"/>
-    <path d="M30 70 L24 78 M50 70 L56 78" stroke="#5a3550" stroke-width="2"/>
-  `);
-}
-function iconUmbrella(){
-  return wrap(`
-    <path d="M10 40 Q40 4 70 40 Z" fill="#ffc7df"/>
-    <path d="M10 40 Q40 24 70 40" fill="#ff9ec6"/>
-    <path d="M40 40 L40 70" stroke="#5a3550" stroke-width="3"/>
-    <path d="M40 70 Q44 74 40 78 Q36 74 40 70" fill="#5a3550"/>
-    <circle cx="40" cy="40" r="4" fill="#ffe28a"/>
-  `);
-}
-function iconPinata(){
-  return wrap(`
-    <ellipse cx="40" cy="40" rx="22" ry="28" fill="#ffe28a"/>
-    <path d="M40 12 L20 40 L60 40 Z" fill="#ff6fa8"/>
-    <path d="M20 40 L26 50 L34 38 Z" fill="#9ed6ff"/>
-    <path d="M60 40 L54 50 L46 38 Z" fill="#9ed6ff"/>
-    <rect x="36" y="58" width="8" height="14" fill="#ff6fa8"/>
-    <rect x="34" y="72" width="12" height="4" fill="#ffe28a"/>
-    <path d="M40 12 L40 6" stroke="#5a3550" stroke-width="2"/>
-  `);
-}
-function iconChairs(){
-  return wrap(`
-    <rect x="14" y="34" width="14" height="34" rx="3" fill="#ff6fa8"/>
-    <rect x="32" y="34" width="14" height="34" rx="3" fill="#9ed6ff"/>
-    <rect x="50" y="34" width="14" height="34" rx="3" fill="#ffe28a"/>
-    <rect x="10" y="20" width="22" height="16" rx="3" fill="#ff6fa8"/>
-    <rect x="28" y="20" width="22" height="16" rx="3" fill="#9ed6ff"/>
-    <rect x="46" y="20" width="22" height="16" rx="3" fill="#ffe28a"/>
-    <rect x="16" y="68" width="4" height="6" fill="#5a3550"/>
-    <rect x="22" y="68" width="4" height="6" fill="#5a3550"/>
-    <rect x="34" y="68" width="4" height="6" fill="#5a3550"/>
-    <rect x="40" y="68" width="4" height="6" fill="#5a3550"/>
-    <rect x="52" y="68" width="4" height="6" fill="#5a3550"/>
-    <rect x="58" y="68" width="4" height="6" fill="#5a3550"/>
-  `);
-}
-function iconFishing(){
-  return wrap(`
-    <ellipse cx="40" cy="60" rx="34" ry="6" fill="#9ed6ff"/>
-    <path d="M10 18 L40 38 L70 18" stroke="#ff6fa8" stroke-width="3" fill="none"/>
-    <circle cx="40" cy="38" r="3" fill="#ff6fa8"/>
-    <path d="M40 38 L48 56 L52 50 L56 58" stroke="#5a3550" stroke-width="1.6" fill="none"/>
-    <circle cx="56" cy="58" r="2" fill="#5a3550"/>
-    <ellipse cx="20" cy="56" rx="4" ry="2" fill="#7ddcb1"/>
-    <ellipse cx="62" cy="56" rx="4" ry="2" fill="#7ddcb1"/>
-  `);
-}
-function iconSackRace(){
-  return wrap(`
-    <rect x="26" y="30" width="28" height="40" rx="6" fill="#dff1ff"/>
-    <path d="M26 30 Q40 22 54 30" stroke="#5a3550" stroke-width="2" fill="none"/>
-    <circle cx="40" cy="22" r="10" fill="#ffd6c0"/>
-    <circle cx="36" cy="20" r="1.5" fill="#5a3550"/>
-    <circle cx="44" cy="20" r="1.5" fill="#5a3550"/>
-    <path d="M38 26 Q40 28 42 26" stroke="#5a3550" stroke-width="1.4" fill="none"/>
-    <ellipse cx="32" cy="72" rx="6" ry="3" fill="#5a3550" opacity=".3"/>
-    <ellipse cx="48" cy="72" rx="6" ry="3" fill="#5a3550" opacity=".3"/>
-  `);
-}
-function iconClownMouth(){
-  return wrap(`
-    <ellipse cx="40" cy="40" rx="32" ry="26" fill="#ffe28a"/>
-    <ellipse cx="40" cy="46" rx="20" ry="14" fill="#ff6fa8"/>
-    <ellipse cx="40" cy="42" rx="16" ry="8" fill="#5a3550"/>
-    <ellipse cx="40" cy="46" rx="6" ry="3" fill="#ff9ec6"/>
-    <circle cx="40" cy="46" r="3" fill="#ff6fa8"/>
-  `);
-}
-function iconHopscotch(){
-  return wrap(`
-    <rect x="14" y="10" width="20" height="20" rx="4" fill="#ff6fa8"/>
-    <rect x="34" y="10" width="32" height="20" rx="4" fill="#9ed6ff"/>
-    <rect x="14" y="30" width="32" height="20" rx="4" fill="#ffe28a"/>
-    <rect x="46" y="30" width="20" height="20" rx="4" fill="#7ddcb1"/>
-    <rect x="14" y="50" width="52" height="14" rx="4" fill="#e9d8ff"/>
-    <text x="24" y="24" font-size="11" font-weight="900" text-anchor="middle" fill="#fff">1</text>
-    <text x="50" y="24" font-size="11" font-weight="900" text-anchor="middle" fill="#fff">2</text>
-    <text x="30" y="44" font-size="11" font-weight="900" text-anchor="middle" fill="#fff">3</text>
-    <text x="56" y="44" font-size="11" font-weight="900" text-anchor="middle" fill="#fff">4</text>
-  `);
-}
-function iconTattoo(){
-  return wrap(`
-    <rect x="20" y="16" width="40" height="50" rx="6" fill="#fff7ec" stroke="#ff9ec6" stroke-width="2"/>
-    <circle cx="40" cy="34" r="9" fill="#fff"/>
-    <path d="M40 28 L42 32 L46 33 L43 36 L44 40 L40 38 L36 40 L37 36 L34 33 L38 32 Z" fill="#ff6fa8"/>
-    <path d="M40 24 C46 16 60 18 60 30 C60 38 40 50 40 50 C40 50 20 38 20 30 C20 18 34 16 40 24 Z" fill="#ff9ec6" stroke="#ff6fa8" stroke-width="1.4"/>
-    <circle cx="34" cy="30" r="2" fill="#fff" opacity=".8"/>
-    <path d="M52 18 L54 22 L58 22 L55 25 L56 29 L52 27 L48 29 L49 25 L46 22 L50 22 Z" fill="#ffe28a" stroke="#e6a85a" stroke-width=".8"/>
-  `);
-}
-function iconBalloon(){
-  return wrap(`
-    <ellipse cx="40" cy="34" rx="18" ry="22" fill="#9ed6ff"/>
-    <ellipse cx="34" cy="28" rx="4" ry="6" fill="#fff" opacity=".6"/>
-    <polygon points="40,56 36,60 40,62 44,60" fill="#9ed6ff"/>
-    <path d="M40 62 Q42 70 38 78" stroke="#5a3550" stroke-width="1.4" fill="none"/>
-  `);
-}
-function iconClown(){
-  return wrap(`
-    <circle cx="40" cy="36" r="22" fill="#fff"/>
-    <circle cx="32" cy="32" r="3" fill="#ff6fa8"/>
-    <circle cx="48" cy="32" r="3" fill="#9ed6ff"/>
-    <circle cx="32" cy="32" r="1" fill="#fff"/>
-    <circle cx="48" cy="32" r="1" fill="#fff"/>
-    <ellipse cx="40" cy="42" rx="8" ry="6" fill="#ff9ec6"/>
-    <path d="M40 38 L42 44 L40 50 L38 44 Z" fill="#ff6fa8"/>
-    <path d="M30 56 Q40 64 50 56" stroke="#ff4d8d" stroke-width="3" fill="none" stroke-linecap="round"/>
-    <path d="M22 24 L26 8 L34 8 L30 24 Z" fill="#ff6fa8"/>
-    <path d="M58 24 L54 8 L46 8 L50 24 Z" fill="#9ed6ff"/>
-    <circle cx="28" cy="6" r="3" fill="#ffe28a"/>
-    <circle cx="52" cy="6" r="3" fill="#ffe28a"/>
-  `);
-}
-function iconCrown(){
-  return wrap(`
-    <path d="M14 50 L18 22 L30 36 L40 14 L50 36 L62 22 L66 50 Z" fill="#ffe28a"/>
-    <path d="M14 50 L66 50 L66 60 L14 60 Z" fill="#ffc107"/>
-    <circle cx="40" cy="14" r="3" fill="#ff6fa8"/>
-    <circle cx="18" cy="22" r="3" fill="#9ed6ff"/>
-    <circle cx="62" cy="22" r="3" fill="#9ed6ff"/>
-    <circle cx="28" cy="56" r="2.5" fill="#ff6fa8"/>
-    <circle cx="40" cy="56" r="2.5" fill="#9ed6ff"/>
-    <circle cx="52" cy="56" r="2.5" fill="#7ddcb1"/>
-  `);
-}
-function iconCandyNecklace(){
-  return wrap(`
-    <path d="M14 40 Q40 14 66 40 Q40 66 14 40Z" stroke="#ff6fa8" stroke-width="3" fill="none"/>
-    <circle cx="22" cy="34" r="5" fill="#ff6fa8"/>
-    <circle cx="34" cy="22" r="5" fill="#9ed6ff"/>
-    <circle cx="46" cy="20" r="5" fill="#ffe28a"/>
-    <circle cx="58" cy="28" r="5" fill="#7ddcb1"/>
-    <circle cx="62" cy="44" r="5" fill="#e9d8ff"/>
-    <circle cx="50" cy="56" r="5" fill="#ff6fa8"/>
-    <circle cx="32" cy="56" r="5" fill="#9ed6ff"/>
-    <circle cx="20" cy="46" r="5" fill="#ffe28a"/>
-  `);
+// Returns <img> element string for use in innerHTML
+function iconFor(id){
+  return `<img src="${ICON_BASE}${ICONS[id]}" alt="" width="72" height="72" loading="lazy" decoding="async" />`;
 }
 
 // ── State ──────────────────────────────────────────────────────────
@@ -930,8 +558,9 @@ ITEMS.forEach(it=>{
   tile.className = 'tile no-select';
   tile.dataset.id = it.id;
   tile.setAttribute('aria-pressed','false');
+  tile.style.background = it.color + "11";
   tile.innerHTML = `
-    <div class="icon">${it.icon()}</div>
+    <div class="icon">${iconFor(it.id)}</div>
     <div class="name">${it.label}</div>
   `;
   tile.addEventListener('click', ()=>{
@@ -969,12 +598,10 @@ document.getElementById('go-find').addEventListener('click', ()=>{
 
 // ── Screen 2: build find scene ─────────────────────────────────────
 function startFindScreen(){
-  // precompute positions for items in scene
   const ids = [...state.selected];
   state.found = new Set();
   state.placements = ids.map((id, i)=>{
     const item = ITEMS.find(x=>x.id===id);
-    // pseudo-random based on id string to keep placement consistent per item
     let h = 0; for (const c of id) h = (h*31 + c.charCodeAt(0)) >>> 0;
     const x = 8 + (h % 84);
     const hy = ((h >> 7) % 70);
@@ -994,7 +621,6 @@ function startFindScreen(){
 function renderScene(){
   const svg = document.getElementById('scene-svg');
   svg.innerHTML = `
-    <!-- sky -->
     <defs>
       <linearGradient id="skyG" x1="0" x2="0" y1="0" y2="1">
         <stop offset="0" stop-color="#a3d8ff"/>
@@ -1073,15 +699,19 @@ function renderScene(){
     g.setAttribute('class','findable');
     g.setAttribute('transform', `translate(${p.x*8}, ${p.y*6}) scale(${p.w/72})`);
     g.dataset.id = p.id;
-    // wrap inner icon (80x80) — scale to ~80
-    const inner = document.createElementNS('http://www.w3.org/2000/svg','g');
-    inner.setAttribute('transform','translate(-40,-40)');
-    // Extract inner svg of icon by re-parsing
-    const tmp = document.createElement('div');
-    tmp.innerHTML = p.item.icon();
-    const iconSvg = tmp.firstChild;
-    Array.from(iconSvg.childNodes).forEach(n=> inner.appendChild(n.cloneNode(true)));
-    g.appendChild(inner);
+    // Use foreignObject so we can embed an <img> directly inside SVG (modern browsers support this)
+    const fo = document.createElementNS('http://www.w3.org/2000/svg','foreignObject');
+    fo.setAttribute('x','-36');fo.setAttribute('y','-36');
+    fo.setAttribute('width','72');fo.setAttribute('height','72');
+    const xhtmlNS = 'http://www.w3.org/1999/xhtml';
+    const img = document.createElementNS(xhtmlNS,'img');
+    img.setAttribute('src', ICON_BASE + ICONS[p.id]);
+    img.setAttribute('width','72');
+    img.setAttribute('height','72');
+    img.style.pointerEvents = 'none';
+    img.style.userSelect = 'none';
+    fo.appendChild(img);
+    g.appendChild(fo);
     g.addEventListener('click', e=>{
       e.stopPropagation();
       findItem(p.id, e);
@@ -1089,7 +719,6 @@ function renderScene(){
     scene.appendChild(g);
   });
 
-  // hint initial
   updateProgress();
   document.getElementById('checklist').scrollTop = 0;
 }
@@ -1097,7 +726,6 @@ function renderScene(){
 function findItem(id, evt){
   if (state.found.has(id)) return;
   state.found.add(id);
-  const placement = state.placements.find(x=>x.id===id);
   const g = document.querySelector(`#scene-svg .findable[data-id="${id}"]`);
   if (g){
     g.classList.add('found');
@@ -1106,11 +734,9 @@ function findItem(id, evt){
     spawnConfetti(r.left+r.width/2 - stage.left, r.top+r.height/2 - stage.top);
     spawnPuff(r.left+r.width/2 - stage.left, r.top+r.height/2 - stage.top);
   }
-  // mark checklist
   const slot = document.querySelector(`#checklist .slot[data-id="${id}"]`);
   if (slot) slot.classList.add('found');
   updateProgress();
-  // If all found → next screen
   if (state.found.size === state.selected.size){
     clearTimeout(state.hintTimer);
     setTimeout(showFinalScreen, 700);
@@ -1157,7 +783,7 @@ function renderChecklist(){
     slot.className = 'slot';
     slot.dataset.id = id;
     slot.title = item.label;
-    slot.innerHTML = item.icon();
+    slot.innerHTML = `<img src="${ICON_BASE}${ICONS[id]}" alt="${item.label}" width="56" height="56" loading="lazy" decoding="async" />`;
     c.appendChild(slot);
   });
 }
@@ -1177,19 +803,16 @@ function startHintTimer(){
     if (now - lastFoundAt < 9500) return;
     const remaining = state.placements.filter(p=>!state.found.has(p.id));
     if (!remaining.length) return;
-    // remove prior hint
     document.querySelectorAll('.findable.hint').forEach(g=>g.classList.remove('hint'));
     const pick = remaining[Math.floor(Math.random()*remaining.length)];
     const g = document.querySelector(`#scene-svg .findable[data-id="${pick.id}"]`);
     if (g){
       g.classList.add('hint');
-      // schedule removal in case it stays
       setTimeout(()=>{ if (!state.found.has(pick.id)) g.classList.remove('hint'); }, 4000);
     }
     lastFoundAt = Date.now();
   }, 3000);
 }
-// reset lastFoundAt on each find
 const origFind = findItem;
 findItem = function(id, evt){
   lastFoundAt = Date.now();
@@ -1203,6 +826,7 @@ function showFinalScreen(){
   document.getElementById('screen-final').style.display = 'block';
   renderFinalScene();
   startFinaleConfetti();
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 function renderFinalScene(){
@@ -1226,7 +850,6 @@ function renderFinalScene(){
 
     <rect x="0" y="0" width="800" height="600" fill="url(#skyF)"/>
 
-    <!-- sun rays -->
     <g opacity=".6">
       <circle cx="640" cy="120" r="180" fill="url(#lightG)"/>
     </g>
@@ -1252,7 +875,6 @@ function renderFinalScene(){
     <path d="M200 360 L600 360 L620 480 L180 480 Z" fill="${tint}" stroke="#fff" stroke-width="3"/>
     <path d="M200 360 L600 360 L600 372 L200 372 Z" fill="#fff" opacity=".4"/>
 
-    <!-- table contents — only if selected -->
     <g id="table-contents"></g>
 
     <!-- big cake (if selected) -->
@@ -1268,12 +890,12 @@ function renderFinalScene(){
     <!-- piñata -->
     ${has('pinhata') ? pinhataSVG() : ''}
 
-    <!-- mascot dancing -->
+    <!-- mascot dancing (improved original bunny with pink bow) -->
     <g transform="translate(660,420)" class="float">
       ${mascotSVG()}
     </g>
 
-    <!-- friend mascot -->
+    <!-- friend mascot (improved original yellow bear) -->
     <g transform="translate(140,440)" class="float" style="animation-delay:.6s">
       ${friendMascotSVG()}
     </g>
@@ -1303,17 +925,19 @@ function renderFinalScene(){
     if (!has(id)) return;
     const item = ITEMS.find(it=>it.id===id);
     const g = document.createElementNS('http://www.w3.org/2000/svg','g');
-    g.setAttribute('transform', `translate(${x},400) scale(.4)`);
-    const tmp = document.createElement('div');
-    tmp.innerHTML = item.icon();
-    const iconSvg = tmp.firstChild;
-    const inner = document.createElementNS('http://www.w3.org/2000/svg','g');
-    inner.setAttribute('transform','translate(-40,-40)');
-    Array.from(iconSvg.childNodes).forEach(n=>inner.appendChild(n.cloneNode(true)));
-    g.appendChild(inner);
+    g.setAttribute('transform', `translate(${x},400) scale(.42)`);
+    const fo = document.createElementNS('http://www.w3.org/2000/svg','foreignObject');
+    fo.setAttribute('x','-36');fo.setAttribute('y','-36');
+    fo.setAttribute('width','72');fo.setAttribute('height','72');
+    const img = document.createElementNS('http://www.w3.org/1999/xhtml','img');
+    img.setAttribute('src', ICON_BASE + ICONS[id]);
+    img.setAttribute('width','72');
+    img.setAttribute('height','72');
+    fo.appendChild(img);
+    g.appendChild(fo);
     tc.appendChild(g);
-    x += 60;
-    if (x > 580){ x = 230; /* wrap not impl; ok for now */ }
+    x += 50;
+    if (x > 600){ x = 230; }
   });
 }
 
@@ -1419,47 +1043,98 @@ function sparkleSVG(){
     </g>
   `;
 }
+
+// Improved original bunny mascot with pink bow (NOT Sanrio)
 function mascotSVG(){
   return `
-    <g transform="translate(-50,-90) scale(1.2)">
-      <ellipse cx="0" cy="-10" rx="40" ry="50" fill="#fff" stroke="#f4c7d9" stroke-width="3"/>
-      <ellipse cx="-18" cy="-46" rx="8" ry="20" fill="#fff" stroke="#f4c7d9" stroke-width="2"/>
-      <ellipse cx="18" cy="-46" rx="8" ry="20" fill="#fff" stroke="#f4c7d9" stroke-width="2"/>
-      <ellipse cx="-18" cy="-46" rx="3" ry="12" fill="#ffc7df"/>
-      <ellipse cx="18" cy="-46" rx="3" ry="12" fill="#ffc7df"/>
-      <circle cx="-12" cy="-2" r="5" fill="#ffb3cf" opacity=".7"/>
-      <circle cx="12" cy="-2" r="5" fill="#ffb3cf" opacity=".7"/>
-      <circle cx="-10" cy="-8" r="3.6" fill="#3a2a36"/>
-      <circle cx="10" cy="-8" r="3.6" fill="#3a2a36"/>
-      <circle cx="-9" cy="-9" r="1.2" fill="#fff"/>
-      <circle cx="11" cy="-9" r="1.2" fill="#fff"/>
-      <path d="M-5 4 Q0 10 5 4" stroke="#3a2a36" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-      <ellipse cx="0" cy="8" rx="3" ry="2" fill="#ff7aa9"/>
+    <g transform="translate(-70,-110) scale(1.4)">
+      <defs>
+        <radialGradient id="mBunnyBody" cx=".5" cy=".4" r=".6">
+          <stop offset="0" stop-color="#ffffff"/>
+          <stop offset="1" stop-color="#fff0f6"/>
+        </radialGradient>
+        <radialGradient id="mBunnyEar" cx=".5" cy=".5" r=".55">
+          <stop offset="0" stop-color="#ffd5e6"/>
+          <stop offset="1" stop-color="#ff9ec6"/>
+        </radialGradient>
+      </defs>
+      <!-- ears -->
+      <ellipse cx="-22" cy="-58" rx="10" ry="26" fill="url(#mBunnyEar)" stroke="#f4c7d9" stroke-width="2"/>
+      <ellipse cx="22" cy="-58" rx="10" ry="26" fill="url(#mBunnyEar)" stroke="#f4c7d9" stroke-width="2"/>
+      <ellipse cx="-22" cy="-58" rx="4" ry="18" fill="#ffb3cf"/>
+      <ellipse cx="22" cy="-58" rx="4" ry="18" fill="#ffb3cf"/>
+      <!-- head -->
+      <ellipse cx="0" cy="-10" rx="46" ry="40" fill="url(#mBunnyBody)" stroke="#f4c7d9" stroke-width="2.4"/>
+      <!-- cheeks -->
+      <circle cx="-24" cy="-2" r="7" fill="#ffb3cf" opacity=".7"/>
+      <circle cx="24" cy="-2" r="7" fill="#ffb3cf" opacity=".7"/>
+      <!-- eyes -->
+      <ellipse cx="-14" cy="-12" rx="4.6" ry="5.6" fill="#3a2a36"/>
+      <ellipse cx="14" cy="-12" rx="4.6" ry="5.6" fill="#3a2a36"/>
+      <circle cx="-13" cy="-13" r="1.6" fill="#fff"/>
+      <circle cx="15" cy="-13" r="1.6" fill="#fff"/>
+      <circle cx="-15" cy="-10" r=".8" fill="#fff" opacity=".7"/>
+      <circle cx="13" cy="-10" r=".8" fill="#fff" opacity=".7"/>
+      <!-- nose + smile -->
+      <ellipse cx="0" cy="-2" rx="2.8" ry="2" fill="#ff7aa9"/>
+      <path d="M-7 4 Q0 12 7 4" stroke="#3a2a36" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      <!-- whiskers -->
+      <path d="M-22 4 L-32 2 M-22 6 L-32 8 M22 4 L32 2 M22 6 L32 8" stroke="#5a3550" stroke-width="1.2" stroke-linecap="round" opacity=".5"/>
       <!-- bow -->
-      <g transform="translate(0,-50)">
-        <path d="M-22 0 Q-12 -10 0 0 Q-12 10 -22 0Z" fill="#ff6fa8"/>
-        <path d="M22 0 Q12 -10 0 0 Q12 10 22 0Z" fill="#ff6fa8"/>
-        <circle cx="0" cy="0" r="4" fill="#ff4d8d"/>
+      <g transform="translate(0,-66)">
+        <path d="M-26 -2 Q-14 -14 0 -2 Q-14 10 -26 -2Z" fill="#ff6fa8" stroke="#ff4d8d" stroke-width="1.5"/>
+        <path d="M26 -2 Q14 -14 0 -2 Q14 10 26 -2Z" fill="#ff6fa8" stroke="#ff4d8d" stroke-width="1.5"/>
+        <circle cx="0" cy="-2" r="5" fill="#ff4d8d" stroke="#fff" stroke-width="1.2"/>
+        <circle cx="0" cy="-2" r="1.5" fill="#fff"/>
+        <!-- bow tails -->
+        <path d="M-3 4 L-6 14 L0 12 Z" fill="#ff4d8d"/>
+        <path d="M3 4 L6 14 L0 12 Z" fill="#ff4d8d"/>
       </g>
+      <!-- tiny sparkle on cheek -->
+      <circle cx="-30" cy="-18" r="1.5" fill="#fff" opacity=".8"/>
+      <circle cx="30" cy="-18" r="1.5" fill="#fff" opacity=".8"/>
     </g>
   `;
 }
+
+// Improved original yellow bear cub (NOT Disney/Pooh)
 function friendMascotSVG(){
-  // Original bear cub
   return `
-    <g transform="translate(-50,-90) scale(1.1)">
-      <ellipse cx="0" cy="-10" rx="40" ry="44" fill="#ffe28a" stroke="#e6a85a" stroke-width="3"/>
-      <circle cx="-26" cy="-40" r="11" fill="#ffe28a" stroke="#e6a85a" stroke-width="2"/>
-      <circle cx="26" cy="-40" r="11" fill="#ffe28a" stroke="#e6a85a" stroke-width="2"/>
-      <circle cx="-26" cy="-40" r="6" fill="#ffc7df"/>
-      <circle cx="26" cy="-40" r="6" fill="#ffc7df"/>
-      <ellipse cx="0" cy="0" rx="18" ry="14" fill="#fff7d6"/>
-      <circle cx="-10" cy="-8" r="3.4" fill="#3a2a36"/>
-      <circle cx="10" cy="-8" r="3.4" fill="#3a2a36"/>
-      <circle cx="-9" cy="-9" r="1.1" fill="#fff"/>
-      <circle cx="11" cy="-9" r="1.1" fill="#fff"/>
-      <ellipse cx="0" cy="2" rx="3" ry="2" fill="#3a2a36"/>
-      <path d="M-6 8 Q0 14 6 8" stroke="#3a2a36" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <g transform="translate(-70,-110) scale(1.35)">
+      <defs>
+        <radialGradient id="mBearBody" cx=".5" cy=".4" r=".6">
+          <stop offset="0" stop-color="#fff0b8"/>
+          <stop offset="1" stop-color="#ffe28a"/>
+        </radialGradient>
+      </defs>
+      <!-- body shadow -->
+      <ellipse cx="0" cy="48" rx="38" ry="6" fill="#5a3550" opacity=".18"/>
+      <!-- ears -->
+      <circle cx="-30" cy="-50" r="14" fill="url(#mBearBody)" stroke="#e6a85a" stroke-width="2.2"/>
+      <circle cx="30" cy="-50" r="14" fill="url(#mBearBody)" stroke="#e6a85a" stroke-width="2.2"/>
+      <circle cx="-30" cy="-50" r="8" fill="#ffc7df"/>
+      <circle cx="30" cy="-50" r="8" fill="#ffc7df"/>
+      <!-- head -->
+      <ellipse cx="0" cy="-10" rx="48" ry="42" fill="url(#mBearBody)" stroke="#e6a85a" stroke-width="2.4"/>
+      <!-- muzzle -->
+      <ellipse cx="0" cy="6" rx="22" ry="16" fill="#fff7d6"/>
+      <!-- cheeks -->
+      <circle cx="-26" cy="2" r="6" fill="#ffb3cf" opacity=".5"/>
+      <circle cx="26" cy="2" r="6" fill="#ffb3cf" opacity=".5"/>
+      <!-- eyes -->
+      <ellipse cx="-14" cy="-14" rx="4.2" ry="5" fill="#3a2a36"/>
+      <ellipse cx="14" cy="-14" rx="4.2" ry="5" fill="#3a2a36"/>
+      <circle cx="-13" cy="-15" r="1.4" fill="#fff"/>
+      <circle cx="15" cy="-15" r="1.4" fill="#fff"/>
+      <!-- nose -->
+      <ellipse cx="0" cy="-2" rx="3.4" ry="2.4" fill="#3a2a36"/>
+      <!-- smile -->
+      <path d="M-7 8 Q0 14 7 8" stroke="#3a2a36" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <!-- tiny tongue/heart -->
+      <path d="M0 12 Q-3 16 0 18 Q3 16 0 12 Z" fill="#ff7aa9" opacity=".8"/>
+      <!-- sparkle -->
+      <circle cx="-36" cy="-22" r="1.6" fill="#fff" opacity=".9"/>
+      <circle cx="36" cy="-22" r="1.6" fill="#fff" opacity=".9"/>
     </g>
   `;
 }
@@ -1482,7 +1157,6 @@ function startFinaleConfetti(){
       animation:rain ${2+Math.random()*2}s linear ${Math.random()}s forwards;`;
     burst.appendChild(s);
   }
-  // inject keyframes for rain once
   if (!document.getElementById('rainKf')){
     const style = document.createElement('style');
     style.id = 'rainKf';
@@ -1520,7 +1194,6 @@ window.addEventListener('load', ()=>{
     setTimeout(()=>sp.remove(), 600);
   }, 600);
 });
-// also hide immediately if already past load
 if (document.readyState === 'complete'){
   setTimeout(()=>{
     const sp = document.getElementById('splash');
