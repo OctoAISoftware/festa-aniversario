@@ -488,7 +488,7 @@
 </main>
 
 <footer class="site-credit">
-  Ícones dos itens: <a href="https://openmoji.org/" target="_blank" rel="noopener">OpenMoji</a> (CC BY-SA 4.0) + ilustrações originais (algodão-doce, chapéu de festa, mascotes e cena).<br/>
+  Ícones dos itens: <a href="https://openmoji.org/" target="_blank" rel="noopener">OpenMoji</a> (CC BY-SA 4.0) + ilustrações originais (algodão-doce, chapéu de festa, sacola, saco, colar, tatuagem, bexiga, amarelinha, mascotes e cena).<br/>
   Feito com 💗 para a Maia.
 </footer>
 
@@ -988,13 +988,17 @@ function renderFinalScene(){
     ${has('pinhata') ? pinhataSVG() : ''}
 
     <!-- mascot dancing (improved original bunny with pink bow) -->
-    <g transform="translate(660,320)" class="float">
-      ${mascotSVG()}
+    <g transform="translate(660,320)">
+      <g class="float">
+        ${mascotSVG()}
+      </g>
     </g>
 
     <!-- friend mascot (improved original yellow bear) -->
-    <g transform="translate(140,335)" class="float" style="animation-delay:.6s">
-      ${friendMascotSVG()}
+    <g transform="translate(140,335)">
+      <g class="float" style="animation-delay:.6s">
+        ${friendMascotSVG()}
+      </g>
     </g>
 
     <!-- bunting (rebalanced) -->
@@ -1008,10 +1012,10 @@ function renderFinalScene(){
     </g>
 
     <!-- sparkles (rebalanced) -->
-    <g class="sparkle" transform="translate(110,160)">${sparkleSVG()}</g>
-    <g class="sparkle" transform="translate(700,200)" style="animation-delay:.3s">${sparkleSVG()}</g>
-    <g class="sparkle" transform="translate(560,160)" style="animation-delay:.6s">${sparkleSVG()}</g>
-    <g class="sparkle" transform="translate(260,200)" style="animation-delay:.9s">${sparkleSVG()}</g>
+    <g transform="translate(110,160)"><g class="sparkle">${sparkleSVG()}</g></g>
+    <g transform="translate(700,200)"><g class="sparkle" style="animation-delay:.3s">${sparkleSVG()}</g></g>
+    <g transform="translate(560,160)"><g class="sparkle" style="animation-delay:.6s">${sparkleSVG()}</g></g>
+    <g transform="translate(260,200)"><g class="sparkle" style="animation-delay:.9s">${sparkleSVG()}</g></g>
   `;
 
   // place additional selected items on the table
