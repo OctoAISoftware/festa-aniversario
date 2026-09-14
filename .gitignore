@@ -1,0 +1,5 @@
+node_modules/
+.next/
+.site-port
+.DS_Store
+*.log
