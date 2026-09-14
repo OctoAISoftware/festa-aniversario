@@ -156,7 +156,7 @@
 
   /* ── SCREEN 2 — seek-and-find ────────────────────────────────────── */
   #screen-find .stage{
-    position:relative;border-radius:var(--r-lg);overflow:hidden;
+    position:relative;width:100%;border-radius:var(--r-lg);overflow:hidden;
     box-shadow:var(--shadow);border:3px solid var(--pink-100);
     background:linear-gradient(180deg,#bfe4ff 0%,#d8ecff 60%,#c8e6c2 100%);
     /* Stage matches the SVG's 4:3 viewBox so 'meet' produces zero letterbox. */
@@ -176,7 +176,6 @@
   .findable .sprite{pointer-events:none;user-select:none;-webkit-user-drag:none}
   .findable:hover .findable-anim{filter:brightness(1.08) drop-shadow(0 0 8px rgba(255,255,255,.85))}
   .findable:hover{filter:none}
-  .findable:hover{filter:brightness(1.08) drop-shadow(0 0 6px rgba(255,255,255,.7))}
   .findable.found{
     pointer-events:none;
   }
@@ -502,7 +501,7 @@
 const ICON_BASE = "assets/icons/";
 // Cache-buster suffix: invalidates the Cloudflare edge cache for the changed icons.
 // (CF token can't purge, max-age=14400s. Without this, the live site keeps serving the old files.)
-const ICON_V = "v=2026-09-14-2";
+const ICON_V = "v=2026-09-14-3";
 const ICONS = {
   bolo:"bolo.svg?"+ICON_V, velinhas:"velinhas.svg?"+ICON_V, docinhos:"docinhos.svg?"+ICON_V, brigadeiro:"brigadeiro.svg?"+ICON_V,
   sorvete:"sorvete.svg?"+ICON_V, refrigerante:"refrigerante.svg?"+ICON_V, suco:"suco.svg?"+ICON_V, salgadinhos:"salgadinhos.svg?"+ICON_V,
@@ -629,7 +628,11 @@ const SPAWN = {
   // sprite user-unit footprint (matches foreignObject in renderScene)
   spriteSize: 96,            // visual sprite size in viewBox units
   hitSize:    112,           // tappable hit area (sprite + 8px padding all around)
-  minGap:     90,            // min center-to-center spacing — sprites may touch but not overlap hits
+  // target min center-to-center spacing in USER units. The grid-search below picks
+  // the cell maximizing distance-to-nearest-already-placed, so this is a soft target,
+  // not a hard reject — with 40 items some pair overlap is unavoidable, and z-order
+  // (later items on top) keeps every item individually tappable.
+  minGap:     90,
 };
 // Scatter items on a deterministic shuffled grid, picking the cell that maximizes
 // distance-to-nearest-already-placed. We don't reject close cells outright — at
@@ -685,6 +688,9 @@ function startFindScreen(){
   document.getElementById('screen-find').style.display = 'block';
   document.getElementById('screen-final').style.display = 'none';
   startHintTimer();
+  // Always start the hunt at the top of the page — the previous screen is
+  // hidden but the document scroll position still points to where it was.
+  window.scrollTo({top:0, behavior:'smooth'});
 }
 
 function renderScene(){
@@ -784,7 +790,10 @@ function renderScene(){
     img.setAttribute('src', ICON_BASE + ICONS[p.id]);
     img.setAttribute('width','96');
     img.setAttribute('height','96');
-    img.style.cssText = 'display:block;margin:8px auto 0;width:96px;height:96px;object-fit:contain;';
+    // The foreignObject is 112 user units. On a 390-wide stage the user→CSS ratio
+    // is ~0.45, so 112 user units ≈ 50 CSS px. Use percentages so the sprite
+    // (96/112 = 85.7% of the FO) and the 8px hit-pad stay proportional at any zoom.
+    img.style.cssText = 'display:block;width:85.7%;height:85.7%;margin:7.15% auto 0;object-fit:contain;pointer-events:none;user-select:none;-webkit-user-drag:none;';
     img.classList.add('sprite');
     fo.appendChild(img);
     anim.appendChild(fo);
