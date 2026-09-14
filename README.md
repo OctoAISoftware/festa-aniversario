@@ -43,6 +43,7 @@ A camada visual foi refeita com mobile-first verdadeiro:
 - CTA 260×59 px com `safe-area-inset-bottom`.
 - Grid responsivo: 3 colunas em phones pequenos, 4–5 em phones grandes, 5–6 em tablet/desktop.
 - Sidebar do checklist retorna em ≥ 760 px.
+- **Tela "Achar os itens"**: sprites de 96 unidades de viewBox (≈ 43 CSS px no iPhone 12, ≈ 57 no tablet, ≈ 82 no desktop) — todos acima do mínimo de 44 px da Apple HIG. Hit-area tátil de 112 unidades de viewBox (≈ 50 CSS px no iPhone 12) com 8 px de hit-pad em todos os lados. SVG usa `preserveAspectRatio="xMidYMid meet"` (não `slice`) para garantir que todos os 40 itens caibam dentro do quadro visível em qualquer proporção de tela. Items são espalhados por um grid-search determinístico que maximiza distância ao vizinho mais próximo; z-order garante que sobreposições parciais ainda permitem toque individual.
 
 ## Lista dos 40 itens
 
