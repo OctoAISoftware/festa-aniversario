@@ -147,16 +147,22 @@
   .name-row{
     display:flex;align-items:center;gap:8px;margin-top:12px;
     background:var(--pink-50);border:2px solid var(--pink-100);border-radius:var(--r-md);
-    padding:10px 12px;
+    padding:10px 12px;flex-wrap:nowrap;min-width:0;
   }
-  .name-row label{font-size:12px;font-weight:800;color:var(--pink-600);flex:0 0 auto}
+  .name-row label{font-size:12px;font-weight:800;color:var(--pink-600);flex:0 0 auto;white-space:nowrap}
   .name-row input{
-    flex:1;border:none;background:transparent;outline:none;
+    flex:1 1 auto;border:none;background:transparent;outline:none;
     font:inherit;font-weight:700;color:var(--ink);font-size:14px;
-    min-width:0;
+    min-width:0;width:100%;
   }
   .name-row input::placeholder{color:var(--ink-soft);font-weight:600}
-  .name-row .emoji{font-size:20px}
+  .name-row .emoji{font-size:20px;flex:0 0 auto}
+  /* Narrow phones: tighten row padding so "Aniversariante:" + placeholder fit together */
+  @media (max-width:390px){
+    .name-row{padding:10px 10px;gap:6px}
+    .name-row label{font-size:11px}
+    .name-row input{font-size:13px}
+  }
 
   /* ── SCREEN 2 — seek-and-find ────────────────────────────────────── */
   #screen-find .stage{
@@ -469,7 +475,7 @@
     <div class="name-row">
       <span class="emoji" aria-hidden="true">🎂</span>
       <label for="nome-input">Aniversariante:</label>
-      <input id="nome-input" type="text" maxlength="20" autocomplete="off" placeholder="nome do(a) aniversariante" />
+      <input id="nome-input" type="text" maxlength="20" autocomplete="off" placeholder="ex: Maria" title="nome do(a) aniversariante" />
     </div>
     <div class="grid" id="grid"></div>
     <div class="cta-row">
@@ -551,7 +557,7 @@
 
 const ICON_BASE = "assets/icons/";
 // Cache-buster suffix: invalidates the Cloudflare edge cache for the changed icons.
-const ICON_V = "v=2026-09-14-6";
+const ICON_V = "v=2026-09-14-7";
 const ICONS = {
   bolo:"bolo.svg?"+ICON_V, velinhas:"velinhas.svg?"+ICON_V, docinhos:"docinhos.svg?"+ICON_V, brigadeiro:"brigadeiro.svg?"+ICON_V,
   sorvete:"sorvete.svg?"+ICON_V, refrigerante:"refrigerante.svg?"+ICON_V, suco:"suco.svg?"+ICON_V, salgadinhos:"salgadinhos.svg?"+ICON_V,
@@ -1322,9 +1328,9 @@ function renderFinalScene(){
       ${bulbRow(760,111,'#ffe28a')}
     ` : ''}
 
-    <!-- ground -->
-    <rect x="0" y="285" width="800" height="165" fill="#cbe8c2"/>
-    <rect x="0" y="285" width="800" height="30" fill="#a8d99b"/>
+    <!-- ground (raised to 370 to close the empty base under the table) -->
+    <rect x="0" y="370" width="800" height="80" fill="#cbe8c2"/>
+    <rect x="0" y="370" width="800" height="20" fill="#a8d99b"/>
 
     <!-- tablecloth: only when selected -->
     ${has('toalha') ? `
@@ -1385,11 +1391,9 @@ function renderFinalScene(){
     txt.textContent = `✨ Parabéns pra ${state.partyName}! ✨`;
   }
 
-  // table contents layout with REAL collision detection — no more overlap hack.
-  // The table region runs from x=160 to x=640 (480 wide) on y=290-360.
-  // We pack items in a grid of slots ~70px wide, sized so the largest icon (0.6× ≈ 72px
-  // sprite) never overlaps its neighbor. We bias placement by table area so items
-  // sit visually "on" the tablecloth.
+// table contents layout — items wrap into a 2-row grid BELOW the cake so
+  // they sit on the tablecloth / grass in front without overlapping the cake,
+  // and close the empty base below the table.
   const tc = svg.querySelector('#table-contents');
   const tableItemIds = [
     'pratinhos','copos','guardanapos','docinhos','brigadeiro','sorvete',
@@ -1399,22 +1403,25 @@ function renderFinalScene(){
     'pescaria','cadeiras','boca','pinhata'
   ];
   const itemsOnTable = tableItemIds.filter(id => has(id) && id !== 'pinhata');
-  // layout in a grid; sprite is 72 (scale 0.6 of 120), but we use 90 for a comfy
-  // padding so adjacent items never touch. Wrap to a second row if needed.
-  const cellW = 80, cellH = 60;
-  const cols = 5; // 5 per row comfortably fits
-  const startX = 175, startY = 295;
+  // Cake spans world x=295..505, y=242..328. Items start at y=355 (27 user-units
+  // below cake bottom) so they never touch the cake. 2 rows × 11 cols fit up to
+  // 22 items comfortably; overflow goes to a 3rd row at y=465 (visually clipped).
+  const cellW = 70, cellH = 60;
+  const cols = 11;
+  const startX = 35, startY = 355;
   itemsOnTable.forEach((id, i)=>{
     const row = Math.floor(i / cols);
     const col = i % cols;
     const x = startX + col * cellW;
     const y = startY + row * cellH;
+    // skip render if completely off the scene vertically
+    if (y > 445) return;
     const g = document.createElementNS('http://www.w3.org/2000/svg','g');
-    g.setAttribute('transform', `translate(${x},${y}) scale(0.6)`);
+    g.setAttribute('transform', `translate(${x},${y}) scale(0.45)`);
     const fo = document.createElementNS('http://www.w3.org/2000/svg','foreignObject');
     fo.setAttribute('x','-60');fo.setAttribute('y','-60');
     fo.setAttribute('width','120');fo.setAttribute('height','120');
-    const img = document.createElementNS('http://www.w3.org/1999/xhtml','img');
+    const img = document.createElementNS(xhtmlNS,'img');
     img.setAttribute('src', ICON_BASE + ICONS[id]);
     img.setAttribute('width','120');
     img.setAttribute('height','120');
