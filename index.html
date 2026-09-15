@@ -501,7 +501,7 @@
 const ICON_BASE = "assets/icons/";
 // Cache-buster suffix: invalidates the Cloudflare edge cache for the changed icons.
 // (CF token can't purge, max-age=14400s. Without this, the live site keeps serving the old files.)
-const ICON_V = "v=2026-09-14-4";
+const ICON_V = "v=2026-09-14-5";
 const ICONS = {
   bolo:"bolo.svg?"+ICON_V, velinhas:"velinhas.svg?"+ICON_V, docinhos:"docinhos.svg?"+ICON_V, brigadeiro:"brigadeiro.svg?"+ICON_V,
   sorvete:"sorvete.svg?"+ICON_V, refrigerante:"refrigerante.svg?"+ICON_V, suco:"suco.svg?"+ICON_V, salgadinhos:"salgadinhos.svg?"+ICON_V,
@@ -624,22 +624,22 @@ document.getElementById('go-find').addEventListener('click', ()=>{
 // it. We just avoid the very edges so nothing is clipped by the rounded mask,
 // and we avoid the deepest part of the table where the cake/tablecloth dominate.
 const SPAWN = {
-  // Sprite is 144 user units, hit-area 170. Bounds are pulled in to (120,680)
-  // × (120,480) so the sprite bbox is fully inside the stage's rounded mask
-  // (radius 24 CSS px ≈ 19.6 user units at the largest tested viewport 1280)
-  // AND clear of the corner clip at the smallest tested viewport 360.
-  // (At 360, scale 0.415: sprite center 120 user → CSS 49.8, sprite top-left
-  // CSS 19.9 — well inside the 21-unit inner curve radius.)
-  xMin: 120, xMax: 680,      // leaves ≥48 viewBox units to the left/right of any sprite
-  yMin: 120, yMax: 480,      // leaves ≥48 viewBox units above/below any sprite
+  // Sprite is 168 user units, hit-area 196. Bounds are pulled in to (145,655)
+  // × (140,460) so the sprite bbox is fully inside the stage's rounded mask
+  // (radius 24 CSS px → inner curve ~21 CSS px) at the smallest tested
+  // viewport 360 (scale ≈0.415: sprite bbox at xMin 145 → CSS left 25.3, well
+  // inside the 21-px curve after the 3-px border). At 390 the sprite renders
+  // ≈76 CSS px (above the 72-px child-finger comfort target); at 1280 ≈193.
+  xMin: 145, xMax: 655,      // leaves ≥70 viewBox units to the left/right of any sprite
+  yMin: 140, yMax: 460,      // leaves ≥84 viewBox units above/below any sprite
   // sprite user-unit footprint (matches foreignObject in renderScene)
-  spriteSize: 144,           // visual sprite size in viewBox units
-  hitSize:    170,           // tappable hit area (sprite + 13px padding all around)
+  spriteSize: 168,           // visual sprite size in viewBox units
+  hitSize:    196,           // tappable hit area (sprite + 14px padding all around)
   // target min center-to-center spacing in USER units. The grid-search below picks
   // the cell maximizing distance-to-nearest-already-placed, so this is a soft target,
   // not a hard reject — with 40 items some pair overlap is unavoidable, and z-order
   // (later items on top) keeps every item individually tappable.
-  minGap:     80,
+  minGap:     90,
 };
 // Scatter items on a deterministic shuffled grid, picking the cell that maximizes
 // distance-to-nearest-already-placed. We don't reject close cells outright — at
@@ -808,22 +808,22 @@ function renderScene(){
     const anim = document.createElementNS('http://www.w3.org/2000/svg','g');
     anim.setAttribute('class','findable-anim');
     // Use foreignObject so we can embed an <img> directly inside SVG (modern browsers support this).
-    // Hit area = 170×170 user units (sprite is 144×144 centered inside → 13px padding all around).
+    // Hit area = 196×196 user units (sprite is 168×168 centered inside → 14px padding all around).
     // viewBox 800×600 with preserveAspectRatio meet → on a 390-wide stage the sprite
-    // renders at 144 × (362/800) ≈ 65.2 px (visual) and hit-area ≈ 76.9 px (comfortably finger-sized).
+    // renders at 168 × (362/800) ≈ 76.0 px (visual) and hit-area ≈ 88.7 px (comfortably finger-sized).
     const fo = document.createElementNS('http://www.w3.org/2000/svg','foreignObject');
-    fo.setAttribute('x','-85');fo.setAttribute('y','-85');
-    fo.setAttribute('width','170');fo.setAttribute('height','170');
+    fo.setAttribute('x','-98');fo.setAttribute('y','-98');
+    fo.setAttribute('width','196');fo.setAttribute('height','196');
     fo.classList.add('hit');
     const xhtmlNS = 'http://www.w3.org/1999/xhtml';
     const img = document.createElementNS(xhtmlNS,'img');
     img.setAttribute('src', ICON_BASE + ICONS[p.id]);
-    img.setAttribute('width','144');
-    img.setAttribute('height','144');
-    // The foreignObject is 170 user units. On a 390-wide stage the user→CSS ratio
-    // is ~0.45, so 170 user units ≈ 77 CSS px. Use percentages so the sprite
-    // (144/170 = 84.7% of the FO) and the 13px hit-pad stay proportional at any zoom.
-    img.style.cssText = 'display:block;width:84.7%;height:84.7%;margin:7.65% auto 0;object-fit:contain;pointer-events:none;user-select:none;-webkit-user-drag:none;';
+    img.setAttribute('width','168');
+    img.setAttribute('height','168');
+    // The foreignObject is 196 user units. On a 390-wide stage the user→CSS ratio
+    // is ~0.45, so 196 user units ≈ 89 CSS px. Use percentages so the sprite
+    // (168/196 = 85.7% of the FO) and the 14px hit-pad stay proportional at any zoom.
+    img.style.cssText = 'display:block;width:85.7%;height:85.7%;margin:7.15% auto 0;object-fit:contain;pointer-events:none;user-select:none;-webkit-user-drag:none;';
     img.classList.add('sprite');
     fo.appendChild(img);
     anim.appendChild(fo);
