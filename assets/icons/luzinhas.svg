@@ -1,14 +1,34 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" width="72" height="72"><g id="color">
-    <polygon fill="#FCEA2B" stroke="none" points="36,10 31.4483,4.3216 28.6708,11.0465 22.7014,6.8864 21.9435,14.1231 15.0427,11.817 16.3488,18.9749 9.0779,18.6961 12.3422,25.1984 5.2887,26.9833 10.2616,32.295 4,36 10.2616,39.7051 5.2889,45.0172 12.3426,46.8026 9.0787,53.3052 16.3497,53.0261 15.044,60.1842 21.9445,57.8775 22.7026,65.1141 28.6713,60.9536 31.4484,67.6784 36,62 40.5517,67.6784 43.3292,60.9535 49.2986,65.1135 50.0565,57.8769 56.9573,60.183 55.6512,53.0251 62.9221,53.3039 59.6578,46.8016 66.7113,45.0167 61.7384,39.705 68,36 61.7384,32.2949 66.7111,26.9828 59.6573,25.1974 62.9213,18.6948 55.6503,18.9739 56.956,11.8158 50.0555,14.1225 49.2974,6.8859 43.3287,11.0464 40.5516,4.3216"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" width="72" height="72">
+  <g id="color">
+    <!-- luzinhas: fairy-light string with glowing round bulbs -->
+    <!-- main hanging cable -->
+    <path d="M4 22 Q36 38 68 22" fill="none" stroke="#5a3550" stroke-width="1.6" stroke-linecap="round"/>
+    <!-- hanging strands -->
+    <line x1="14" y1="26" x2="14" y2="38" stroke="#5a3550" stroke-width="1"/>
+    <line x1="24" y1="30" x2="24" y2="42" stroke="#5a3550" stroke-width="1"/>
+    <line x1="34" y1="32" x2="34" y2="44" stroke="#5a3550" stroke-width="1"/>
+    <line x1="44" y1="32" x2="44" y2="44" stroke="#5a3550" stroke-width="1"/>
+    <line x1="54" y1="30" x2="54" y2="42" stroke="#5a3550" stroke-width="1"/>
+    <line x1="64" y1="26" x2="64" y2="38" stroke="#5a3550" stroke-width="1"/>
+    <!-- bulb bodies with glow halos -->
+    <circle cx="14" cy="42" r="6" fill="#fff3b8"/>
+    <circle cx="14" cy="42" r="4" fill="#ffe28a" stroke="#d8a93a" stroke-width="1"/>
+    <circle cx="24" cy="46" r="6" fill="#ffd5e6"/>
+    <circle cx="24" cy="46" r="4" fill="#ff6fa8" stroke="#c94e8a" stroke-width="1"/>
+    <circle cx="34" cy="48" r="6" fill="#dff1ff"/>
+    <circle cx="34" cy="48" r="4" fill="#9ed6ff" stroke="#5aa5d8" stroke-width="1"/>
+    <circle cx="44" cy="48" r="6" fill="#dfffe6"/>
+    <circle cx="44" cy="48" r="4" fill="#7ddcb1" stroke="#3f9d77" stroke-width="1"/>
+    <circle cx="54" cy="46" r="6" fill="#f1e8ff"/>
+    <circle cx="54" cy="46" r="4" fill="#b89ee0" stroke="#8c6fbf" stroke-width="1"/>
+    <circle cx="64" cy="42" r="6" fill="#fff3b8"/>
+    <circle cx="64" cy="42" r="4" fill="#ffe28a" stroke="#d8a93a" stroke-width="1"/>
+    <!-- tiny shine highlights -->
+    <circle cx="12" cy="40" r="0.9" fill="#fff"/>
+    <circle cx="22" cy="44" r="0.9" fill="#fff"/>
+    <circle cx="32" cy="46" r="0.9" fill="#fff"/>
+    <circle cx="42" cy="46" r="0.9" fill="#fff"/>
+    <circle cx="52" cy="44" r="0.9" fill="#fff"/>
+    <circle cx="62" cy="40" r="0.9" fill="#fff"/>
   </g>
-  
-  <g id="skin"/>
-  <g id="skin-shadow"/>
-  <g id="line">
-    <polygon fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" points="36,10 31.4483,4.3216 28.6708,11.0465 22.7014,6.8864 21.9435,14.1231 15.0427,11.817 16.3488,18.9749 9.0779,18.6961 12.3422,25.1984 5.2887,26.9833 10.2616,32.295 4,36 10.2616,39.7051 5.2889,45.0172 12.3426,46.8026 9.0787,53.3052 16.3497,53.0261 15.044,60.1842 21.9445,57.8775 22.7026,65.1141 28.6713,60.9536 31.4484,67.6784 36,62 40.5517,67.6784 43.3292,60.9535 49.2986,65.1135 50.0565,57.8769 56.9573,60.183 55.6512,53.0251 62.9221,53.3039 59.6578,46.8016 66.7113,45.0167 61.7384,39.705 68,36 61.7384,32.2949 66.7111,26.9828 59.6573,25.1974 62.9213,18.6948 55.6503,18.9739 56.956,11.8158 50.0555,14.1225 49.2974,6.8859 43.3287,11.0464 40.5516,4.3216"/>
-    <circle cx="27.8456" cy="33.789" r="3" fill="#000000" stroke="none"/>
-    <circle cx="44.1544" cy="33.789" r="3" fill="#000000" stroke="none"/>
-    <path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M43.6763,46.3816c-2.1347,1.5846-4.8139,2.5518-7.6766,2.5518c-2.9019,0-5.5262-0.9282-7.6759-2.5523"/>
-    <path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M31.7748,23.0042c0,0-4.7748-2.6003-9.5496,1.6523"/>
-    <path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M40.2252,23.0042c0,0,4.7748-2.6003,9.5496,1.6523"/>
-  </g></svg>
+</svg>

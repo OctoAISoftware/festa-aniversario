@@ -1,26 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" width="72" height="72"><g id="color">
-    <path fill="#92d3f5" d="M39.7792,57.8819H52.77V44.851c5.2976,0,11.6314,1.4,11.6314-6.1934,0-6.7613-6.3338-5.8535-11.6314-5.8535V19.5133H39.7792c1.8239-5.8157,1.8239-11.6314-4.9774-11.6314s-6.73,6.3338-6.73,11.6314H14.4016V33.5239c4.2433-1.5715,11.6314-4.4184,11.6314,5.1737s-8.48,6.5814-11.6314,5.1737V57.8819H26.3729c0-5.2976,0-12.383,7.213-12.3112C40.3686,45.6382,39.7792,52.5843,39.7792,57.8819Z"/>
-    <path fill="#61b2e4" d="M39.0542,51.0992c1.7359,1.7359,1.11,4.1339,1.11,6.7827H52.77V43.8713c5.8157,1.0357,10.9968,3.6045,10.9968-5.2137,0-5.2976-4.9743-6.1934-10.2719-6.1934V19.8154H49.3788"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" width="72" height="72">
+  <g id="color">
+    <!-- fantasia: witch/princess hat tilted, child-friendly -->
+    <!-- brim ellipse -->
+    <ellipse cx="36" cy="56" rx="26" ry="6" fill="#9ed6ff" stroke="#5aa5d8" stroke-width="1.6"/>
+    <!-- cone hat tilted slightly to right -->
+    <path d="M16 50 L40 4 L52 50 Z" fill="#9ed6ff" stroke="#5aa5d8" stroke-width="1.6" stroke-linejoin="round"/>
+    <!-- hat band -->
+    <path d="M19 46 L49 46 L52 50 L16 50 Z" fill="#5aa5d8"/>
+    <!-- star on the band -->
+    <polygon points="36,18 38,24 44,24 39,28 41,34 36,30 31,34 33,28 28,24 34,24" fill="#ffe28a" stroke="#d8a93a" stroke-width="1.2" stroke-linejoin="round"/>
+    <!-- magic sparkles -->
+    <circle cx="58" cy="20" r="1.8" fill="#ffe28a"/>
+    <circle cx="14" cy="30" r="1.6" fill="#ff9ec6"/>
+    <path d="M62 38 l1.4 1.4 M62 38 l-1.4 1.4 M62 38 l1.4 -1.4 M62 38 l-1.4 -1.4" stroke="#7ddcb1" stroke-width="1.2" stroke-linecap="round"/>
   </g>
-  <g id="line">
-    <polyline fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" points="14.402 33.524 14.402 19.513 29.628 19.513"/>
-    <polyline fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" points="28 57.882 14.402 57.882 14.402 43.871"/>
-    <polyline fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" points="52.77 43.871 52.77 57.882 38.348 57.882"/>
-    <polyline fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" points="39.976 19.513 52.77 19.513 52.77 33.524"/>
-    <g>
-      <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.4016,33.5239c2.6813-2.3413,11.6314-3.2873,11.6314,5.1737"/>
-      <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.4016,43.8713c2.6813,2.3413,11.6314,3.2873,11.6314-5.1737"/>
-    </g>
-    <g>
-      <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M28.0005,57.8819c-2.3414-2.6814-3.2873-11.6314,5.1737-11.6314"/>
-      <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M38.3479,57.8819c2.3413-2.6814,3.2873-11.6314-5.1737-11.6314"/>
-    </g>
-    <g>
-      <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M29.6281,19.5133c-2.3414-2.6814-3.2873-11.6314,5.1737-11.6314"/>
-      <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M39.9755,19.5133c2.3413-2.6814,3.2873-11.6314-5.1737-11.6314"/>
-    </g>
-    <g>
-      <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M52.77,43.8713c2.6813,2.3413,11.6314,3.2873,11.6314-5.1737"/>
-      <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M52.77,33.5239c2.6813-2.3413,11.6314-3.2873,11.6314,5.1737"/>
-    </g>
-  </g></svg>
+</svg>

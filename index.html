@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <meta name="theme-color" content="#ffd6e8" />
 <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='%23fff' stroke='%23ff9ec6' stroke-width='2'/><path d='M16 7 L18.5 12 L24 12.5 L20 16 L21 21.5 L16 18.5 L11 21.5 L12 16 L8 12.5 L13.5 12 Z' fill='%23ff6fa8'/><circle cx='16' cy='16' r='3' fill='%23fff'/></svg>" />
 <title>Festa da Maia — Organizador de Festa</title>
@@ -74,26 +74,10 @@
   }
   header.app-bar .counter .dot{width:8px;height:8px;border-radius:50%;background:var(--pink-400);box-shadow:0 0 0 3px #fff inset}
 
-  .screen-title{ text-align:center;padding:14px 16px 4px; }
-  .screen-title h2{font-size:22px;color:var(--pink-600);font-weight:900;letter-spacing:-.01em;line-height:1.15}
-  .screen-title p{font-size:13px;color:var(--ink-soft);margin-top:3px}
-
   /* ── MAIN WRAPPER ────────────────────────────────────────────────── */
-  main{
-    padding:0 14px calc(110px + var(--safe-bot));
-    max-width:980px;margin:0 auto;
-    width:100%;
-  }
-  /* Tighter bottom padding for the final screen — the action buttons sit right above the footer
-     and we don't want a 110px dead-zone between them. */
-  #screen-final{
-    padding-bottom:calc(14px + var(--safe-bot));
-  }
-  .panel{
-    background:#fff;border-radius:var(--r-lg);
-    padding:14px;box-shadow:var(--shadow);
-    border:2px solid var(--pink-100);
-  }
+  main{padding:0 14px calc(180px + var(--safe-bot));max-width:980px;margin:0 auto;width:100%;}
+  #screen-final{padding-bottom:calc(14px + var(--safe-bot));}
+  .panel{background:#fff;border-radius:var(--r-lg);padding:14px;box-shadow:var(--shadow);border:2px solid var(--pink-100);}
 
   /* ── SCREEN 1 — item selection grid ──────────────────────────────── */
   #screen-pick{display:block}
@@ -134,8 +118,13 @@
   @keyframes pop{0%{transform:scale(.92)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
   @keyframes bounce-in{0%{transform:scale(0) rotate(-30deg)}70%{transform:scale(1.3) rotate(8deg)}100%{transform:scale(1) rotate(0)}}
 
-  /* CTA */
-  .cta-row{margin-top:18px;display:flex;flex-direction:column;align-items:center;gap:8px}
+  /* CTA sticky on mobile so it never scrolls off */
+  .cta-row{
+    position:sticky;bottom:calc(var(--safe-bot) + 10px);z-index:20;
+    margin-top:18px;display:flex;flex-direction:column;align-items:center;gap:8px;
+    padding-top:10px;
+    background:linear-gradient(180deg,transparent 0%,rgba(255,240,247,.92) 35%,rgba(255,247,230,.95) 100%);
+  }
   .cta{
     background:linear-gradient(180deg,var(--pink-400),var(--pink-500));
     color:#fff;font-weight:900;font-size:18px;letter-spacing:.01em;
@@ -154,14 +143,27 @@
   .cta[disabled]:hover{transform:none}
   .cta-hint{font-size:12px;color:var(--ink-soft);font-weight:700;min-height:16px;text-align:center;padding:0 12px}
 
+  /* Name input row */
+  .name-row{
+    display:flex;align-items:center;gap:8px;margin-top:12px;
+    background:var(--pink-50);border:2px solid var(--pink-100);border-radius:var(--r-md);
+    padding:10px 12px;
+  }
+  .name-row label{font-size:12px;font-weight:800;color:var(--pink-600);flex:0 0 auto}
+  .name-row input{
+    flex:1;border:none;background:transparent;outline:none;
+    font:inherit;font-weight:700;color:var(--ink);font-size:14px;
+    min-width:0;
+  }
+  .name-row input::placeholder{color:var(--ink-soft);font-weight:600}
+  .name-row .emoji{font-size:20px}
+
   /* ── SCREEN 2 — seek-and-find ────────────────────────────────────── */
   #screen-find .stage{
     position:relative;width:100%;border-radius:var(--r-lg);overflow:hidden;
     box-shadow:var(--shadow);border:3px solid var(--pink-100);
     background:linear-gradient(180deg,#bfe4ff 0%,#d8ecff 60%,#c8e6c2 100%);
-    /* Stage matches the SVG's 4:3 viewBox so 'meet' produces zero letterbox. */
     aspect-ratio: 4/3;
-    /* On short phones (e.g. landscape) let users scroll the scene vertically. */
     min-height: 340px;
     touch-action:pan-y;
   }
@@ -176,9 +178,7 @@
   .findable .sprite{pointer-events:none;user-select:none;-webkit-user-drag:none}
   .findable:hover .findable-anim{filter:brightness(1.08) drop-shadow(0 0 8px rgba(255,255,255,.85))}
   .findable:hover{filter:none}
-  .findable.found{
-    pointer-events:none;
-  }
+  .findable.found{pointer-events:none;}
   .findable.found .findable-anim{
     animation:found-pop .65s ease forwards;
     transform-origin:center;
@@ -186,10 +186,11 @@
   .findable.hint .findable-anim{
     animation:wiggle 1.2s ease-in-out infinite;
     transform-origin:center;
+    filter:drop-shadow(0 0 12px gold);
   }
-  /* The animation transform is applied to an INNER <g class="findable-anim"> so the
-     outer <g>'s translate(x,y) stays put — SVG transforms replace, not compose. */
-  .findable-anim{transform-box:fill-box;transform-origin:center;transition:transform .2s ease}
+  /* Stronger hint: make front z-order obstacles semi-transparent so a buried item shows through */
+  .stage.reveal .findable:not(.found):not(.hint) .findable-anim{opacity:.55}
+  .findable-anim{transform-box:fill-box;transform-origin:center;transition:transform .2s ease, opacity .35s ease, filter .35s ease}
   @keyframes wiggle{
     0%,100%{transform:rotate(0) scale(1)}
     25%{transform:rotate(-8deg) scale(1.10)}
@@ -209,12 +210,13 @@
     0%{transform:scale(.3);opacity:.9}
     100%{transform:scale(2.4);opacity:0}
   }
+  /* Confetti container is now 0×0 — confetti fragments spawn AT the target hit-point. */
   .confetti-burst{
-    position:absolute;width:100%;height:100%;top:0;left:0;pointer-events:none;overflow:hidden;
+    position:absolute;width:0;height:0;top:0;left:0;pointer-events:none;overflow:visible;
   }
   .confetti-burst span{
     position:absolute;width:10px;height:14px;border-radius:3px;
-    top:50%;left:50%;
+    top:0;left:0;
     animation:confetti 1s cubic-bezier(.2,.7,.3,1) forwards;
   }
   @keyframes confetti{
@@ -224,7 +226,7 @@
       rotate(720deg);opacity:0}
   }
 
-  /* sidebar */
+  /* phase banner + sidebar */
   .find-layout{display:grid;grid-template-columns:1fr;gap:12px;margin-top:10px}
   .sidebar{
     background:#fff;border-radius:var(--r-lg);
@@ -264,6 +266,38 @@
   }
   .progress-label{font-size:11px;color:var(--ink-soft);font-weight:700;margin-top:5px;text-align:center}
 
+  /* phase indicator (visual, not text — children don't read) */
+  .phase-bar{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    margin-top:8px;flex-wrap:wrap;
+  }
+  .phase-pill{
+    display:flex;align-items:center;gap:5px;
+    background:var(--pink-50);border:2px solid var(--pink-100);
+    border-radius:999px;padding:4px 9px;font-size:11px;font-weight:800;color:var(--ink-soft);
+    transition:all .25s ease;
+  }
+  .phase-pill .stars{display:flex;gap:2px}
+  .phase-pill .star{width:11px;height:11px;color:var(--pink-200);transition:color .25s ease, transform .25s ease}
+  .phase-pill .star.on{color:var(--pink-400)}
+  .phase-pill.active{background:#fff;border-color:var(--pink-400);color:var(--pink-600);box-shadow:0 4px 10px rgba(255,105,160,.25);transform:scale(1.05)}
+  .phase-pill.done{background:#fff5e8;border-color:var(--mint-2);color:#3f8e6a}
+  .phase-pill.done .star{color:var(--mint-2)}
+  .phase-transition{
+    position:absolute;inset:0;display:grid;place-items:center;
+    background:linear-gradient(160deg,rgba(255,214,232,.92),rgba(255,247,214,.92));
+    opacity:0;pointer-events:none;z-index:5;border-radius:var(--r-lg);
+    transition:opacity .4s ease;
+  }
+  .phase-transition.show{opacity:1;pointer-events:auto}
+  .phase-transition .bubble{
+    background:#fff;border:3px solid var(--pink-300);border-radius:999px;
+    padding:14px 26px;font-weight:900;color:var(--pink-600);font-size:18px;
+    box-shadow:0 14px 30px rgba(255,77,141,.3);animation:pop .5s ease;
+    display:flex;align-items:center;gap:10px;
+  }
+  .phase-transition .bubble .star-big{color:var(--pink-400);font-size:22px}
+
   /* ── SCREEN 3 — final scene ──────────────────────────────────────── */
   #screen-final .finale{
     position:relative;border-radius:var(--r-lg);overflow:hidden;
@@ -298,6 +332,12 @@
     box-shadow:0 14px 28px rgba(255,77,141,.4);
   }
 
+  /* finale name banner — uses optional configurable name */
+  .finale-name-banner{
+    text-align:center;font-size:18px;font-weight:900;color:var(--pink-600);
+    margin:6px 0 4px;
+  }
+
   /* ── splash ──────────────────────────────────────────────────────── */
   .splash{
     position:fixed;inset:0;z-index:200;background:linear-gradient(160deg,#ffd6e8,#fff5d6);
@@ -319,10 +359,16 @@
     max-width:680px;margin:0 auto;
   }
   footer.site-credit a{color:var(--pink-600);text-decoration:none;border-bottom:1px dotted var(--pink-300)}
-  footer.site-credit a:hover{border-bottom-color:var(--pink-600)}
+  footer.site-credit a:hover{bottom-color:var(--pink-600)}
+
+  /* ── focus visibility (a11y) ─────────────────────────────────────── */
+  .tile:focus-visible, .findable:focus-visible, .cta:focus-visible, .big-btn:focus-visible, .phase-pill:focus-visible{
+    outline:3px solid var(--pink-500);outline-offset:3px;border-radius:var(--r-md);
+    box-shadow:0 0 0 5px rgba(255,77,141,.25);
+  }
+  .findable:focus-visible .findable-anim{filter:drop-shadow(0 0 10px var(--pink-400))}
 
   /* ── BREAKPOINTS — true mobile-first scaling ────────────────────── */
-  /* phones ~360-414px: keep current */
   @media (max-width:380px){
     .grid{grid-template-columns:repeat(3,1fr);gap:8px}
     .tile{min-height:104px}
@@ -330,12 +376,10 @@
     .tile .name{font-size:10px}
     header.app-bar h1{font-size:17px}
   }
-  /* slightly larger phones (iPhone Plus / Pro Max) — 2xl uses 5 cols */
   @media (min-width:430px){
     .grid{grid-template-columns:repeat(4,1fr)}
     .checklist{grid-template-columns:repeat(6,1fr)}
   }
-  /* tablet portrait — sidebar returns */
   @media (min-width:760px){
     main{padding-left:18px;padding-right:18px}
     .grid{grid-template-columns:repeat(5,1fr)}
@@ -344,7 +388,6 @@
     .tile .icon{width:72px;height:72px}
     .tile .name{font-size:12px}
   }
-  /* desktop — comfortable */
   @media (min-width:980px){
     .grid{grid-template-columns:repeat(6,1fr)}
     .find-layout{grid-template-columns:1fr 240px;gap:18px}
@@ -354,6 +397,7 @@
   /* reduced motion */
   @media (prefers-reduced-motion:reduce){
     *{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+    .findable-anim{opacity:1 !important}
   }
 </style>
 </head>
@@ -362,7 +406,6 @@
 <div class="splash" id="splash" aria-hidden="true">
   <div class="bouncer">
     <svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true">
-      <!-- Original bunny mascot (improved) -->
       <defs>
         <radialGradient id="bunnyBody" cx=".5" cy=".4" r=".6">
           <stop offset="0" stop-color="#ffffff"/>
@@ -373,25 +416,19 @@
           <stop offset="1" stop-color="#ff9ec6"/>
         </radialGradient>
       </defs>
-      <!-- ears -->
       <ellipse cx="42" cy="36" rx="9" ry="22" fill="url(#bunnyEar)" stroke="#f4c7d9" stroke-width="2"/>
       <ellipse cx="78" cy="36" rx="9" ry="22" fill="url(#bunnyEar)" stroke="#f4c7d9" stroke-width="2"/>
       <ellipse cx="42" cy="36" rx="3.4" ry="14" fill="#ffb3cf"/>
       <ellipse cx="78" cy="36" rx="3.4" ry="14" fill="#ffb3cf"/>
-      <!-- head -->
       <ellipse cx="60" cy="70" rx="38" ry="34" fill="url(#bunnyBody)" stroke="#f4c7d9" stroke-width="2.4"/>
-      <!-- cheeks -->
       <circle cx="38" cy="72" r="6" fill="#ffb3cf" opacity=".7"/>
       <circle cx="82" cy="72" r="6" fill="#ffb3cf" opacity=".7"/>
-      <!-- eyes -->
       <ellipse cx="48" cy="64" rx="4.2" ry="5" fill="#3a2a36"/>
       <ellipse cx="72" cy="64" rx="4.2" ry="5" fill="#3a2a36"/>
       <circle cx="49" cy="63" r="1.4" fill="#fff"/>
       <circle cx="73" cy="63" r="1.4" fill="#fff"/>
-      <!-- nose + smile -->
       <ellipse cx="60" cy="74" rx="2.4" ry="1.6" fill="#ff7aa9"/>
       <path d="M54 78 Q60 84 66 78" stroke="#3a2a36" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-      <!-- bow -->
       <g transform="translate(60,32)">
         <path d="M-22 -2 Q-12 -12 0 -2 Q-12 8 -22 -2Z" fill="#ff6fa8" stroke="#ff4d8d" stroke-width="1.5"/>
         <path d="M22 -2 Q12 -12 0 -2 Q12 8 22 -2Z" fill="#ff6fa8" stroke="#ff4d8d" stroke-width="1.5"/>
@@ -418,7 +455,7 @@
   <div class="counter" id="counter" aria-live="polite">
     <span class="dot"></span>
     <span id="counter-num">0</span>
-    <span>itens</span>
+    <span id="counter-unit">itens</span>
   </div>
 </header>
 
@@ -429,6 +466,11 @@
     <p>Toque nos itens que você quer na sua festa ✨</p>
   </div>
   <section class="panel">
+    <div class="name-row">
+      <span class="emoji" aria-hidden="true">🎂</span>
+      <label for="nome-input">Aniversariante:</label>
+      <input id="nome-input" type="text" maxlength="20" autocomplete="off" placeholder="nome do(a) aniversariante" />
+    </div>
     <div class="grid" id="grid"></div>
     <div class="cta-row">
       <button class="cta" id="go-find" disabled>
@@ -445,12 +487,20 @@
 <!-- ── SCREEN 2: find the items ────────────────────────────────────── -->
 <main id="screen-find">
   <div class="screen-title">
-    <h2>Achar os itens</h2>
-    <p>clique em cada item para marcar ✅</p>
+    <h2 id="find-title">Achar os itens</h2>
+    <p id="find-sub">toque em cada um para marcar ✅</p>
   </div>
+  <div class="phase-bar" id="phase-bar" aria-label="progresso das fases"></div>
   <div class="find-layout">
-    <section class="stage" id="stage" aria-label="Cena da festa">
-      <svg id="scene-svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
+    <section class="stage" id="stage" aria-label="Cena da caça aos itens">
+      <div class="phase-transition" id="phase-transition" aria-hidden="true">
+        <div class="bubble">
+          <span class="star-big">⭐</span>
+          <span id="phase-transition-text">Fase completa!</span>
+          <span class="star-big">⭐</span>
+        </div>
+      </div>
+      <svg id="scene-svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet" aria-label="Cena da caça aos itens"></svg>
     </section>
     <aside class="sidebar">
       <h3>Checklist</h3>
@@ -466,9 +516,10 @@
   <div class="screen-title">
     <h2>A festa está pronta! 🎉</h2>
   </div>
+  <div class="finale-name-banner" id="finale-name"></div>
   <section class="panel">
     <div class="finale">
-      <svg id="scene-final-svg" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
+      <svg id="scene-final-svg" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid meet" aria-label="Cena final da festa"></svg>
     </div>
     <div class="finale-actions">
       <button class="big-btn primary" id="restart">
@@ -488,20 +539,19 @@
 </main>
 
 <footer class="site-credit">
-  Ícones dos itens: <a href="https://openmoji.org/" target="_blank" rel="noopener">OpenMoji</a> (CC BY-SA 4.0) + ilustrações originais (algodão-doce, chapéu de festa, sacola, saco, colar, tatuagem, bexiga, amarelinha, mascotes e cena).<br/>
+  Ícones dos itens: <a href="https://openmoji.org/" target="_blank" rel="noopener">OpenMoji</a> (CC BY-SA 4.0) + ilustrações originais (algodão-doce, chapéu de festa, sacola, saco, colar, tatuagem, amarelinha, mascotes, cena, festa, convites, piñata, guardanapos, toalha, bandeirolas, luzinhas, decoração, fantasia, máscara, boca do palhaço).<br/>
   Feito com 💗 para a Maia.
 </footer>
 
 <script>
 /* ──────────────────────────────────────────────────────────────────
- *  Festa da Maia — single-page game
- *  Visuals sourced from OpenMoji (CC BY-SA 4.0) + original art.
+ *  Festa da Maia — single-page game (P1–P5 rebuild)
+ *  Visuals sourced from OpenMoji (CC BY-SA 4.0) + original kawaii art.
  * ────────────────────────────────────────────────────────────────── */
 
 const ICON_BASE = "assets/icons/";
 // Cache-buster suffix: invalidates the Cloudflare edge cache for the changed icons.
-// (CF token can't purge, max-age=14400s. Without this, the live site keeps serving the old files.)
-const ICON_V = "v=2026-09-14-5";
+const ICON_V = "v=2026-09-14-6";
 const ICONS = {
   bolo:"bolo.svg?"+ICON_V, velinhas:"velinhas.svg?"+ICON_V, docinhos:"docinhos.svg?"+ICON_V, brigadeiro:"brigadeiro.svg?"+ICON_V,
   sorvete:"sorvete.svg?"+ICON_V, refrigerante:"refrigerante.svg?"+ICON_V, suco:"suco.svg?"+ICON_V, salgadinhos:"salgadinhos.svg?"+ICON_V,
@@ -512,10 +562,10 @@ const ICONS = {
   presente:"presente.svg?"+ICON_V, sacola:"sacola.svg?"+ICON_V, mascara:"mascara.svg?"+ICON_V, fantasia:"fantasia.svg?"+ICON_V,
   guardachuva:"guardachuva.svg?"+ICON_V, pinhata:"pinhata.svg?"+ICON_V, cadeiras:"cadeiras.svg?"+ICON_V, pescaria:"pescaria.svg?"+ICON_V,
   saco:"saco.svg?"+ICON_V, boca:"boca.svg?"+ICON_V, amarelinha:"amarelinha.svg?"+ICON_V, tatuagem:"tatuagem.svg?"+ICON_V,
-  bexiga:"bexiga.svg?"+ICON_V, palhaco:"palhaco.svg?"+ICON_V, coroa:"coroa.svg?"+ICON_V, colar:"colar.svg?"+ICON_V,
+  convites:"convites.svg?"+ICON_V, palhaco:"palhaco.svg?"+ICON_V, coroa:"coroa.svg?"+ICON_V, colar:"colar.svg?"+ICON_V,
 };
 
-// ── 40-item catalog ───────────────────────────────────────────────
+// ── 40-item catalog (P2: balões+bexiga merged → convites replaces bexiga) ─
 const ITEMS = [
   {id:"bolo",     label:"bolo",        color:"#ffc7df"},
   {id:"velinhas", label:"velinhas",    color:"#ffe28a"},
@@ -553,25 +603,101 @@ const ITEMS = [
   {id:"boca",     label:"boca do palhaço",color:"#ffe28a"},
   {id:"amarelinha",label:"amarelinha", color:"#e9d8ff"},
   {id:"tatuagem", label:"tatuagem de festa",color:"#ffc7df"},
-  {id:"bexiga",   label:"bexiga",      color:"#9ed6ff"},
+  {id:"convites", label:"convite",     color:"#9ed6ff"},
   {id:"palhaco",  label:"palhaço",     color:"#ff9ec6"},
   {id:"coroa",    label:"coroa",       color:"#ffe28a"},
   {id:"colar",    label:"colar de guloseimas",color:"#bff0d8"},
 ];
 if (ITEMS.length !== 40) console.warn("Expected 40 items, got", ITEMS.length);
 
-// Returns <img> element string for use in innerHTML
-function iconFor(id){
-  return `<img src="${ICON_BASE}${ICONS[id]}" alt="" width="72" height="72" loading="lazy" decoding="async" />`;
+function iconFor(id, size){
+  const s = size || 72;
+  return `<img src="${ICON_BASE}${ICONS[id]}" alt="" width="${s}" height="${s}" loading="lazy" decoding="async" />`;
 }
 
 // ── State ──────────────────────────────────────────────────────────
-const state = {
+const state = window.__state = {
   selected: new Set(),
   found: new Set(),
   finalSeed: 1,
-  zShuffle: 1,          // bumps each new find game so z-order varies
+  zShuffle: 1,
+  // find-phase tracking
+  phases: [],           // [[id,...], [id,...], ...] — phases of 6–10 items
+  phaseIdx: 0,
+  foundInPhase: new Set(),
+  partyName: '',
 };
+
+// ── WebAudio (P4): festive ding on hit, applause at finale ─────────
+let audioCtx = null;
+function ensureAudio(){
+  if (audioCtx) return audioCtx;
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  } catch(e){ audioCtx = null; }
+  return audioCtx;
+}
+function playDing(){
+  const ctx = ensureAudio(); if (!ctx) return;
+  if (ctx.state === 'suspended') ctx.resume();
+  const now = ctx.currentTime;
+  // Major-chord ding: root + major third + perfect fifth, short pluck envelope
+  const freqs = [880, 1108.73, 1318.51];
+  freqs.forEach((f,i)=>{
+    const o = ctx.createOscillator(); const g = ctx.createGain();
+    o.type = 'sine'; o.frequency.value = f;
+    g.gain.setValueAtTime(0.0001, now + i*0.04);
+    g.gain.exponentialRampToValueAtTime(0.18, now + i*0.04 + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + i*0.04 + 0.45);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(now + i*0.04); o.stop(now + i*0.04 + 0.5);
+  });
+}
+function playPhaseDone(){
+  const ctx = ensureAudio(); if (!ctx) return;
+  if (ctx.state === 'suspended') ctx.resume();
+  const now = ctx.currentTime;
+  // rising arpeggio fanfare
+  const seq = [659.25, 783.99, 987.77, 1318.51];
+  seq.forEach((f,i)=>{
+    const o = ctx.createOscillator(); const g = ctx.createGain();
+    o.type = 'triangle'; o.frequency.value = f;
+    const t = now + i*0.09;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.22, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.4);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(t); o.stop(t + 0.45);
+  });
+}
+function playApplause(){
+  const ctx = ensureAudio(); if (!ctx) return;
+  if (ctx.state === 'suspended') ctx.resume();
+  // brown-noise burst + envelope = crowd clap
+  const now = ctx.currentTime;
+  const dur = 2.4;
+  const bufferSize = Math.floor(ctx.sampleRate * dur);
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  let last = 0;
+  for (let i=0;i<bufferSize;i++){
+    // band-limited noise (1-pole lowpass) — softer than white noise
+    const w = Math.random() * 2 - 1;
+    last = (last + 0.04 * w) / 1.04;
+    data[i] = last * 4;
+  }
+  const src = ctx.createBufferSource(); src.buffer = buffer;
+  // envelope: quick rise, sustain, decay
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0.0001, now);
+  g.gain.exponentialRampToValueAtTime(0.55, now + 0.08);
+  g.gain.setValueAtTime(0.55, now + 1.6);
+  g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+  // light high-pass to take rumble out
+  const hp = ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value = 800;
+  src.connect(hp); hp.connect(g); g.connect(ctx.destination);
+  src.start(now); src.stop(now + dur);
+}
 
 // ── Screen 1: render grid ──────────────────────────────────────────
 const grid = document.getElementById('grid');
@@ -580,9 +706,10 @@ ITEMS.forEach(it=>{
   tile.className = 'tile no-select';
   tile.dataset.id = it.id;
   tile.setAttribute('aria-pressed','false');
+  tile.setAttribute('aria-label', it.label);
   tile.style.background = it.color + "11";
   tile.innerHTML = `
-    <div class="icon">${iconFor(it.id)}</div>
+    <div class="icon">${iconFor(it.id, 72)}</div>
     <div class="name">${it.label}</div>
   `;
   tile.addEventListener('click', ()=>{
@@ -596,8 +723,49 @@ ITEMS.forEach(it=>{
   grid.appendChild(tile);
 });
 
+// optional configurable name (P4): input + URL param, sanitized
+function sanitizeName(raw){
+  if (!raw) return '';
+  let s = String(raw);
+  // strip tags
+  s = s.replace(/<[^>]*>/g, '');
+  // decode entities safely
+  try { s = (new DOMParser()).parseFromString(s, 'text/html').body.textContent || ''; } catch(e){}
+  s = s.replace(/[\u0000-\u001f\u007f]/g, ''); // strip control chars
+  s = s.trim();
+  if (s.length > 20) s = s.slice(0, 20);
+  return s;
+}
+function getNameFromURL(){
+  try {
+    const url = new URL(window.location.href);
+    return sanitizeName(url.searchParams.get('nome'));
+  } catch(e){ return ''; }
+}
+const nomeInput = document.getElementById('nome-input');
+const initialName = getNameFromURL();
+if (initialName){ nomeInput.value = initialName; state.partyName = initialName; }
+nomeInput.addEventListener('input', ()=>{
+  const clean = sanitizeName(nomeInput.value);
+  if (clean !== nomeInput.value){
+    // reflect sanitized back silently
+    const pos = nomeInput.selectionStart;
+    nomeInput.value = clean;
+    try { nomeInput.setSelectionRange(pos, pos); } catch(e){}
+  }
+  state.partyName = clean;
+  // sync URL (no page reload) so the link is shareable
+  try {
+    const url = new URL(window.location.href);
+    if (clean) url.searchParams.set('nome', clean); else url.searchParams.delete('nome');
+    window.history.replaceState({}, '', url.toString());
+  } catch(e){}
+});
+
 function updateCounter(){
-  document.getElementById('counter-num').textContent = state.selected.size;
+  const n = state.selected.size;
+  document.getElementById('counter-num').textContent = n;
+  document.getElementById('counter-unit').textContent = n === 1 ? 'item' : 'itens';
 }
 function updateCTA(){
   const btn = document.getElementById('go-find');
@@ -618,42 +786,40 @@ document.getElementById('go-find').addEventListener('click', ()=>{
   startFindScreen();
 });
 
+// ── P1: split selected items into phases of 6–10 ───────────────────
+function splitPhases(ids){
+  // target 8 per phase when possible (sweet spot for ~5 phases of 40)
+  const TARGET = 8, MIN = 6, MAX = 10;
+  if (ids.length <= MAX) return [ids.slice()];
+  const phases = [];
+  let i = 0;
+  while (i < ids.length){
+    let n = Math.min(TARGET, ids.length - i);
+    if (ids.length - i > MAX && n < MIN) n = Math.min(MIN, ids.length - i);
+    if (ids.length - i <= MAX && ids.length - i > 0) n = ids.length - i;
+    phases.push(ids.slice(i, i + n));
+    i += n;
+  }
+  return phases;
+}
+
 // ── Screen 2: build find scene ─────────────────────────────────────
-// Safe zone for spawn: viewBox is 800×600. Items render ON TOP of the scenery so
-// every selected item is always visible, regardless of what scenery sits behind
-// it. We just avoid the very edges so nothing is clipped by the rounded mask,
-// and we avoid the deepest part of the table where the cake/tablecloth dominate.
+// Safe zone for spawn (viewBox 800×600).
 const SPAWN = {
-  // Sprite is 168 user units, hit-area 196. Bounds are pulled in to (145,655)
-  // × (140,460) so the sprite bbox is fully inside the stage's rounded mask
-  // (radius 24 CSS px → inner curve ~21 CSS px) at the smallest tested
-  // viewport 360 (scale ≈0.415: sprite bbox at xMin 145 → CSS left 25.3, well
-  // inside the 21-px curve after the 3-px border). At 390 the sprite renders
-  // ≈76 CSS px (above the 72-px child-finger comfort target); at 1280 ≈193.
-  xMin: 145, xMax: 655,      // leaves ≥70 viewBox units to the left/right of any sprite
-  yMin: 140, yMax: 460,      // leaves ≥84 viewBox units above/below any sprite
-  // sprite user-unit footprint (matches foreignObject in renderScene)
-  spriteSize: 168,           // visual sprite size in viewBox units
-  hitSize:    196,           // tappable hit area (sprite + 14px padding all around)
-  // target min center-to-center spacing in USER units. The grid-search below picks
-  // the cell maximizing distance-to-nearest-already-placed, so this is a soft target,
-  // not a hard reject — with 40 items some pair overlap is unavoidable, and z-order
-  // (later items on top) keeps every item individually tappable.
-  minGap:     90,
+  xMin: 110, xMax: 690,      // wide band → uniform coverage including the right half
+  yMin: 130, yMax: 470,
+  spriteSize: 168,
+  hitSize:    196,
+  minGap:     110,
 };
-// Scatter items on a deterministic shuffled grid, picking the cell that maximizes
-// distance-to-nearest-already-placed. We don't reject close cells outright — at
-// 40 items in the safe band the density is high, so some pair overlap is
-// unavoidable. Z-order: later items draw on top, so the hint timer (every ~9s
-// of no finds) wiggle-surfaces any item that ended up fully covered.
+
+// Collision-aware placement with deterministic seeding.
 function pickSpawn(used, hash){
-  // Finer step → more candidate cells → better dispersion of items across the
-  // full stage (band is 640×440 user units → 33×23 = 759 candidates).
-  const stepX = 20, stepY = 20;
+  const stepX = 16, stepY = 16;
   const xs = [], ys = [];
   for (let x=SPAWN.xMin; x<=SPAWN.xMax; x+=stepX) xs.push(x);
   for (let y=SPAWN.yMin; y<=SPAWN.yMax; y+=stepY) ys.push(y);
-  let best = null, bestScore = -1;
+  let best = null, bestScore = -Infinity;
   const r = (n)=> ( (hash * 9301 + n * 49297 + 233280) >>> 0 );
   for (let i=0;i<xs.length;i++){
     for (let j=0;j<ys.length;j++){
@@ -663,15 +829,15 @@ function pickSpawn(used, hash){
         const d = Math.hypot(x-u.x, y-u.y);
         if (d < minD) minD = d;
       }
-      // Heavily prefer cells with minD ≥ minGap (so neighbors are visibly apart),
-      // fall back to the largest minD when the band is crowded.
-      const gapBonus = minD >= SPAWN.minGap ? 200 : 0;
-      const score = minD + gapBonus + ((r(i*97+j*31) % 1000) / 1000) * 6;
+      const gapBonus = minD >= SPAWN.minGap ? 250 : (minD > 60 ? 50 : -200);
+      // bias toward RIGHT side a bit (was historically empty)
+      const rightBias = x > 450 ? 18 : 0;
+      const jitter = ((r(i*97+j*31) % 1000) / 1000) * 8;
+      const score = minD + gapBonus + rightBias + jitter;
       if (score > bestScore){ bestScore = score; best = {x,y}; }
     }
   }
   if (!best){
-    // Last-resort: deterministic jitter inside the safe band
     let h2 = hash >>> 0;
     best = {
       x: SPAWN.xMin + (h2 % (SPAWN.xMax - SPAWN.xMin)),
@@ -684,7 +850,12 @@ function pickSpawn(used, hash){
 function startFindScreen(){
   const ids = [...state.selected];
   state.found = new Set();
-  state.zShuffle = (state.zShuffle || 1) + 1;  // vary z-order each new round
+  state.foundInPhase = new Set();
+  state.zShuffle = (state.zShuffle || 1) + 1;
+  state.phases = splitPhases(ids);
+  state.phaseIdx = 0;
+
+  // Pre-place all items across all phases so re-shuffling a phase later doesn't move earlier ones.
   const placed = [];
   state.placements = ids.map((id, i)=>{
     const item = ITEMS.find(x=>x.id===id);
@@ -695,17 +866,21 @@ function startFindScreen(){
   });
   renderScene();
   renderChecklist();
+  renderPhaseBar();
+  updatePhaseContext();
   document.getElementById('screen-pick').style.display = 'none';
   document.getElementById('screen-find').style.display = 'block';
   document.getElementById('screen-final').style.display = 'none';
   startHintTimer();
-  // Always start the hunt at the top of the page — the previous screen is
-  // hidden but the document scroll position still points to where it was.
+  // initialize audio on first gesture (autoplay policy)
+  ensureAudio();
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
 function renderScene(){
   const svg = document.getElementById('scene-svg');
+  // Build the scenery once. Items are appended as separate <g.findable> children
+  // so we can toggle visibility per phase without touching scenery DOM.
   svg.innerHTML = `
     <defs>
       <linearGradient id="skyG" x1="0" x2="0" y1="0" y2="1">
@@ -719,6 +894,10 @@ function renderScene(){
       <pattern id="dots" width="14" height="14" patternUnits="userSpaceOnUse">
         <circle cx="7" cy="7" r="1.4" fill="#fff" opacity=".4"/>
       </pattern>
+      <radialGradient id="bushG" cx=".5" cy=".4" r=".7">
+        <stop offset="0" stop-color="#bce8b9"/>
+        <stop offset="1" stop-color="#7fcc84"/>
+      </radialGradient>
     </defs>
     <rect x="0" y="0" width="800" height="600" fill="url(#skyG)"/>
 
@@ -737,9 +916,9 @@ function renderScene(){
 
     <!-- distant trees -->
     <g opacity=".85">
-      <ellipse cx="80" cy="380" rx="50" ry="60" fill="#7fcc84"/>
+      <ellipse cx="80" cy="380" rx="50" ry="60" fill="url(#bushG)"/>
       <ellipse cx="100" cy="370" rx="38" ry="48" fill="#9be09c"/>
-      <ellipse cx="720" cy="380" rx="60" ry="70" fill="#7fcc84"/>
+      <ellipse cx="720" cy="380" rx="60" ry="70" fill="url(#bushG)"/>
       <ellipse cx="700" cy="370" rx="40" ry="50" fill="#9be09c"/>
       <rect x="76" y="370" width="8" height="60" fill="#7a4a3a"/>
       <rect x="716" y="370" width="8" height="70" fill="#7a4a3a"/>
@@ -767,50 +946,69 @@ function renderScene(){
     <circle cx="620" cy="140" r="18" fill="#ff6fa8"/>
     <circle cx="720" cy="200" r="20" fill="#9ed6ff"/>
 
-    <!-- trees middle -->
-    <ellipse cx="180" cy="430" rx="36" ry="46" fill="#7fcc84"/>
-    <ellipse cx="195" cy="420" rx="26" ry="32" fill="#9be09c"/>
-    <rect x="176" y="430" width="8" height="44" fill="#7a4a3a"/>
-    <ellipse cx="640" cy="430" rx="40" ry="50" fill="#7fcc84"/>
-    <ellipse cx="625" cy="420" rx="28" ry="34" fill="#9be09c"/>
-    <rect x="636" y="430" width="8" height="46" fill="#7a4a3a"/>
+    <!-- middle trees (these are the obstacles that may occlude items) -->
+    <g id="obstacles">
+      <ellipse cx="180" cy="430" rx="36" ry="46" fill="url(#bushG)"/>
+      <ellipse cx="195" cy="420" rx="26" ry="32" fill="#9be09c"/>
+      <rect x="176" y="430" width="8" height="44" fill="#7a4a3a"/>
+      <ellipse cx="640" cy="430" rx="40" ry="50" fill="url(#bushG)"/>
+      <ellipse cx="625" cy="420" rx="28" ry="34" fill="#9be09c"/>
+      <rect x="636" y="430" width="8" height="46" fill="#7a4a3a"/>
+      <!-- picnic basket / park bench / trash bin as coherent park distractors -->
+      <g transform="translate(560,420)">
+        <rect x="-22" y="0" width="44" height="22" rx="3" fill="#d6a86a" stroke="#7a4a3a" stroke-width="1.4"/>
+        <line x1="-22" y1="6" x2="22" y2="6" stroke="#7a4a3a" stroke-width="1"/>
+        <line x1="-22" y1="12" x2="22" y2="12" stroke="#7a4a3a" stroke-width="1"/>
+        <rect x="-22" y="22" width="44" height="6" fill="#7a4a3a"/>
+      </g>
+      <!-- bench -->
+      <g transform="translate(250,440)">
+        <rect x="-30" y="-4" width="60" height="6" rx="2" fill="#a87044" stroke="#7a4a3a" stroke-width="1.4"/>
+        <rect x="-30" y="2" width="6" height="18" fill="#7a4a3a"/>
+        <rect x="24" y="2" width="6" height="18" fill="#7a4a3a"/>
+      </g>
+      <!-- lamp post -->
+      <g transform="translate(60,360)">
+        <rect x="-1.5" y="0" width="3" height="60" fill="#5a3550"/>
+        <circle cx="0" cy="-4" r="6" fill="#ffe28a" stroke="#d8a93a" stroke-width="1.2"/>
+        <line x1="-4" y1="-4" x2="4" y2="-4" stroke="#5a3550" stroke-width="1.6"/>
+      </g>
+    </g>
 
     <!-- grass tufts -->
     <path d="M40 580 Q50 560 60 580 M70 580 Q80 565 90 580 M740 580 Q750 560 760 580" stroke="#5a8a5a" stroke-width="2" fill="none"/>
+
+    <g id="findables"></g>
   `;
 
-  const scene = svg;
-  // Z-order shuffle: the click hit-test resolves to the TOPMOST element at the
-  // touch point, so if we appended in selection order the items clicked first
-  // would always be at the bottom and risk being fully covered by later items.
-  // We append in a deterministic-shuffled order so each new game hides a
-  // different subset, and the hint timer wiggle rescues any buried item after
-  // ~9s of no finds.  (zOrder is a permutation of placement indices.)
-  const zOrder = (() => {
-    const idxs = state.placements.map((_, i) => i);
-    // Fisher–Yates with a per-round seed so the order is reproducible per game
-    // but differs between rounds.
-    let s = ((state.zShuffle || 1) * 2654435761) >>> 0;
-    for (let i = idxs.length - 1; i > 0; i--){
-      s = (s * 1664525 + 1013904223) >>> 0;
-      const j = s % (i + 1);
-      const t = idxs[i]; idxs[i] = idxs[j]; idxs[j] = t;
-    }
-    return idxs;
-  })();
-  zOrder.forEach(idx => {
+  const scene = svg.querySelector('#findables');
+  // z-order shuffle so the visible occlusion of items varies between rounds
+  const idxs = state.placements.map((_, i) => i);
+  let s = ((state.zShuffle || 1) * 2654435761) >>> 0;
+  for (let i = idxs.length - 1; i > 0; i--){
+    s = (s * 1664525 + 1013904223) >>> 0;
+    const j = s % (i + 1);
+    const t = idxs[i]; idxs[i] = idxs[j]; idxs[j] = t;
+  }
+
+  idxs.forEach(idx => {
     const p = state.placements[idx];
     const wrap = document.createElementNS('http://www.w3.org/2000/svg','g');
     wrap.setAttribute('class','findable');
     wrap.setAttribute('transform', `translate(${p.x}, ${p.y})`);
     wrap.dataset.id = p.id;
-    // inner <g> takes the CSS animation so the outer translate isn't replaced
+    wrap.setAttribute('role','button');
+    wrap.setAttribute('tabindex','0');
+    wrap.setAttribute('aria-label', 'procurar ' + (ITEMS.find(it=>it.id===p.id)||{}).label);
+
     const anim = document.createElementNS('http://www.w3.org/2000/svg','g');
     anim.setAttribute('class','findable-anim');
-    // Use foreignObject so we can embed an <img> directly inside SVG (modern browsers support this).
-    // Hit area = 196×196 user units (sprite is 168×168 centered inside → 14px padding all around).
-    // viewBox 800×600 with preserveAspectRatio meet → on a 390-wide stage the sprite
-    // renders at 168 × (362/800) ≈ 76.0 px (visual) and hit-area ≈ 88.7 px (comfortably finger-sized).
+
+    // per-item deterministic variation: scale + rotation
+    let hh = 2166136261 >>> 0; for (const c of p.id) hh = ((hh ^ c.charCodeAt(0)) * 16777619) >>> 0;
+    const scaleJ = 0.85 + ((hh % 100) / 100) * 0.45;   // 0.85..1.30
+    const rotJ   = ((hh >> 7) % 60) - 30;              // -30..+30 deg
+
     const fo = document.createElementNS('http://www.w3.org/2000/svg','foreignObject');
     fo.setAttribute('x','-98');fo.setAttribute('y','-98');
     fo.setAttribute('width','196');fo.setAttribute('height','196');
@@ -820,28 +1018,50 @@ function renderScene(){
     img.setAttribute('src', ICON_BASE + ICONS[p.id]);
     img.setAttribute('width','168');
     img.setAttribute('height','168');
-    // The foreignObject is 196 user units. On a 390-wide stage the user→CSS ratio
-    // is ~0.45, so 196 user units ≈ 89 CSS px. Use percentages so the sprite
-    // (168/196 = 85.7% of the FO) and the 14px hit-pad stay proportional at any zoom.
-    img.style.cssText = 'display:block;width:85.7%;height:85.7%;margin:7.15% auto 0;object-fit:contain;pointer-events:none;user-select:none;-webkit-user-drag:none;';
+    img.style.cssText = `display:block;width:85.7%;height:85.7%;margin:7.15% auto 0;object-fit:contain;pointer-events:none;user-select:none;-webkit-user-drag:none;transform:rotate(${rotJ}deg) scale(${scaleJ.toFixed(3)});transform-origin:center;`;
     img.classList.add('sprite');
     fo.appendChild(img);
     anim.appendChild(fo);
     wrap.appendChild(anim);
-    wrap.addEventListener('click', e=>{
-      e.stopPropagation();
-      findItem(p.id, e);
+
+    wrap.addEventListener('click', e=>{ e.stopPropagation(); findItem(p.id, e); });
+    wrap.addEventListener('keydown', e=>{
+      if (e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        findItem(p.id, e);
+      }
     });
     scene.appendChild(wrap);
   });
 
+  // apply current phase visibility
+  applyPhaseVisibility();
   updateProgress();
   document.getElementById('checklist').scrollTop = 0;
 }
 
+// show only items belonging to the current phase (others get display:none, not removed)
+function applyPhaseVisibility(){
+  const phaseIds = new Set(state.phases[state.phaseIdx] || []);
+  state.placements.forEach((p, idx)=>{
+    const g = document.querySelector(`#scene-svg .findable[data-id="${p.id}"]`);
+    if (!g) return;
+    if (phaseIds.has(p.id)){
+      g.style.display = '';
+    } else {
+      g.style.display = 'none';
+    }
+  });
+}
+
 function findItem(id, evt){
   if (state.found.has(id)) return;
+  // only count if the item belongs to the current phase
+  const phaseIds = state.phases[state.phaseIdx] || [];
+  if (!phaseIds.includes(id)) return;
+
   state.found.add(id);
+  state.foundInPhase.add(id);
   const g = document.querySelector(`#scene-svg .findable[data-id="${id}"]`);
   if (g){
     g.classList.add('found');
@@ -851,12 +1071,49 @@ function findItem(id, evt){
     spawnPuff(r.left+r.width/2 - stage.left, r.top+r.height/2 - stage.top);
   }
   const slot = document.querySelector(`#checklist .slot[data-id="${id}"]`);
-  if (slot) slot.classList.add('found');
-  updateProgress();
-  if (state.found.size === state.selected.size){
-    clearTimeout(state.hintTimer);
-    setTimeout(showFinalScreen, 700);
+  if (slot){
+    slot.classList.add('found');
+    slot.setAttribute('aria-pressed','true');
   }
+  updateProgress();
+  // P4: ding on hit
+  playDing();
+  // phase complete?
+  if (state.foundInPhase.size >= phaseIds.length){
+    if (state.phaseIdx + 1 < state.phases.length){
+      // show transition bubble, then advance
+      playPhaseDone();
+      showPhaseTransition(()=>{
+        state.phaseIdx++;
+        state.foundInPhase = new Set();
+        applyPhaseVisibility();
+        renderPhaseBar();
+        updatePhaseContext();
+      });
+    } else {
+      // all phases done
+      clearTimeout(state.hintTimer);
+      playApplause();
+      setTimeout(showFinalScreen, 700);
+    }
+  }
+}
+
+function showPhaseTransition(after){
+  const tr = document.getElementById('phase-transition');
+  const txt = document.getElementById('phase-transition-text');
+  if (state.phaseIdx + 1 < state.phases.length){
+    txt.textContent = `Fase ${state.phaseIdx + 1} completa!`;
+  } else {
+    txt.textContent = `Tudo pronto!`;
+  }
+  tr.classList.add('show');
+  tr.setAttribute('aria-hidden','false');
+  setTimeout(()=>{
+    tr.classList.remove('show');
+    tr.setAttribute('aria-hidden','true');
+    after();
+  }, 1300);
 }
 
 function spawnPuff(x,y){
@@ -872,6 +1129,9 @@ function spawnConfetti(x,y){
   const stage = document.getElementById('stage');
   const burst = document.createElement('div');
   burst.className = 'confetti-burst';
+  // container is 0×0 at (0,0); shift to hit point
+  burst.style.left = x+'px';
+  burst.style.top = y+'px';
   const colors = ['#ff6fa8','#9ed6ff','#ffe28a','#7ddcb1','#e9d8ff','#ff9ec6'];
   for (let i=0;i<14;i++){
     const s = document.createElement('span');
@@ -884,8 +1144,6 @@ function spawnConfetti(x,y){
     s.style.animationDelay = (Math.random()*0.1)+'s';
     burst.appendChild(s);
   }
-  burst.style.left = x+'px';
-  burst.style.top = y+'px';
   stage.appendChild(burst);
   setTimeout(()=>burst.remove(), 1200);
 }
@@ -898,11 +1156,39 @@ function renderChecklist(){
     const slot = document.createElement('div');
     slot.className = 'slot';
     slot.dataset.id = id;
+    slot.setAttribute('role','button');
+    slot.setAttribute('tabindex','-1');
+    slot.setAttribute('aria-pressed','false');
+    slot.setAttribute('aria-label', item.label);
     slot.title = item.label;
     slot.innerHTML = `<img src="${ICON_BASE}${ICONS[id]}" alt="${item.label}" width="56" height="56" loading="lazy" decoding="async" />`;
     c.appendChild(slot);
   });
 }
+
+function renderPhaseBar(){
+  const bar = document.getElementById('phase-bar');
+  bar.innerHTML = '';
+  state.phases.forEach((ids, i)=>{
+    const pill = document.createElement('div');
+    pill.className = 'phase-pill' + (i === state.phaseIdx ? ' active' : (i < state.phaseIdx ? ' done' : ''));
+    pill.setAttribute('role','button');
+    pill.setAttribute('tabindex','-1');
+    pill.setAttribute('aria-label', `fase ${i+1} de ${state.phases.length}`);
+    const stars = ids.length; // visual proxy: number of stars
+    let shtml = '';
+    for (let k=0;k<stars;k++) shtml += `<svg class="star ${k < (i < state.phaseIdx ? ids.length : (i===state.phaseIdx ? state.foundInPhase.size : 0)) ? 'on' : ''}" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2 14.5 8.5 21 9.3 16 14 17.5 21 12 17.3 6.5 21 8 14 3 9.3 9.5 8.5z"/></svg>`;
+    pill.innerHTML = `<span class="stars">${shtml}</span>`;
+    bar.appendChild(pill);
+  });
+}
+
+function updatePhaseContext(){
+  const phaseIds = state.phases[state.phaseIdx] || [];
+  document.getElementById('find-title').textContent = `Achar os itens · fase ${state.phaseIdx+1}/${state.phases.length}`;
+  document.getElementById('find-sub').textContent = `${phaseIds.length} itens nesta fase ✨`;
+}
+
 function updateProgress(){
   const total = state.selected.size;
   const done = state.found.size;
@@ -910,27 +1196,27 @@ function updateProgress(){
   document.getElementById('progress-label').textContent = `${done} de ${total}`;
 }
 
-// hint timer: every ~6s of no finds, spotlight one unfound item (the customer
-// previously reported some items didn't appear, so a faster hint cadence
-// rescues buried items before the kid gets stuck).  Also gently scrolls the
-// hinted item into view (it lives inside a scrollable stage).
+// hint timer: every ~5s of no finds, spotlight an unfound item from current phase.
+// If an item is mostly covered, also semi-translate the obstacles so it shows through.
 let lastFoundAt = Date.now();
 function startHintTimer(){
   if (state.hintTimer) clearInterval(state.hintTimer);
   state.hintTimer = setInterval(()=>{
     if (document.getElementById('screen-find').style.display !== 'block') return;
     const now = Date.now();
-    if (now - lastFoundAt < 6000) return;
-    const remaining = state.placements.filter(p=>!state.found.has(p.id));
+    if (now - lastFoundAt < 5000) return;
+    const phaseIds = state.phases[state.phaseIdx] || [];
+    const remaining = phaseIds.filter(id => !state.found.has(id));
     if (!remaining.length) return;
     document.querySelectorAll('.findable.hint').forEach(g=>g.classList.remove('hint'));
-    // Prefer items that have ZERO visible portion (fully covered by later
-    // z-order) — those are the ones the kid genuinely cannot see.
-    const hidden = [];
+
+    // prefer items that are heavily covered by later z-order in the current phase
+    const visibleScores = [];
     const all = [...document.querySelectorAll('#scene-svg .findable')];
     for (const g of all){
       const id = g.dataset.id;
       if (state.found.has(id)) continue;
+      if (g.style.display === 'none') continue;
       const img = g.querySelector('img.sprite');
       if (!img) continue;
       const r = img.getBoundingClientRect();
@@ -938,6 +1224,7 @@ function startHintTimer(){
       let node = g.nextElementSibling;
       while (node){
         if (node.classList && node.classList.contains('findable')){
+          if (node.style.display === 'none'){ node = node.nextElementSibling; continue; }
           const oImg = node.querySelector('img.sprite');
           if (oImg){
             const oR = oImg.getBoundingClientRect();
@@ -950,14 +1237,14 @@ function startHintTimer(){
       }
       const area = r.width * r.height;
       const visiblePct = area ? Math.max(0, (1 - coveredByLater / area)) : 1;
-      if (visiblePct < 0.4) hidden.push({ id, visiblePct });
+      visibleScores.push({ id, visiblePct });
     }
-    const pool = hidden.length ? hidden : remaining.map(p => ({ id: p.id, visiblePct: 1 }));
-    const pick = pool[Math.floor(Math.random() * pool.length)];
+    visibleScores.sort((a,b)=>a.visiblePct - b.visiblePct);
+    const pick = visibleScores[0] || { id: remaining[0], visiblePct: 1 };
     const g = document.querySelector(`#scene-svg .findable[data-id="${pick.id}"]`);
     if (g){
       g.classList.add('hint');
-      // Pan the hinted item into view inside the scrollable stage container.
+      // pan the hinted item into view
       const stage = document.getElementById('stage');
       const r = g.getBoundingClientRect();
       const sr = stage.getBoundingClientRect();
@@ -966,24 +1253,27 @@ function startHintTimer(){
         const delta = (r.top + r.height/2) - (sr.top + sr.height/2);
         stage.scrollBy({ top: delta, behavior: 'smooth' });
       }
-      setTimeout(()=>{ if (!state.found.has(pick.id)) g.classList.remove('hint'); }, 3500);
+      // if heavily covered, also reveal — semi-translate items not yet found for a few seconds
+      if (pick.visiblePct < 0.55){
+        document.getElementById('stage').classList.add('reveal');
+      }
+      setTimeout(()=>{
+        if (!state.found.has(pick.id)) g.classList.remove('hint');
+        document.getElementById('stage').classList.remove('reveal');
+      }, 3500);
     }
     lastFoundAt = Date.now();
   }, 1800);
 }
-const origFind = findItem;
-findItem = function(id, evt){
-  lastFoundAt = Date.now();
-  document.querySelectorAll('.findable.hint').forEach(g=>g.classList.remove('hint'));
-  return origFind(id, evt);
-};
 
 // ── Screen 3: final scene ───────────────────────────────────────────
 function showFinalScreen(){
   document.getElementById('screen-find').style.display = 'none';
   document.getElementById('screen-final').style.display = 'block';
+  document.getElementById('finale-name').textContent = state.partyName ? `Parabéns pra ${state.partyName}!` : '';
   renderFinalScene();
   startFinaleConfetti();
+  playApplause();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -991,18 +1281,23 @@ function renderFinalScene(){
   const svg = document.getElementById('scene-final-svg');
   const selected = [...state.selected];
   const has = id => selected.includes(id);
-  const tier = (state.finalSeed % 3);
+  // P3: actually use all 5 palette slots
+  const tier = (state.finalSeed % 5);
   const tint = ['#ffc7df','#9ed6ff','#bff0d8','#ffe28a','#e9d8ff'][tier];
 
   svg.innerHTML = `
     <defs>
       <linearGradient id="skyF" x1="0" x2="0" y1="0" y2="1">
-        <stop offset="0" stop-color="${tier===0?'#ffd6e8':'#cfeaff'}"/>
+        <stop offset="0" stop-color="${tier===0?'#ffd6e8':(tier===1?'#cfeaff':(tier===2?'#dff7e8':(tier===3?'#fff2c2':'#f1e8ff')))}"/>
         <stop offset="1" stop-color="#fff5d6"/>
       </linearGradient>
       <radialGradient id="lightG" cx=".5" cy=".5" r=".6">
         <stop offset="0" stop-color="#fff" stop-opacity=".5"/>
         <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="cakeG" cx=".5" cy=".4" r=".6">
+        <stop offset="0" stop-color="#fff"/>
+        <stop offset="1" stop-color="#ffe1ec"/>
       </radialGradient>
     </defs>
 
@@ -1012,64 +1307,69 @@ function renderFinalScene(){
       <circle cx="640" cy="90" r="140" fill="url(#lightG)"/>
     </g>
 
-    <!-- string lights (compressed to fit 800x450) -->
-    <path d="M0 75 Q200 135 400 98 Q600 60 800 113" stroke="#5a3550" stroke-width="1.4" fill="none"/>
-    ${bulbRow(40,135,'#ffe28a')}
-    ${bulbRow(120,122,'#ff6fa8')}
-    ${bulbRow(200,111,'#9ed6ff')}
-    ${bulbRow(280,104,'#7ddcb1')}
-    ${bulbRow(360,98,'#e9d8ff')}
-    ${bulbRow(440,96,'#ffe28a')}
-    ${bulbRow(520,90,'#ff6fa8')}
-    ${bulbRow(600,98,'#9ed6ff')}
-    ${bulbRow(680,105,'#7ddcb1')}
-    ${bulbRow(760,111,'#ffe28a')}
+    <!-- string lights: only when selected -->
+    ${has('luzinhas') ? `
+      <path d="M0 75 Q200 135 400 98 Q600 60 800 113" stroke="#5a3550" stroke-width="1.4" fill="none"/>
+      ${bulbRow(40,135,'#ffe28a')}
+      ${bulbRow(120,122,'#ff6fa8')}
+      ${bulbRow(200,111,'#9ed6ff')}
+      ${bulbRow(280,104,'#7ddcb1')}
+      ${bulbRow(360,98,'#e9d8ff')}
+      ${bulbRow(440,96,'#ffe28a')}
+      ${bulbRow(520,90,'#ff6fa8')}
+      ${bulbRow(600,98,'#9ed6ff')}
+      ${bulbRow(680,105,'#7ddcb1')}
+      ${bulbRow(760,111,'#ffe28a')}
+    ` : ''}
 
     <!-- ground -->
     <rect x="0" y="285" width="800" height="165" fill="#cbe8c2"/>
     <rect x="0" y="285" width="800" height="30" fill="#a8d99b"/>
 
-    <!-- tablecloth (rebalanced to fit 800x450) -->
-    <path d="M200 270 L600 270 L620 360 L180 360 Z" fill="${tint}" stroke="#fff" stroke-width="3"/>
-    <path d="M200 270 L600 270 L600 279 L200 279 Z" fill="#fff" opacity=".4"/>
+    <!-- tablecloth: only when selected -->
+    ${has('toalha') ? `
+      <path d="M180 285 L620 285 L640 360 L160 360 Z" fill="${tint}" stroke="#fff" stroke-width="3"/>
+      <path d="M180 285 L620 285 L620 295 L180 295 Z" fill="#fff" opacity=".4"/>
+    ` : `
+      <!-- bare table surface (still visible even without toalha) -->
+      <rect x="160" y="285" width="480" height="75" fill="#d8c3a4" stroke="#a0866a" stroke-width="2"/>
+    `}
 
     <g id="table-contents"></g>
 
-    <!-- big cake (if selected) -->
-    ${has('bolo') ? bigCakeSVG() : ''}
-    ${has('velinhas') ? candleFlameSVG() : ''}
+    <!-- big cake (centerpiece, always shown if selected; otherwise a plain plate) -->
+    ${has('bolo') ? bigCakeSVG() : (has('pratinhos') ? '' : '')}
+    ${has('velinhas') ? candleFlameSVG(has('bolo')) : ''}
 
-    <!-- presents stack -->
+    <!-- presents stack: only when selected -->
     ${has('presente') ? presentsSVG(tier) : ''}
 
-    <!-- balloon bouquet -->
+    <!-- balloon bouquet: only when selected -->
     ${has('baloes') ? balloonsSVG(tier) : ''}
 
-    <!-- piñata -->
+    <!-- piñata: only when selected -->
     ${has('pinhata') ? pinhataSVG() : ''}
 
-    <!-- mascot dancing (improved original bunny with pink bow) -->
-    <g transform="translate(660,320)">
-      <g class="float">
-        ${mascotSVG()}
-      </g>
+    <!-- wall decoration (paper pom): hung from the upper area, mirrored per finalSeed -->
+    ${has('decor') ? decorWallSVG() : ''}
+
+    <!-- mascot dancing (improved original bunny) — smaller and lower so it doesn't dominate -->
+    <g transform="translate(110,330)">
+      <g class="float" style="animation-delay:.1s">${mascotSVG(0.78)}</g>
     </g>
 
-    <!-- friend mascot (improved original yellow bear) -->
-    <g transform="translate(140,335)">
-      <g class="float" style="animation-delay:.6s">
-        ${friendMascotSVG()}
-      </g>
+    <!-- friend mascot (yellow bear) — smaller -->
+    <g transform="translate(690,335)">
+      <g class="float" style="animation-delay:.6s">${friendMascotSVG(0.78)}</g>
     </g>
 
-    <!-- bunting (rebalanced) -->
-    <path d="M40 60 Q400 0 760 60" stroke="#ff6fa8" stroke-width="2" fill="none"/>
-    ${buntingSVG()}
+    <!-- bunting: only when selected -->
+    ${has('bandeirolas') ? buntingSVG() : ''}
 
     <!-- "Parabéns pra você" banner -->
     <g transform="translate(400,68)">
       <rect x="-180" y="-22" width="360" height="44" rx="22" fill="#fff" stroke="#ff6fa8" stroke-width="3"/>
-      <text x="0" y="8" font-size="22" font-weight="900" text-anchor="middle" fill="#ff4d8d">✨ Parabéns pra você! ✨</text>
+      <text id="parabens-text" x="0" y="8" font-size="22" font-weight="900" text-anchor="middle" fill="#ff4d8d">✨ Parabéns pra você! ✨</text>
     </g>
 
     <!-- sparkles (rebalanced) -->
@@ -1079,27 +1379,50 @@ function renderFinalScene(){
     <g transform="translate(260,200)"><g class="sparkle" style="animation-delay:.9s">${sparkleSVG()}</g></g>
   `;
 
-  // place additional selected items on the table
+  // banner uses name if configured
+  const txt = svg.querySelector('#parabens-text');
+  if (txt && state.partyName){
+    txt.textContent = `✨ Parabéns pra ${state.partyName}! ✨`;
+  }
+
+  // table contents layout with REAL collision detection — no more overlap hack.
+  // The table region runs from x=160 to x=640 (480 wide) on y=290-360.
+  // We pack items in a grid of slots ~70px wide, sized so the largest icon (0.6× ≈ 72px
+  // sprite) never overlaps its neighbor. We bias placement by table area so items
+  // sit visually "on" the tablecloth.
   const tc = svg.querySelector('#table-contents');
-  const tableItems = ['pratinhos','copos','guardanapos','docinhos','brigadeiro','sorvete','refrigerante','suco','salgadinhos','pizza','pipoca','algodao','cachorroquente','chapeu','mascara','coroa','colar','bexiga','palhaco','fantasia','sacola','tatuagem'];
-  let x = 230;
-  tableItems.forEach(id=>{
-    if (!has(id)) return;
-    const item = ITEMS.find(it=>it.id===id);
+  const tableItemIds = [
+    'pratinhos','copos','guardanapos','docinhos','brigadeiro','sorvete',
+    'refrigerante','suco','salgadinhos','pizza','pipoca','algodao','cachorroquente',
+    'chapeu','mascara','coroa','colar','palhaco','fantasia','sacola','tatuagem',
+    'convites','guardachuva','musica','serpentina','confete','amarelinha','saco',
+    'pescaria','cadeiras','boca','pinhata'
+  ];
+  const itemsOnTable = tableItemIds.filter(id => has(id) && id !== 'pinhata');
+  // layout in a grid; sprite is 72 (scale 0.6 of 120), but we use 90 for a comfy
+  // padding so adjacent items never touch. Wrap to a second row if needed.
+  const cellW = 80, cellH = 60;
+  const cols = 5; // 5 per row comfortably fits
+  const startX = 175, startY = 295;
+  itemsOnTable.forEach((id, i)=>{
+    const row = Math.floor(i / cols);
+    const col = i % cols;
+    const x = startX + col * cellW;
+    const y = startY + row * cellH;
     const g = document.createElementNS('http://www.w3.org/2000/svg','g');
-    g.setAttribute('transform', `translate(${x},315) scale(.42)`);
+    g.setAttribute('transform', `translate(${x},${y}) scale(0.6)`);
     const fo = document.createElementNS('http://www.w3.org/2000/svg','foreignObject');
-    fo.setAttribute('x','-36');fo.setAttribute('y','-36');
-    fo.setAttribute('width','72');fo.setAttribute('height','72');
+    fo.setAttribute('x','-60');fo.setAttribute('y','-60');
+    fo.setAttribute('width','120');fo.setAttribute('height','120');
     const img = document.createElementNS('http://www.w3.org/1999/xhtml','img');
     img.setAttribute('src', ICON_BASE + ICONS[id]);
-    img.setAttribute('width','72');
-    img.setAttribute('height','72');
+    img.setAttribute('width','120');
+    img.setAttribute('height','120');
+    img.style.cssText = 'display:block;width:100%;height:100%;object-fit:contain;pointer-events:none;';
     fo.appendChild(img);
     g.appendChild(fo);
+    g.setAttribute('aria-label', (ITEMS.find(it=>it.id===id)||{}).label || id);
     tc.appendChild(g);
-    x += 50;
-    if (x > 600){ x = 230; }
   });
 }
 
@@ -1108,68 +1431,78 @@ function bulbRow(cx,cy,color){
   return `<line x1="${cx-12}" y1="${cy-6}" x2="${cx+12}" y2="${cy+6}" stroke="#5a3550" stroke-width="1"/>
           <circle cx="${cx}" cy="${cy+10}" r="6" fill="${color}" stroke="#fff" stroke-width="1.2"/>`;
 }
+
+// big cake — the candle position depends on whether the cake is present
 function bigCakeSVG(){
+  // cake center at (400, 282), top of body at y=282-44 = 238
   return `
-    <g transform="translate(400,250)">
-      <ellipse cx="0" cy="38" rx="100" ry="11" fill="#f4c7d9"/>
-      <rect x="-95" y="-32" width="190" height="84" rx="9" fill="#ffc7df"/>
-      <!-- attached frosting drips: scalloped band sitting flush with the top of the cake body, drawn as a continuous filled scallop so it can't separate -->
-      <path d="M-95 -32
-               Q -85 -42 -75 -32
-               Q -65 -42 -55 -32
-               Q -45 -42 -35 -32
-               Q -25 -42 -15 -32
-               Q  -5 -42   5 -32
-               Q  15 -42  25 -32
-               Q  35 -42  45 -32
-               Q  55 -42  65 -32
-               Q  75 -42  85 -32
-               Q  95 -42  95 -32
-               L  95 -24
-               Q  85 -34  75 -24
-               Q  65 -34  55 -24
-               Q  45 -34  35 -24
-               Q  25 -34  15 -24
-               Q   5 -34  -5 -24
-               Q -15 -34 -25 -24
-               Q -35 -34 -45 -24
-               Q -55 -34 -65 -24
-               Q -75 -34 -85 -24
-               Q -95 -34 -95 -24 Z"
+    <g id="big-cake" transform="translate(400,282)">
+      <ellipse cx="0" cy="44" rx="105" ry="11" fill="#f4c7d9"/>
+      <rect x="-100" y="-40" width="200" height="86" rx="9" fill="url(#cakeG)" stroke="#ff9ec6" stroke-width="1.6"/>
+      <!-- attached frosting drips: scalloped band sitting flush with the top of the cake body -->
+      <path d="M-100 -40
+               Q -90 -50 -80 -40
+               Q -70 -50 -60 -40
+               Q -50 -50 -40 -40
+               Q -30 -50 -20 -40
+               Q -10 -50   0 -40
+               Q  10 -50  20 -40
+               Q  30 -50  40 -40
+               Q  50 -50  60 -40
+               Q  70 -50  80 -40
+               Q  90 -50 100 -40
+               L 100 -32
+               Q  90 -42  80 -32
+               Q  70 -42  60 -32
+               Q  50 -42  40 -32
+               Q  30 -42  20 -32
+               Q  10 -42   0 -32
+               Q -10 -42 -20 -32
+               Q -30 -42 -40 -32
+               Q -50 -42 -60 -32
+               Q -70 -42 -80 -32
+               Q -90 -42 -100 -32 Z"
             fill="#fff" stroke="#ff9ec6" stroke-width="1.4" stroke-linejoin="round"/>
-      <rect x="-95" y="-8" width="190" height="5" fill="#ff9ec6"/>
-      <rect x="-95" y="16" width="190" height="5" fill="#ff9ec6"/>
-      <circle cx="-60" cy="8" r="2.5" fill="#fff"/>
+      <rect x="-100" y="-8" width="200" height="5" fill="#ff9ec6"/>
+      <rect x="-100" y="16" width="200" height="5" fill="#ff9ec6"/>
+      <circle cx="-65" cy="8" r="2.5" fill="#fff"/>
       <circle cx="-35" cy="16" r="2.5" fill="#fff"/>
       <circle cx="0" cy="8" r="2.5" fill="#fff"/>
       <circle cx="35" cy="16" r="2.5" fill="#fff"/>
-      <circle cx="60" cy="8" r="2.5" fill="#fff"/>
+      <circle cx="65" cy="8" r="2.5" fill="#fff"/>
     </g>
   `;
 }
-function candleFlameSVG(){
+// candle group. if cake is present, sit candles ON TOP of the cake (y of candle body
+// base = -40 in cake-local). Otherwise float them a bit higher.
+function candleFlameSVG(hasCake){
+  // candle body bottom sits at y=242 if hasCake (top of cake body is y=238 in world
+  // coords because cake is at translate(400,282) and top edge is y=-40 → world 242).
+  // Each candle has height 22 → top of candle body at y=220 (world) → wick starts at 220.
+  // We position the candle group so body bottom = cakeTop.
+  const baseY = hasCake ? 242 : 234; // world y of candle body bottom
   return `
-    <g transform="translate(400,180)">
+    <g id="candles" transform="translate(0,${baseY})">
       <!-- wicks -->
-      <line x1="-23" y1="-10" x2="-23" y2="-14" stroke="#5a3550" stroke-width="1.4"/>
-      <line x1="0" y1="-16" x2="0" y2="-20" stroke="#5a3550" stroke-width="1.4"/>
-      <line x1="23" y1="-12" x2="23" y2="-16" stroke="#5a3550" stroke-width="1.4"/>
-      <!-- candle bodies -->
-      <rect x="-26" y="-10" width="6" height="20" rx="2" fill="#fff" stroke="#5a3550" stroke-width="1.4"/>
-      <rect x="-3"  y="-16" width="6" height="26" rx="2" fill="#9ed6ff" stroke="#5a3550" stroke-width="1.4"/>
-      <rect x="20"  y="-12" width="6" height="22" rx="2" fill="#ffc7df" stroke="#5a3550" stroke-width="1.4"/>
+      <line x1="377" y1="0" x2="377" y2="-4" stroke="#5a3550" stroke-width="1.4"/>
+      <line x1="400" y1="-2" x2="400" y2="-6" stroke="#5a3550" stroke-width="1.4"/>
+      <line x1="423" y1="0" x2="423" y2="-4" stroke="#5a3550" stroke-width="1.4"/>
+      <!-- candle bodies (resting on cake top) -->
+      <rect x="374" y="-22" width="6" height="22" rx="2" fill="#fff" stroke="#5a3550" stroke-width="1.4"/>
+      <rect x="397" y="-28" width="6" height="28" rx="2" fill="#9ed6ff" stroke="#5a3550" stroke-width="1.4"/>
+      <rect x="420" y="-24" width="6" height="24" rx="2" fill="#ffc7df" stroke="#5a3550" stroke-width="1.4"/>
       <!-- warm flame halos (outer glow) -->
-      <ellipse cx="-23" cy="-18" rx="7" ry="11" fill="#fff3b8" opacity=".55"/>
-      <ellipse cx="0" cy="-24" rx="8" ry="14" fill="#fff3b8" opacity=".55"/>
-      <ellipse cx="23" cy="-20" rx="7" ry="12" fill="#fff3b8" opacity=".55"/>
+      <ellipse cx="377" cy="-30" rx="7" ry="11" fill="#fff3b8" opacity=".55"/>
+      <ellipse cx="400" cy="-36" rx="8" ry="14" fill="#fff3b8" opacity=".55"/>
+      <ellipse cx="423" cy="-32" rx="7" ry="12" fill="#fff3b8" opacity=".55"/>
       <!-- flame bodies (warm yellow) -->
-      <path d="M-23 -14 Q-29 -22 -23 -28 Q-17 -22 -23 -14 Z" fill="#ffd24d" stroke="#ff8a3d" stroke-width="1.2" stroke-linejoin="round"/>
-      <path d="M0 -20 Q-7 -30 0 -38 Q7 -30 0 -20 Z" fill="#ffd24d" stroke="#ff8a3d" stroke-width="1.2" stroke-linejoin="round"/>
-      <path d="M23 -16 Q17 -26 23 -32 Q29 -26 23 -16 Z" fill="#ffd24d" stroke="#ff8a3d" stroke-width="1.2" stroke-linejoin="round"/>
+      <path d="M377 -26 Q371 -18 377 -12 Q383 -18 377 -26 Z" fill="#ffd24d" stroke="#ff8a3d" stroke-width="1.2" stroke-linejoin="round"/>
+      <path d="M400 -32 Q393 -22 400 -14 Q407 -22 400 -32 Z" fill="#ffd24d" stroke="#ff8a3d" stroke-width="1.2" stroke-linejoin="round"/>
+      <path d="M423 -28 Q417 -20 423 -14 Q429 -20 423 -28 Z" fill="#ffd24d" stroke="#ff8a3d" stroke-width="1.2" stroke-linejoin="round"/>
       <!-- inner flame cores (white-hot) -->
-      <path d="M-23 -18 Q-26 -22 -23 -25 Q-20 -22 -23 -18 Z" fill="#fff8d6"/>
-      <path d="M0 -24 Q-3 -30 0 -34 Q3 -30 0 -24 Z" fill="#fff8d6"/>
-      <path d="M23 -20 Q20 -24 23 -27 Q26 -24 23 -20 Z" fill="#fff8d6"/>
+      <path d="M377 -22 Q374 -18 377 -15 Q380 -18 377 -22 Z" fill="#fff8d6"/>
+      <path d="M400 -28 Q397 -22 400 -18 Q403 -22 400 -28 Z" fill="#fff8d6"/>
+      <path d="M423 -24 Q420 -20 423 -17 Q426 -20 423 -24 Z" fill="#fff8d6"/>
     </g>
   `;
 }
@@ -1177,7 +1510,7 @@ function presentsSVG(tier){
   const colors = ['#ff6fa8','#9ed6ff','#7ddcb1','#ffe28a','#e9d8ff'];
   const c1=colors[tier], c2=colors[(tier+2)%5], c3=colors[(tier+4)%5];
   return `
-    <g transform="translate(120,335)">
+    <g transform="translate(180,345)">
       <rect x="-26" y="-8" width="52" height="36" rx="3" fill="${c1}"/>
       <rect x="-26" y="-8" width="52" height="5" fill="#fff" opacity=".4"/>
       <rect x="-4" y="-8" width="8" height="36" fill="${c3}"/>
@@ -1185,7 +1518,7 @@ function presentsSVG(tier){
       <path d="M0 -8 Q12 -22 8 -30 Q2 -22 0 -8Z" fill="${c3}"/>
       <circle cx="0" cy="-24" r="2.5" fill="${c1}"/>
     </g>
-    <g transform="translate(680,348)">
+    <g transform="translate(620,355)">
       <rect x="-22" y="-8" width="44" height="32" rx="3" fill="${c2}"/>
       <rect x="-22" y="-8" width="44" height="5" fill="#fff" opacity=".4"/>
       <rect x="-3" y="-8" width="6" height="32" fill="${c3}"/>
@@ -1194,10 +1527,13 @@ function presentsSVG(tier){
     </g>
   `;
 }
+// P3: balloon bouquet moved to NOT collide with the bunny (which is now smaller and on the LEFT)
+// Old position (560,220) collided with bunny at (660,320) scale 1.4 — now bunny is at left (110,330),
+// so balloons can return to the upper-right area where they read clearly.
 function balloonsSVG(tier){
   const cols = ['#ff9ec6','#9ed6ff','#ffe28a','#7ddcb1','#e9d8ff'];
   return `
-    <g transform="translate(560,220)">
+    <g transform="translate(600,180)">
       <ellipse cx="-40" cy="-20" rx="18" ry="22" fill="${cols[tier]}"/>
       <ellipse cx="0" cy="-30" rx="20" ry="24" fill="${cols[(tier+1)%5]}"/>
       <ellipse cx="40" cy="-20" rx="18" ry="22" fill="${cols[(tier+2)%5]}"/>
@@ -1214,8 +1550,11 @@ function balloonsSVG(tier){
   `;
 }
 function pinhataSVG(){
+  // hang from upper area, no longer fixed at (280,140) — varied per seed for "Outra variação"
+  const x = 200 + (state.finalSeed * 47) % 200;  // 200..400 ish
+  const y = 130 + (state.finalSeed * 13) % 30;
   return `
-    <g transform="translate(280,140)">
+    <g transform="translate(${x},${y})">
       <line x1="0" y1="-40" x2="0" y2="-24" stroke="#5a3550" stroke-width="2"/>
       <ellipse cx="0" cy="0" rx="28" ry="38" fill="#ffe28a"/>
       <path d="M-28 0 L28 0 L0 -40 Z" fill="#ff6fa8"/>
@@ -1223,6 +1562,26 @@ function pinhataSVG(){
       <path d="M28 0 L16 16 L24 8 Z" fill="#9ed6ff"/>
       <rect x="-5" y="24" width="10" height="16" fill="#ff6fa8"/>
       <rect x="-8" y="40" width="16" height="5" fill="#ffe28a"/>
+    </g>
+  `;
+}
+function decorWallSVG(){
+  // mirror side per finalSeed so "Outra variação" actually varies
+  const side = (state.finalSeed % 2 === 0) ? 1 : -1;
+  const x = 500 + side * 200;  // 300 or 700
+  const y = 140;
+  const cols = ['#ff9ec6','#9ed6ff','#ffe28a','#7ddcb1','#e9d8ff'];
+  const c = cols[state.finalSeed % 5];
+  return `
+    <g transform="translate(${x},${y})">
+      <line x1="0" y1="-40" x2="0" y2="-22" stroke="#5a3550" stroke-width="1.6"/>
+      <circle cx="0" cy="0" r="22" fill="${c}" stroke="#c94e8a" stroke-width="1.4"/>
+      <path d="M-22 -8 Q0 -2 22 -8" fill="none" stroke="#c94e8a" stroke-width="1" opacity=".7"/>
+      <path d="M-22 0  Q0 6  22 0"  fill="none" stroke="#c94e8a" stroke-width="1" opacity=".7"/>
+      <path d="M-22 8  Q0 14 22 8"  fill="none" stroke="#c94e8a" stroke-width="1" opacity=".7"/>
+      <ellipse cx="-6" cy="-6" rx="4" ry="3" fill="#fff" opacity=".5"/>
+      <line x1="0" y1="22" x2="0" y2="38" stroke="#c94e8a" stroke-width="1.2"/>
+      <circle cx="0" cy="40" r="2" fill="#c94e8a"/>
     </g>
   `;
 }
@@ -1245,9 +1604,10 @@ function sparkleSVG(){
 }
 
 // Improved original bunny mascot with pink bow (NOT Sanrio)
-function mascotSVG(){
+function mascotSVG(scale){
+  scale = scale || 1.4;
   return `
-    <g transform="translate(-70,-110) scale(1.4)">
+    <g transform="translate(-70,-110) scale(${scale})">
       <defs>
         <radialGradient id="mBunnyBody" cx=".5" cy=".4" r=".6">
           <stop offset="0" stop-color="#ffffff"/>
@@ -1258,39 +1618,30 @@ function mascotSVG(){
           <stop offset="1" stop-color="#ff9ec6"/>
         </radialGradient>
       </defs>
-      <!-- ears -->
       <ellipse cx="-22" cy="-58" rx="10" ry="26" fill="url(#mBunnyEar)" stroke="#f4c7d9" stroke-width="2"/>
       <ellipse cx="22" cy="-58" rx="10" ry="26" fill="url(#mBunnyEar)" stroke="#f4c7d9" stroke-width="2"/>
       <ellipse cx="-22" cy="-58" rx="4" ry="18" fill="#ffb3cf"/>
       <ellipse cx="22" cy="-58" rx="4" ry="18" fill="#ffb3cf"/>
-      <!-- head -->
       <ellipse cx="0" cy="-10" rx="46" ry="40" fill="url(#mBunnyBody)" stroke="#f4c7d9" stroke-width="2.4"/>
-      <!-- cheeks -->
       <circle cx="-24" cy="-2" r="7" fill="#ffb3cf" opacity=".7"/>
       <circle cx="24" cy="-2" r="7" fill="#ffb3cf" opacity=".7"/>
-      <!-- eyes -->
       <ellipse cx="-14" cy="-12" rx="4.6" ry="5.6" fill="#3a2a36"/>
       <ellipse cx="14" cy="-12" rx="4.6" ry="5.6" fill="#3a2a36"/>
       <circle cx="-13" cy="-13" r="1.6" fill="#fff"/>
       <circle cx="15" cy="-13" r="1.6" fill="#fff"/>
       <circle cx="-15" cy="-10" r=".8" fill="#fff" opacity=".7"/>
       <circle cx="13" cy="-10" r=".8" fill="#fff" opacity=".7"/>
-      <!-- nose + smile -->
       <ellipse cx="0" cy="-2" rx="2.8" ry="2" fill="#ff7aa9"/>
       <path d="M-7 4 Q0 12 7 4" stroke="#3a2a36" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-      <!-- whiskers -->
       <path d="M-22 4 L-32 2 M-22 6 L-32 8 M22 4 L32 2 M22 6 L32 8" stroke="#5a3550" stroke-width="1.2" stroke-linecap="round" opacity=".5"/>
-      <!-- bow -->
       <g transform="translate(0,-66)">
         <path d="M-26 -2 Q-14 -14 0 -2 Q-14 10 -26 -2Z" fill="#ff6fa8" stroke="#ff4d8d" stroke-width="1.5"/>
         <path d="M26 -2 Q14 -14 0 -2 Q14 10 26 -2Z" fill="#ff6fa8" stroke="#ff4d8d" stroke-width="1.5"/>
         <circle cx="0" cy="-2" r="5" fill="#ff4d8d" stroke="#fff" stroke-width="1.2"/>
         <circle cx="0" cy="-2" r="1.5" fill="#fff"/>
-        <!-- bow tails -->
         <path d="M-3 4 L-6 14 L0 12 Z" fill="#ff4d8d"/>
         <path d="M3 4 L6 14 L0 12 Z" fill="#ff4d8d"/>
       </g>
-      <!-- tiny sparkle on cheek -->
       <circle cx="-30" cy="-18" r="1.5" fill="#fff" opacity=".8"/>
       <circle cx="30" cy="-18" r="1.5" fill="#fff" opacity=".8"/>
     </g>
@@ -1298,41 +1649,32 @@ function mascotSVG(){
 }
 
 // Improved original yellow bear cub (NOT Disney/Pooh)
-function friendMascotSVG(){
+function friendMascotSVG(scale){
+  scale = scale || 1.35;
   return `
-    <g transform="translate(-70,-110) scale(1.35)">
+    <g transform="translate(-70,-110) scale(${scale})">
       <defs>
         <radialGradient id="mBearBody" cx=".5" cy=".4" r=".6">
           <stop offset="0" stop-color="#fff0b8"/>
           <stop offset="1" stop-color="#ffe28a"/>
         </radialGradient>
       </defs>
-      <!-- body shadow -->
       <ellipse cx="0" cy="48" rx="38" ry="6" fill="#5a3550" opacity=".18"/>
-      <!-- ears -->
       <circle cx="-30" cy="-50" r="14" fill="url(#mBearBody)" stroke="#e6a85a" stroke-width="2.2"/>
       <circle cx="30" cy="-50" r="14" fill="url(#mBearBody)" stroke="#e6a85a" stroke-width="2.2"/>
       <circle cx="-30" cy="-50" r="8" fill="#ffc7df"/>
       <circle cx="30" cy="-50" r="8" fill="#ffc7df"/>
-      <!-- head -->
       <ellipse cx="0" cy="-10" rx="48" ry="42" fill="url(#mBearBody)" stroke="#e6a85a" stroke-width="2.4"/>
-      <!-- muzzle -->
       <ellipse cx="0" cy="6" rx="22" ry="16" fill="#fff7d6"/>
-      <!-- cheeks -->
       <circle cx="-26" cy="2" r="6" fill="#ffb3cf" opacity=".5"/>
       <circle cx="26" cy="2" r="6" fill="#ffb3cf" opacity=".5"/>
-      <!-- eyes -->
       <ellipse cx="-14" cy="-14" rx="4.2" ry="5" fill="#3a2a36"/>
       <ellipse cx="14" cy="-14" rx="4.2" ry="5" fill="#3a2a36"/>
       <circle cx="-13" cy="-15" r="1.4" fill="#fff"/>
       <circle cx="15" cy="-15" r="1.4" fill="#fff"/>
-      <!-- nose -->
       <ellipse cx="0" cy="-2" rx="3.4" ry="2.4" fill="#3a2a36"/>
-      <!-- smile -->
       <path d="M-7 8 Q0 14 7 8" stroke="#3a2a36" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-      <!-- tiny tongue/heart -->
       <path d="M0 12 Q-3 16 0 18 Q3 16 0 12 Z" fill="#ff7aa9" opacity=".8"/>
-      <!-- sparkle -->
       <circle cx="-36" cy="-22" r="1.6" fill="#fff" opacity=".9"/>
       <circle cx="36" cy="-22" r="1.6" fill="#fff" opacity=".9"/>
     </g>
@@ -1345,7 +1687,7 @@ function startFinaleConfetti(){
   const colors = ['#ff6fa8','#9ed6ff','#ffe28a','#7ddcb1','#e9d8ff','#ff9ec6'];
   const burst = document.createElement('div');
   burst.className = 'confetti-burst';
-  burst.style.cssText = 'position:absolute;inset:0;pointer-events:none;';
+  burst.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:hidden;';
   c.appendChild(burst);
   for (let i=0;i<60;i++){
     const s = document.createElement('span');
@@ -1372,19 +1714,56 @@ function startFinaleConfetti(){
 document.getElementById('restart').addEventListener('click', ()=>{
   state.selected.clear();
   state.found.clear();
+  state.foundInPhase.clear();
+  state.phases = [];
+  state.phaseIdx = 0;
   if (state.hintTimer){ clearInterval(state.hintTimer); state.hintTimer = null; }
-  document.querySelectorAll('.tile.selected').forEach(t=>t.classList.remove('selected'));
+  document.querySelectorAll('.tile.selected').forEach(t=>{
+    t.classList.remove('selected');
+    t.setAttribute('aria-pressed','false');
+  });
+  // reset checklist aria-pressed
+  document.querySelectorAll('.checklist .slot.found').forEach(s=>{
+    s.classList.remove('found');
+    s.setAttribute('aria-pressed','false');
+  });
   document.getElementById('screen-final').style.display = 'none';
+  document.getElementById('screen-find').style.display = 'none';
   document.getElementById('screen-pick').style.display = 'block';
+  document.getElementById('phase-bar').innerHTML = '';
   updateCounter();
   updateCTA();
   window.scrollTo({top:0,behavior:'smooth'});
 });
+
 document.getElementById('variation').addEventListener('click', ()=>{
   state.finalSeed++;
   state.found.clear();
-  renderFinalScene();
+  state.foundInPhase.clear();
+  state.phaseIdx = 0;
+  // also re-split phases & re-render scene to vary layout (P3: "Outra variação" should
+  // change composition AND positions, not just colors)
+  state.phases = splitPhases([...state.selected]);
+  // re-place items with new seed so positions move
+  const placed = [];
+  state.placements = [...state.selected].map((id, i)=>{
+    const item = ITEMS.find(x=>x.id===id);
+    let h = 2166136261 >>> 0; for (const c of id) h = ((h ^ c.charCodeAt(0)) * 16777619) >>> 0;
+    h = (h ^ (state.finalSeed * 2654435761)) >>> 0;
+    const pos = pickSpawn(placed, h + i*131);
+    placed.push(pos);
+    return {id, item, x: pos.x, y: pos.y};
+  });
+  renderScene();
+  renderChecklist();
+  renderPhaseBar();
+  updatePhaseContext();
+  document.getElementById('screen-final').style.display = 'none';
+  document.getElementById('screen-find').style.display = 'block';
+  document.getElementById('screen-pick').style.display = 'none';
+  startHintTimer();
   startFinaleConfetti();
+  window.scrollTo({top:0,behavior:'smooth'});
 });
 
 // ── splash hide on load ────────────────────────────────────────────
@@ -1414,6 +1793,12 @@ document.getElementById('stage').addEventListener('click', e=>{
 document.addEventListener('contextmenu', e=>{
   if (e.target.closest('.tile, .findable, .cta, .big-btn')) e.preventDefault();
 });
+
+// expose helpers for end-to-end tests / devtools introspection
+window.applyPhaseVisibility = applyPhaseVisibility;
+window.spawnConfetti = spawnConfetti;
+window.ITEMS = ITEMS;
+window.ICONS = ICONS;
 </script>
 </body>
 </html>
